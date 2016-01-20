@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{f0800569-8d73-468a-a179-94750573d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\contexts">
+      <UniqueIdentifier>{058c4121-8c2c-4a5b-bc26-4d48818fb42f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\tests\cmdline_v2_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tests\contexts\cmdline_context_v2.cpp">
+      <Filter>src\contexts</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\tests\contexts\cmdline_context_v2.h">
+      <Filter>src\contexts</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

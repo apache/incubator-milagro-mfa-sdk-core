@@ -1,0 +1,10 @@
+bin/
+build/
+dist/
+*.sdf
+*.opensdf
+*.suo
+*.user
+*tokens.json
+*users.json
+cvlog.txt

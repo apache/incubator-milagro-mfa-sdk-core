@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f2" displayName="core" projectFiles="true">
+        <itemPath>../../../src/core/cv_shared_ptr.h</itemPath>
+        <itemPath>../../../src/core/mpin_crypto.h</itemPath>
+        <itemPath>../../../src/core/mpin_crypto_non_tee.h</itemPath>
+        <itemPath>../../../src/core/mpin_sdk.h</itemPath>
+        <itemPath>../../../src/core/utf8.h</itemPath>
+        <itemPath>../../../src/core/utils.h</itemPath>
+        <itemPath>../../../src/core/version.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="crypto" projectFiles="true">
+        <itemPath>../../../src/core/crypto/DLLDefines.h</itemPath>
+        <itemPath>../../../src/core/crypto/clint.h</itemPath>
+        <itemPath>../../../src/core/crypto/mpin.h</itemPath>
+        <itemPath>../../../src/core/crypto/platform.h</itemPath>
+        <itemPath>../../../src/core/crypto/version.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="cvshared" projectFiles="true">
+        <itemPath>../../../ext/cvshared/cpp/include/CvHttpRequest.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvLogger.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvMutex.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvQueue.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvSemaphore.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvString.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvThread.h</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/include/CvXcode.h</itemPath>
+      </logicalFolder>
+      <itemPath>HttpRequest.h</itemPath>
+      <itemPath>MpinClient.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f2" displayName="core" projectFiles="true">
+        <itemPath>../../../src/core/mpin_crypto_non_tee.cpp</itemPath>
+        <itemPath>../../../src/core/mpin_sdk.cpp</itemPath>
+        <itemPath>../../../src/core/utils.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="crypto" projectFiles="true">
+        <itemPath>../../../src/core/crypto/aes.c</itemPath>
+        <itemPath>../../../src/core/crypto/big.c</itemPath>
+        <itemPath>../../../src/core/crypto/ecp.c</itemPath>
+        <itemPath>../../../src/core/crypto/ecp2.c</itemPath>
+        <itemPath>../../../src/core/crypto/ff.c</itemPath>
+        <itemPath>../../../src/core/crypto/fp.c</itemPath>
+        <itemPath>../../../src/core/crypto/fp12.c</itemPath>
+        <itemPath>../../../src/core/crypto/fp2.c</itemPath>
+        <itemPath>../../../src/core/crypto/fp4.c</itemPath>
+        <itemPath>../../../src/core/crypto/gcm.c</itemPath>
+        <itemPath>../../../src/core/crypto/hash.c</itemPath>
+        <itemPath>../../../src/core/crypto/mpin.c</itemPath>
+        <itemPath>../../../src/core/crypto/oct.c</itemPath>
+        <itemPath>../../../src/core/crypto/pair.c</itemPath>
+        <itemPath>../../../src/core/crypto/rand.c</itemPath>
+        <itemPath>../../../src/core/crypto/rom.c</itemPath>
+        <itemPath>../../../src/core/crypto/version.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="cvshared" projectFiles="true">
+        <itemPath>../../../ext/cvshared/cpp/linux/CvHttpRequest.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/linux/CvLogger.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/linux/CvMutex.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/linux/CvSemaphore.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/CvString.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/linux/CvThread.cpp</itemPath>
+        <itemPath>../../../ext/cvshared/cpp/CvXcode.cpp</itemPath>
+      </logicalFolder>
+      <itemPath>HttpRequest.cpp</itemPath>
+      <itemPath>MpinClient.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>Readme.md</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>../../../src/core/crypto</pElem>
+            <pElem>../../../src/core</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>../../../src/core/crypto</pElem>
+            <pElem>../../../src/core</pElem>
+            <pElem>../../../ext/cvshared/cpp/include</pElem>
+            <pElem>../../../src/core/json</pElem>
+            <pElem>../../../src/core/utf8</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
+            <linkerLibLibItem>crypto</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="../../../ext/cvshared/cpp/CvString.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/CvXcode.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvHttpRequest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvLogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvMutex.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvQueue.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvSemaphore.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvString.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvThread.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvXcode.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvHttpRequest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvLogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvMutex.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvSemaphore.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvThread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/DLLDefines.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/aes.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/big.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/clint.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ecp.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ff.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp12.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp2.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp4.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/gcm.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/hash.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/mpin.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/mpin.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/oct.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/pair.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/platform.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/rand.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/rom.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/version.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto_non_tee.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto_non_tee.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_sdk.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/utf8.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/utils.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/core/utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="HttpRequest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HttpRequest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MpinClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MpinClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Readme.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>../../../src/core/crypto</pElem>
+            <pElem>../../../src/core</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>../../../src/core/crypto</pElem>
+            <pElem>../../../src/core</pElem>
+            <pElem>../../../ext/cvshared/cpp/include</pElem>
+            <pElem>../../../src/core/json</pElem>
+            <pElem>../../../src/core/utf8</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
+            <linkerLibLibItem>crypto</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="../../../ext/cvshared/cpp/CvString.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/CvXcode.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvHttpRequest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvLogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvMutex.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvQueue.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvSemaphore.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvString.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvThread.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/include/CvXcode.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvHttpRequest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvLogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvMutex.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvSemaphore.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../ext/cvshared/cpp/linux/CvThread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/DLLDefines.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/aes.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/big.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/clint.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ecp.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/ff.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp12.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp2.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/fp4.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/gcm.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/hash.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/mpin.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/mpin.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/oct.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/pair.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/platform.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/rand.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/rom.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/version.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../../../src/core/crypto/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto_non_tee.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_crypto_non_tee.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/core/mpin_sdk.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/utf8.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/utils.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/core/utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/core/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="HttpRequest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HttpRequest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MpinClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MpinClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Readme.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
