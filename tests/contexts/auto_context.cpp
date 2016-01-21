@@ -30,30 +30,8 @@ under the License.
 
 typedef MPinSDK::String String;
 typedef MPinSDK::IHttpRequest IHttpRequest;
-typedef MPinSDK::IPinPad IPinPad;
 typedef MPinSDK::CryptoType CryptoType;
 typedef MPinSDK::UserPtr UserPtr;
-
-/*
- * Pinpad class impl
- */
-
-class AutoPinpad : public MPinSDK::IPinPad
-{
-public:
-    void SetPin(const String& pin)
-    {
-        m_pin = pin;
-    }
-
-    virtual String Show(UserPtr user, Mode mode)
-    {
-        return m_pin;
-    }
-
-private:
-    String m_pin;
-};
 
 /*
  * Context class impl
@@ -63,14 +41,12 @@ AutoContext::AutoContext()
 {
     m_nonSecureStorage = new MemoryStorage();
     m_secureStorage = new MemoryStorage();
-    m_pinpad = new AutoPinpad();
 }
 
 AutoContext::~AutoContext()
 {
     delete m_nonSecureStorage;
     delete m_secureStorage;
-    delete m_pinpad;
 }
 
 IHttpRequest * AutoContext::CreateHttpRequest() const
@@ -93,17 +69,7 @@ MPinSDK::IStorage * AutoContext::GetStorage(IStorage::Type type) const
     return m_nonSecureStorage;
 }
 
-IPinPad * AutoContext::GetPinPad() const
-{
-    return m_pinpad;
-}
-
 CryptoType AutoContext::GetMPinCryptoType() const
 {
     return MPinSDK::CRYPTO_NON_TEE;
-}
-
-void AutoContext::SetPin(const String& pin)
-{
-    ((AutoPinpad *) m_pinpad)->SetPin(pin);
 }

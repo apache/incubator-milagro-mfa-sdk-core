@@ -102,9 +102,6 @@
     <ClCompile Include="..\..\src\utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mpin_sdk_v2.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\mpin_crypto.h">
@@ -189,9 +186,6 @@
       <Filter>src\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\utils.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mpin_sdk_v2.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

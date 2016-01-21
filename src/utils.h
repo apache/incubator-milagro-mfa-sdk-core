@@ -47,7 +47,7 @@ public:
     ~String();
     String& Trim(const std::string& chars = " \t\f\v\n\r");
     void Overwrite(char c = ' ');
-    int GetHash();
+    int GetHash() const;
 };
 
 void OverwriteString(std::string& str, char c = ' ');

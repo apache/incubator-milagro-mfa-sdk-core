@@ -30,33 +30,9 @@ under the License.
 
 typedef MPinSDK::String String;
 typedef MPinSDK::IHttpRequest IHttpRequest;
-typedef MPinSDK::IPinPad IPinPad;
 typedef MPinSDK::CryptoType CryptoType;
 typedef MPinSDK::UserPtr UserPtr;
 using namespace std;
-
-/*
- * Pinpad class impl
- */
-
-class CmdLinePinpad : public MPinSDK::IPinPad
-{
-public:
-    virtual String Show(UserPtr user, Mode mode)
-    {
-        String pin;
-        cout << "Enter pin: ";
-        cin >> pin;
-
-        // Special character to simulate PIN_INPUT_CANCELED
-        if(pin == "c")
-        {
-            pin.clear();
-        }
-
-        return pin;
-    }
-};
 
 /*
  * Context class impl
@@ -66,14 +42,12 @@ CmdLineContext::CmdLineContext(const String& usersFile, const String& tokensFile
 {
     m_nonSecureStorage = new FileStorage(usersFile);
     m_secureStorage = new FileStorage(tokensFile);
-    m_pinpad = new CmdLinePinpad();
 }
 
 CmdLineContext::~CmdLineContext()
 {
     delete m_nonSecureStorage;
     delete m_secureStorage;
-    delete m_pinpad;
 }
 
 IHttpRequest * CmdLineContext::CreateHttpRequest() const
@@ -94,11 +68,6 @@ MPinSDK::IStorage * CmdLineContext::GetStorage(IStorage::Type type) const
     }
 
     return m_nonSecureStorage;
-}
-
-IPinPad * CmdLineContext::GetPinPad() const
-{
-    return m_pinpad;
 }
 
 CryptoType CmdLineContext::GetMPinCryptoType() const

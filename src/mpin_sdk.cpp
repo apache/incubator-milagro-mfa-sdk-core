@@ -623,7 +623,7 @@ Status MPinSDK::Init(const StringMap& config, IContext* ctx)
     if(ctx->GetMPinCryptoType() == CRYPTO_NON_TEE)
     {
         MPinCryptoNonTee *nonteeCrypto = new MPinCryptoNonTee();
-        Status s = nonteeCrypto->Init(ctx->GetPinPad(), ctx->GetStorage(IStorage::SECURE));
+        Status s = nonteeCrypto->Init(ctx->GetStorage(IStorage::SECURE));
         if(s != Status::OK)
         {
             delete nonteeCrypto;
@@ -893,7 +893,7 @@ Status MPinSDK::VerifyUser(UserPtr user, const String& mpinId, const String &  a
     return s;
 }
 
-Status MPinSDK::FinishRegistration(UserPtr user, const String & pushMessageIdentifier)
+Status MPinSDK::ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier)
 {
     Status s = CheckIfBackendIsSet();
     if(s != Status::OK)
@@ -921,17 +921,18 @@ Status MPinSDK::FinishRegistration(UserPtr user, const String & pushMessageIdent
     String regOTT = user->GetRegOTT();
 
     String url = String().Format("%s/%s?regOTT=%s", m_clientSettings.GetStringParam("signatureURL"), mpinIdHex.c_str(), regOTT.c_str());
-    if(pushMessageIdentifier != "") {
-        url = url + "&pmiToken=" + pushMessageIdentifier;
+    if(!pushMessageIdentifier.empty())
+    {
+        url += "&pmiToken=" + pushMessageIdentifier;
     }
-    
+
     HttpResponse response = MakeGetRequest(url);
     if(response.GetStatus() != HttpResponse::HTTP_OK)
     {
         return response.TranslateToMPinStatus(HttpResponse::GET_CLIENT_SECRET1);
     }
 
-    String cs1 = util::HexDecode(response.GetJsonData().GetStringParam("clientSecretShare"));
+    user->m_clientSecret1 = util::HexDecode(response.GetJsonData().GetStringParam("clientSecretShare"));
 
     // Request the client secret share from CertiVox's D-TA.
     String cs2Params = response.GetJsonData().GetStringParam("params");
@@ -942,7 +943,38 @@ Status MPinSDK::FinishRegistration(UserPtr user, const String & pushMessageIdent
         return response.TranslateToMPinStatus(HttpResponse::GET_CLIENT_SECRET2);
     }
 
-    String cs2 = util::HexDecode(response.GetJsonData().GetStringParam("clientSecret"));
+    user->m_clientSecret2 = util::HexDecode(response.GetJsonData().GetStringParam("clientSecret"));
+
+    return Status::OK;
+}
+
+Status MPinSDK::FinishRegistration(INOUT UserPtr user, const String& pin)
+{
+    Status s = CheckIfBackendIsSet();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
+	// A user can get here either in STARTED_REGISTRATION state or in ACTIVATED state (force-activate flow)
+	// In the first case, the method might fail if the user identity has not been verified yet, and the user state
+	// should stay as it was - STARTED_REGISTRATION
+    s = CheckUserState(user, User::STARTED_REGISTRATION);
+    if(s != Status::OK)
+    {
+		Status sSave = s;
+		s = CheckUserState(user, User::ACTIVATED);
+		if ( s != Status::OK )
+		{
+			return sSave;
+		}
+    }
+
+    // In addition, client secret shares must be retrieved
+    if(user->m_clientSecret1.empty() || user->m_clientSecret2.empty())
+    {
+        return Status(Status::FLOW_ERROR, String().Format("Cannot finish user '%s' registration: User identity not verified", user->GetId().c_str()));
+    }
 
     s = m_crypto->OpenSession();
     if(s != Status::OK)
@@ -951,10 +983,10 @@ Status MPinSDK::FinishRegistration(UserPtr user, const String & pushMessageIdent
     }
 
     std::vector<String> clientSecretShares;
-    clientSecretShares.push_back(cs1);
-    clientSecretShares.push_back(cs2);
+    clientSecretShares.push_back(user->m_clientSecret1);
+    clientSecretShares.push_back(user->m_clientSecret2);
 
-    s = m_crypto->Register(user, clientSecretShares);
+    s = m_crypto->Register(user, pin, clientSecretShares);
     if(s != Status::OK)
     {
         m_crypto->CloseSession();
@@ -970,52 +1002,10 @@ Status MPinSDK::FinishRegistration(UserPtr user, const String & pushMessageIdent
         return s;
     }
 
-    return Status(Status::OK);
+    return Status::OK;
 }
 
-Status MPinSDK::Authenticate(UserPtr user)
-{
-    util::JsonObject authResult;
-    return AuthenticateImpl(user, "", NULL, authResult);
-}
-
-Status MPinSDK::Authenticate(UserPtr user, OUT String& authResultData)
-{
-    util::JsonObject authResult;
-
-    Status s = AuthenticateImpl(user, "", NULL, authResult);
-
-    authResultData = authResult.ToString();
-    return s;
-}
-
-Status MPinSDK::AuthenticateOTP(UserPtr user, OUT OTP& otp)
-{
-    util::JsonObject authResult;
-    String otpNumber;
-
-    Status s = AuthenticateImpl(user, "", &otpNumber, authResult);
-
-    otp.ExtractFrom(otpNumber, authResult);
-    return s;
-}
-
-Status MPinSDK::AuthenticateAN(INOUT UserPtr user, const String& accessNumber)
-{
-    util::JsonObject authResult;
-
-    Status s = AuthenticateImpl(user, accessNumber, NULL, authResult);
-
-    LogoutData logoutData;
-    if(logoutData.ExtractFrom(authResult))
-    {
-        m_logoutData.insert(std::make_pair(user, logoutData));
-    }
-
-    return s;
-}
-
-Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber, OUT String *otp, OUT util::JsonObject& authResultData)
+Status MPinSDK::StartAuthentication(INOUT UserPtr user)
 {
     Status s = CheckIfBackendIsSet();
     if(s != Status::OK)
@@ -1031,9 +1021,7 @@ Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber,
     }
 
     // Request a time permit share from the customer's D-TA and a signed request for a time permit share from CertiVox's D-TA.
-    String mpinId = user->GetMPinId();
     String mpinIdHex = user->GetMPinIdHex();
-
     String url = String().Format("%s/%s", m_clientSettings.GetStringParam("timePermitsURL"), mpinIdHex.c_str());
     HttpResponse response = MakeGetRequest(url);
     if(response.GetStatus() != HttpResponse::HTTP_OK)
@@ -1041,21 +1029,92 @@ Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber,
         return response.TranslateToMPinStatus(HttpResponse::GET_TIME_PERMIT1);
     }
 
-    String tp1 = util::HexDecode(response.GetJsonData().GetStringParam("timePermit"));
+    user->m_timePermitShare1 = util::HexDecode(response.GetJsonData().GetStringParam("timePermit"));
 
     // Request time permit share from CertiVox's D-TA (Searches first in user cache, than in S3 cache)
-    String tp2;
-    s = GetCertivoxTimePermitShare(user, response.GetJsonData(), tp2);
+    s = GetCertivoxTimePermitShare(user, response.GetJsonData(), user->m_timePermitShare2);
     if(s != Status::OK)
     {
         return s;
     }
 
-    // Check accessNumber
-    if(!accessNumber.empty() && !CheckAccessNumber(accessNumber))
+    return Status::OK;
+}
+
+Status MPinSDK::CheckAccessNumber(const String& accessNumber)
+{
+    if(accessNumber.empty() || !ValidateAccessNumber(accessNumber))
     {
         return Status(Status::INCORRECT_ACCESS_NUMBER, "Invalid access number");
     }
+
+    return Status::OK;
+}
+
+Status MPinSDK::FinishAuthentication(INOUT UserPtr user, const String& pin)
+{
+    util::JsonObject authResult;
+    return FinishAuthenticationImpl(user, pin, "", NULL, authResult);
+}
+
+Status MPinSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData)
+{
+    util::JsonObject authResult;
+
+    Status s = FinishAuthenticationImpl(user, pin, "", NULL, authResult);
+
+    authResultData = authResult.ToString();
+    return s;
+}
+
+Status MPinSDK::FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp)
+{
+    util::JsonObject authResult;
+    String otpNumber;
+
+    Status s = FinishAuthenticationImpl(user, pin, "", &otpNumber, authResult);
+
+    otp.ExtractFrom(otpNumber, authResult);
+    return s;
+}
+
+Status MPinSDK::FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber)
+{
+    util::JsonObject authResult;
+
+    Status s = FinishAuthenticationImpl(user, pin, accessNumber, NULL, authResult);
+
+    LogoutData logoutData;
+    if(logoutData.ExtractFrom(authResult))
+    {
+        m_logoutData.insert(std::make_pair(user, logoutData));
+    }
+
+    return s;
+}
+
+Status MPinSDK::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, const String& accessNumber, OUT String *otp, OUT util::JsonObject& authResultData)
+{
+    Status s = CheckIfBackendIsSet();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
+    // Check if the user is already registered
+    s = CheckUserState(user, User::REGISTERED);
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
+    // Check if time permit was obtained from StartAuthentication
+    if(user->m_timePermitShare1.empty() || user->m_timePermitShare2.empty())
+    {
+        return Status(Status::FLOW_ERROR, String().Format("Cannot finish user '%s' authentication: Invalid time permit", user->GetId().c_str()));
+    }
+
+    String mpinIdHex = user->GetMPinIdHex();
 
     s = m_crypto->OpenSession();
     if(s != Status::OK)
@@ -1064,12 +1123,12 @@ Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber,
     }
 
     std::vector<String> timePermitShares;
-    timePermitShares.push_back(tp1);
-    timePermitShares.push_back(tp2);
+    timePermitShares.push_back(user->m_timePermitShare1);
+    timePermitShares.push_back(user->m_timePermitShare2);
 
     // Authentication pass 1
     String u, ut;
-    s = m_crypto->AuthenticatePass1(user, timePermitShares, u, ut);
+    s = m_crypto->AuthenticatePass1(user, pin, timePermitShares, u, ut);
     if(s != Status::OK)
     {
         m_crypto->CloseSession();
@@ -1083,8 +1142,8 @@ Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber,
     requestData["U"] = json::String(util::HexEncode(u));
 
     String mpinAuthServerURL = m_clientSettings.GetStringParam("mpinAuthServerURL");
-    url.Format("%s/pass1", mpinAuthServerURL.c_str());
-    response = MakeRequest(url, IHttpRequest::POST, requestData);
+    String url = String().Format("%s/pass1", mpinAuthServerURL.c_str());
+    HttpResponse response = MakeRequest(url, IHttpRequest::POST, requestData);
     if(response.GetStatus() != HttpResponse::HTTP_OK)
     {
         m_crypto->CloseSession();
@@ -1148,7 +1207,7 @@ Status MPinSDK::AuthenticateImpl(INOUT UserPtr user, const String& accessNumber,
 
     authResultData = response.GetJsonData();
 
-    return Status(Status::OK);
+    return Status::OK;
 }
 
 Status MPinSDK::GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit)
@@ -1244,7 +1303,7 @@ bool MPinSDK::LogoutData::ExtractFrom(const util::JsonObject& json)
     return true;
 }
 
-bool MPinSDK::CheckAccessNumber(const String& accessNumber)
+bool MPinSDK::ValidateAccessNumber(const String& accessNumber)
 {
     bool accessNumberUseCheckSum = m_clientSettings.GetBoolParam("accessNumberUseCheckSum", true);
     int accessNumberDigits = m_clientSettings.GetIntParam("accessNumberDigits", AN_WITH_CHECKSUM_LEN);
@@ -1510,7 +1569,7 @@ Status MPinSDK::LoadUsersFromStorage()
 
 const char * MPinSDK::GetVersion()
 {
-    return MPIN_SDK_VERSION;
+    return MPIN_SDK_V2_VERSION;
 }
 
 bool MPinSDK::CanLogout(UserPtr user)
@@ -1546,32 +1605,39 @@ bool MPinSDK::Logout(UserPtr user)
 class StringVisitor:public json::Visitor
 {
 public:
-   virtual ~StringVisitor() {}
+    virtual ~StringVisitor() {}
 
-   virtual void Visit(json::Array& array) {}
-   virtual void Visit(json::Object& object) {}
-   virtual void Visit(json::Null& null){}
-   virtual void Visit(json::Number& number){
-	   data << (int) number.Value();
-   }
-   virtual void Visit(json::String& string){
-	   data << string.Value();
-   }
-   virtual void Visit(json::Boolean& boolean) {
-       data << (boolean.Value() ? "true" : "false");
-   }
+    virtual void Visit(json::Array& array) {}
+    virtual void Visit(json::Object& object) {}
+    virtual void Visit(json::Null& null){}
+
+    virtual void Visit(json::Number& number)
+    {
+        data << (int) number.Value();
+    }
+
+    virtual void Visit(json::String& string)
+    {
+	    data << string.Value();
+    }
+
+    virtual void Visit(json::Boolean& boolean)
+    {
+        data << (boolean.Value() ? "true" : "false");
+    }
    
+    String GetData()
+    {
+	    return data.str();
+    }	   
    
-   String getData() {
-		return data.str();
-   }	   
-   
-   private:
-	std::stringstream data;
+private:
+    std::stringstream data;
 };
 
-String MPinSDK::GetClientParam(const String& key) {
+String MPinSDK::GetClientParam(const String& key)
+{
 	StringVisitor sv;
 	m_clientSettings[key].Accept(sv);
-	return sv.getData();
+	return sv.GetData();
 }

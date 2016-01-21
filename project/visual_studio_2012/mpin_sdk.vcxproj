@@ -101,7 +101,6 @@
     <ClCompile Include="..\..\src\crypto\version.c" />
     <ClCompile Include="..\..\src\mpin_crypto_non_tee.cpp" />
     <ClCompile Include="..\..\src\mpin_sdk.cpp" />
-    <ClCompile Include="..\..\src\mpin_sdk_v2.cpp" />
     <ClCompile Include="..\..\src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -127,7 +126,6 @@
     <ClInclude Include="..\..\src\mpin_crypto.h" />
     <ClInclude Include="..\..\src\mpin_crypto_non_tee.h" />
     <ClInclude Include="..\..\src\mpin_sdk.h" />
-    <ClInclude Include="..\..\src\mpin_sdk_v2.h" />
     <ClInclude Include="..\..\src\utf8.h" />
     <ClInclude Include="..\..\src\utf8\checked.h" />
     <ClInclude Include="..\..\src\utf8\core.h" />
