@@ -71,7 +71,7 @@ String Octet::ToString()
 }
 
 
-MPinCryptoNonTee::MPinCryptoNonTee() : m_pinPad(NULL), m_storage(NULL), m_initialized(false), m_sessionOpened(false)
+MPinCryptoNonTee::MPinCryptoNonTee() : m_storage(NULL), m_initialized(false), m_sessionOpened(false)
 {
 }
 
@@ -80,14 +80,13 @@ MPinCryptoNonTee::~MPinCryptoNonTee()
     Destroy();
 }
 
-Status MPinCryptoNonTee::Init(IPinPad *pinpad, IStorage *storage)
+Status MPinCryptoNonTee::Init(IStorage *storage)
 {
     if(m_initialized)
     {
         return Status(Status::OK);
     }
 
-    m_pinPad = pinpad;
     m_storage = storage;
 
     String tokensJson;
@@ -146,7 +145,7 @@ void MPinCryptoNonTee::CloseSession()
     }
 }
 
-Status MPinCryptoNonTee::Register(UserPtr user, std::vector<String>& clientSecretShares)
+Status MPinCryptoNonTee::Register(UserPtr user, const String& pin, std::vector<String>& clientSecretShares)
 {
     const String& mpinId = user->GetMPinId();
     
@@ -171,8 +170,6 @@ Status MPinCryptoNonTee::Register(UserPtr user, std::vector<String>& clientSecre
         return Status(Status::CRYPTO_ERROR, String().Format("MPIN_RECOMBINE_G1() failed with code %d", res));
     }
 
-    // Query the user for the pin
-    String pin = m_pinPad->Show(user, IPinPad::REGISTER);
     if(pin.empty())
     {
         return Status(Status::PIN_INPUT_CANCELED, "Pin input canceled");
@@ -195,7 +192,7 @@ Status MPinCryptoNonTee::Register(UserPtr user, std::vector<String>& clientSecre
     return Status(Status::OK);
 }
 
-Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, std::vector<String>& timePermitShares, String& commitmentU, String& commitmentUT)
+Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, std::vector<String>& timePermitShares, String& commitmentU, String& commitmentUT)
 {
     const String& mpinId = user->GetMPinId();
 
@@ -227,8 +224,6 @@ Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, std::vector<String>& ti
         return Status(Status::CRYPTO_ERROR, String().Format("Failed to find stored token for mpinId='%s'", mpinId.c_str()));
     }
 
-    // Query the user for the pin
-    String pin = m_pinPad->Show(user, IPinPad::AUTHENTICATE);
     if(pin.empty())
     {
         return Status(Status::PIN_INPUT_CANCELED, "Pin input canceled");

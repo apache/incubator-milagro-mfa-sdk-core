@@ -45,7 +45,7 @@ String& String::Trim(const std::string& chars)
     return *this;
 }
 
-int String::GetHash()
+int String::GetHash() const
 {
     // Implements java style hashcode: h(s)=\sum_{i=0}^{n-1}s[i] \cdot 31^{n-1-i}
     int hash = 0;

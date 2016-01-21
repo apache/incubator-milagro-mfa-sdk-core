@@ -33,7 +33,6 @@ extern "C"
 class MPinCryptoNonTee : public IMPinCrypto
 {
 public:
-    typedef MPinSDK::IPinPad IPinPad;
     typedef MPinSDK::IStorage IStorage;
     typedef util::JsonObject JsonObject;
     typedef MPinSDK::UserPtr UserPtr;
@@ -41,13 +40,13 @@ public:
     MPinCryptoNonTee();
     ~MPinCryptoNonTee();
 
-    Status Init(IN IPinPad *pinpad, IN IStorage *storage);
+    Status Init(IN IStorage *storage);
     void Destroy();
 
     virtual Status OpenSession();
     virtual void CloseSession();
-    virtual Status Register(IN UserPtr user, IN std::vector<String>& clientSecretShares);
-    virtual Status AuthenticatePass1(IN UserPtr user, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT);
+    virtual Status Register(IN UserPtr user, const String& pin, IN std::vector<String>& clientSecretShares);
+    virtual Status AuthenticatePass1(IN UserPtr user, const String& pin, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT);
     virtual Status AuthenticatePass2(IN UserPtr user, const String& challenge, OUT String& validator);
     virtual void DeleteToken(const String& mpinId);
 
@@ -63,7 +62,6 @@ private:
     static void GenerateRandomSeed(OUT char *buf, size_t len);
 
 private:
-    IPinPad *m_pinPad;
     IStorage *m_storage;
     bool m_initialized;
     bool m_sessionOpened;

@@ -97,19 +97,6 @@ public:
         virtual const String& GetErrorMessage() const = 0;
     };
 
-    class IPinPad
-    {
-    public:
-        enum Mode
-        {
-            REGISTER,
-            AUTHENTICATE,
-        };
-
-        virtual ~IPinPad() {}
-        virtual String Show(UserPtr user, Mode mode) = 0;
-    };
-
     class IContext
     {
     public:
@@ -117,7 +104,6 @@ public:
         virtual IHttpRequest * CreateHttpRequest() const = 0;
         virtual void ReleaseHttpRequest(IN IHttpRequest *request) const = 0;
         virtual IStorage * GetStorage(IStorage::Type type) const = 0;
-        virtual IPinPad * GetPinPad() const = 0;
         virtual CryptoType GetMPinCryptoType() const = 0;
     };
 
@@ -242,17 +228,23 @@ public:
     void Destroy();
     void ClearUsers();
 
-    Status TestBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX) const;
-    Status SetBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX);
+    Status TestBackend(const String& server, const String& rpsPrefix = MPinSDK::DEFAULT_RPS_PREFIX) const;
+    Status SetBackend(const String& server, const String& rpsPrefix = MPinSDK::DEFAULT_RPS_PREFIX);
     UserPtr MakeNewUser(const String& id, const String& deviceName = "") const;
+
     Status StartRegistration(INOUT UserPtr user, const String& userData = "");
     Status RestartRegistration(INOUT UserPtr user, const String& userData = "");
-    Status VerifyUser(UserPtr user, const String& mpinId, const String &  activationKey);
-    Status FinishRegistration(INOUT UserPtr user, const String & pushMessageIdentifier = "");
-    Status Authenticate(INOUT UserPtr user);
-    Status Authenticate(INOUT UserPtr user, OUT String& authResultData);
-    Status AuthenticateOTP(INOUT UserPtr user, OUT OTP& otp);
-    Status AuthenticateAN(INOUT UserPtr user, const String& accessNumber);
+    Status VerifyUser(INOUT UserPtr user, const String& mpinId, const String& activationKey);
+    Status ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier = "");
+    Status FinishRegistration(INOUT UserPtr user, const String& pin);
+
+    Status StartAuthentication(INOUT UserPtr user);
+    Status CheckAccessNumber(const String& accessNumber);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData);
+    Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
+    Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
+
     void DeleteUser(INOUT UserPtr user);
     void ListUsers(OUT std::vector<UserPtr>& users);
     const char * GetVersion();
@@ -348,9 +340,9 @@ private:
     Status RewriteRelativeUrls();
     Status GetClientSettings(const String& backend, const String& rpsPrefix, OUT util::JsonObject *clientSettings) const;
     Status RequestRegistration(INOUT UserPtr user, const String& userData);
-    Status AuthenticateImpl(INOUT UserPtr user, const String& accessNumber, OUT String *otp, OUT util::JsonObject& authResultData);
+    Status FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, const String& accessNumber, OUT String *otp, OUT util::JsonObject& authResultData);
     Status GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit);
-    bool CheckAccessNumber(const String& accessNumber);
+    bool ValidateAccessNumber(const String& accessNumber);
     bool ValidateAccessNumberChecksum(const String& accessNumber);
     void AddUser(IN UserPtr user);
     Status CheckUserState(IN UserPtr user, User::State expectedState);
@@ -361,8 +353,6 @@ private:
     static const int AN_WITH_CHECKSUM_LEN = 7;
 
 private:
-    friend class MPinSDKv2;
-
     typedef std::map<String, UserPtr> UsersMap;
     typedef std::map<UserPtr, LogoutData> LogoutDataMap;
     
