@@ -493,7 +493,7 @@ void MPinCryptoNonTee::GenerateRandomSeed(char *buf, size_t len)
     FILE *fp = fopen("/dev/urandom", "rb");
     if(fp != NULL)
     {
-        fread(buf, 1, len, fp);
+        size_t rc = fread(buf, 1, len, fp);
         fclose(fp);
     }
 #else

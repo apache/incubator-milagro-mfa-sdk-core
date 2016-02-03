@@ -5,20 +5,20 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="core" projectFiles="true">
-        <itemPath>../../../src/core/cv_shared_ptr.h</itemPath>
-        <itemPath>../../../src/core/mpin_crypto.h</itemPath>
-        <itemPath>../../../src/core/mpin_crypto_non_tee.h</itemPath>
-        <itemPath>../../../src/core/mpin_sdk.h</itemPath>
-        <itemPath>../../../src/core/utf8.h</itemPath>
-        <itemPath>../../../src/core/utils.h</itemPath>
-        <itemPath>../../../src/core/version.h</itemPath>
+        <itemPath>../../../src/cv_shared_ptr.h</itemPath>
+        <itemPath>../../../src/mpin_crypto.h</itemPath>
+        <itemPath>../../../src/mpin_crypto_non_tee.h</itemPath>
+        <itemPath>../../../src/mpin_sdk.h</itemPath>
+        <itemPath>../../../src/utf8.h</itemPath>
+        <itemPath>../../../src/utils.h</itemPath>
+        <itemPath>../../../src/version.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="crypto" projectFiles="true">
-        <itemPath>../../../src/core/crypto/DLLDefines.h</itemPath>
-        <itemPath>../../../src/core/crypto/clint.h</itemPath>
-        <itemPath>../../../src/core/crypto/mpin.h</itemPath>
-        <itemPath>../../../src/core/crypto/platform.h</itemPath>
-        <itemPath>../../../src/core/crypto/version.h</itemPath>
+        <itemPath>../../../src/crypto/DLLDefines.h</itemPath>
+        <itemPath>../../../src/crypto/clint.h</itemPath>
+        <itemPath>../../../src/crypto/mpin.h</itemPath>
+        <itemPath>../../../src/crypto/platform.h</itemPath>
+        <itemPath>../../../src/crypto/version.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="cvshared" projectFiles="true">
         <itemPath>../../../ext/cvshared/cpp/include/CvHttpRequest.h</itemPath>
@@ -37,28 +37,28 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="core" projectFiles="true">
-        <itemPath>../../../src/core/mpin_crypto_non_tee.cpp</itemPath>
-        <itemPath>../../../src/core/mpin_sdk.cpp</itemPath>
-        <itemPath>../../../src/core/utils.cpp</itemPath>
+        <itemPath>../../../src/mpin_crypto_non_tee.cpp</itemPath>
+        <itemPath>../../../src/mpin_sdk.cpp</itemPath>
+        <itemPath>../../../src/utils.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="crypto" projectFiles="true">
-        <itemPath>../../../src/core/crypto/aes.c</itemPath>
-        <itemPath>../../../src/core/crypto/big.c</itemPath>
-        <itemPath>../../../src/core/crypto/ecp.c</itemPath>
-        <itemPath>../../../src/core/crypto/ecp2.c</itemPath>
-        <itemPath>../../../src/core/crypto/ff.c</itemPath>
-        <itemPath>../../../src/core/crypto/fp.c</itemPath>
-        <itemPath>../../../src/core/crypto/fp12.c</itemPath>
-        <itemPath>../../../src/core/crypto/fp2.c</itemPath>
-        <itemPath>../../../src/core/crypto/fp4.c</itemPath>
-        <itemPath>../../../src/core/crypto/gcm.c</itemPath>
-        <itemPath>../../../src/core/crypto/hash.c</itemPath>
-        <itemPath>../../../src/core/crypto/mpin.c</itemPath>
-        <itemPath>../../../src/core/crypto/oct.c</itemPath>
-        <itemPath>../../../src/core/crypto/pair.c</itemPath>
-        <itemPath>../../../src/core/crypto/rand.c</itemPath>
-        <itemPath>../../../src/core/crypto/rom.c</itemPath>
-        <itemPath>../../../src/core/crypto/version.c</itemPath>
+        <itemPath>../../../src/crypto/aes.c</itemPath>
+        <itemPath>../../../src/crypto/big.c</itemPath>
+        <itemPath>../../../src/crypto/ecp.c</itemPath>
+        <itemPath>../../../src/crypto/ecp2.c</itemPath>
+        <itemPath>../../../src/crypto/ff.c</itemPath>
+        <itemPath>../../../src/crypto/fp.c</itemPath>
+        <itemPath>../../../src/crypto/fp12.c</itemPath>
+        <itemPath>../../../src/crypto/fp2.c</itemPath>
+        <itemPath>../../../src/crypto/fp4.c</itemPath>
+        <itemPath>../../../src/crypto/gcm.c</itemPath>
+        <itemPath>../../../src/crypto/hash.c</itemPath>
+        <itemPath>../../../src/crypto/mpin.c</itemPath>
+        <itemPath>../../../src/crypto/oct.c</itemPath>
+        <itemPath>../../../src/crypto/pair.c</itemPath>
+        <itemPath>../../../src/crypto/rand.c</itemPath>
+        <itemPath>../../../src/crypto/rom.c</itemPath>
+        <itemPath>../../../src/crypto/version.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="cvshared" projectFiles="true">
         <itemPath>../../../ext/cvshared/cpp/linux/CvHttpRequest.cpp</itemPath>
@@ -98,18 +98,18 @@
         <cTool>
           <architecture>2</architecture>
           <incDir>
-            <pElem>../../../src/core/crypto</pElem>
-            <pElem>../../../src/core</pElem>
+            <pElem>../../../src/crypto</pElem>
+            <pElem>../../../src</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <architecture>2</architecture>
           <incDir>
-            <pElem>../../../src/core/crypto</pElem>
-            <pElem>../../../src/core</pElem>
+            <pElem>../../../src/crypto</pElem>
+            <pElem>../../../src</pElem>
             <pElem>../../../ext/cvshared/cpp/include</pElem>
-            <pElem>../../../src/core/json</pElem>
-            <pElem>../../../src/core/utf8</pElem>
+            <pElem>../../../src/json</pElem>
+            <pElem>../../../src/utf8</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -195,81 +195,72 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/DLLDefines.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/crypto/DLLDefines.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/aes.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/aes.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/big.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/big.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/clint.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/clint.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ecp.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ecp.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ff.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ff.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp12.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp12.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp2.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp2.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp4.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp4.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/gcm.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/gcm.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/hash.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/hash.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/mpin.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/mpin.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/mpin.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/mpin.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/oct.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/oct.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/pair.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/pair.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/platform.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/crypto/platform.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/rand.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/rand.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/rom.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/rom.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/version.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/version.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/version.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/version.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/mpin_crypto.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto_non_tee.cpp"
+      <item path="../../../src/mpin_crypto_non_tee.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto_non_tee.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/mpin_crypto_non_tee.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../src/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_sdk.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/mpin_sdk.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/utf8.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/utf8.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/utils.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../src/utils.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../src/core/utils.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/utils.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/version.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/version.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="HttpRequest.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -295,19 +286,19 @@
           <developmentMode>5</developmentMode>
           <architecture>2</architecture>
           <incDir>
-            <pElem>../../../src/core/crypto</pElem>
-            <pElem>../../../src/core</pElem>
+            <pElem>../../../src/crypto</pElem>
+            <pElem>../../../src</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
           <architecture>2</architecture>
           <incDir>
-            <pElem>../../../src/core/crypto</pElem>
-            <pElem>../../../src/core</pElem>
+            <pElem>../../../src/crypto</pElem>
+            <pElem>../../../src</pElem>
             <pElem>../../../ext/cvshared/cpp/include</pElem>
-            <pElem>../../../src/core/json</pElem>
-            <pElem>../../../src/core/utf8</pElem>
+            <pElem>../../../src/json</pElem>
+            <pElem>../../../src/utf8</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -399,81 +390,72 @@
             tool="1"
             flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/DLLDefines.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/crypto/DLLDefines.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/aes.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/aes.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/big.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/big.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/clint.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/clint.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ecp.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ecp.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ecp2.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/ff.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/ff.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp12.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp12.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp2.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp2.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/fp4.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/fp4.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/gcm.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/gcm.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/hash.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/hash.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/mpin.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/mpin.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/mpin.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/mpin.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/oct.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/oct.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/pair.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/pair.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/platform.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/crypto/platform.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/rand.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/rand.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/rom.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/rom.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/version.c" ex="false" tool="0" flavor2="0">
+      <item path="../../../src/crypto/version.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../../../src/core/crypto/version.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/crypto/version.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/cv_shared_ptr.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/mpin_crypto.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto_non_tee.cpp"
+      <item path="../../../src/mpin_crypto_non_tee.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_crypto_non_tee.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../../../src/mpin_crypto_non_tee.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../src/mpin_sdk.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../src/core/mpin_sdk.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/mpin_sdk.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/utf8.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/utf8.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/utils.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../../src/utils.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../../../src/core/utils.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/utils.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../../../src/core/version.h" ex="false" tool="3" flavor2="0">
+      <item path="../../../src/version.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="HttpRequest.cpp" ex="false" tool="1" flavor2="0">
       </item>

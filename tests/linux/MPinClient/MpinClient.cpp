@@ -79,7 +79,7 @@ bool CMpinClient::CStorage::GetData(OUT String &data)
 CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId ) :
 	m_bInitialized(false), m_id(aClientId), m_userId(aUserId),
 	m_storageSecure( String().Format("sec-%d", aClientId) ), m_storageNonSecure( String().Format("%d", aClientId) ),
-	m_context( String().Format("%d",aClientId), &m_storageSecure, &m_storageNonSecure, &m_pinPad ),
+	m_context( String().Format("%d",aClientId), &m_storageSecure, &m_storageNonSecure ),
 	m_thread(aUserId), m_queue(aUserId.c_str()), m_bIdle(false), m_bStatsEnabled(true)
 {
 	std::ifstream filePin( String().Format("pin-%d", m_id).c_str() );
@@ -92,7 +92,7 @@ CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String
 CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId, const String& aPinGood, const String& aPinBad ) :
 	m_bInitialized(false), m_id(aClientId), m_userId(aUserId), m_pinGood(aPinGood), m_pinBad(aPinBad),
 	m_storageSecure( String().Format("sec-%d", aClientId) ), m_storageNonSecure( String().Format("%d", aClientId) ),
-	m_context( String().Format("%d",aClientId), &m_storageSecure, &m_storageNonSecure, &m_pinPad ),
+	m_context( String().Format("%d",aClientId), &m_storageSecure, &m_storageNonSecure ),
 	m_thread(aUserId), m_queue(aUserId.c_str()), m_bIdle(false), m_bStatsEnabled(true)
 {
 	std::ofstream filePin( String().Format("pin-%d", m_id).c_str() );
@@ -171,8 +171,6 @@ bool CMpinClient::_Register()
 
 	MPinSDK::UserPtr user = m_sdk.MakeNewUser( m_userId, String().Format( "M-Pin Test Client #%d", m_id ) );
 	
-	m_pinPad.SetPin( m_pinGood );
-			
 	TimeSpec now;
 	GetCurrentTime(now);
 	Millisecs startTime = now.ToMillisecs();
@@ -197,7 +195,7 @@ bool CMpinClient::_Register()
 
 			CvShared::SleepFor( CvShared::Seconds(10) );
 
-			status = m_sdk.FinishRegistration( user );
+			status = m_sdk.ConfirmRegistration( user );
 			
 			if ( status == MPinSDK::Status::OK )
 			{
@@ -207,7 +205,7 @@ bool CMpinClient::_Register()
 				
 			if ( status != MPinSDK::Status::IDENTITY_NOT_VERIFIED )
 			{
-				LogMessage( enLogLevel_Error, "Failed in FinishRegistration(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
+				LogMessage( enLogLevel_Error, "Failed in ConfirmRegistration(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
 				if ( m_bStatsEnabled )
 				{
 					++m_stats.m_numOfErrors;
@@ -220,17 +218,29 @@ bool CMpinClient::_Register()
 	{
 		LogMessage( enLogLevel_Info, "User [%s] has been force-activated", user->GetId().c_str() );
 		
-		status = m_sdk.FinishRegistration( user );
+		status = m_sdk.ConfirmRegistration( user );
 
 		if ( status != MPinSDK::Status::OK )
 		{
-			LogMessage( enLogLevel_Error, "Failed in FinishRegistration(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
+			LogMessage( enLogLevel_Error, "Failed in ConfirmRegistration(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
 			if ( m_bStatsEnabled )
 			{
 				++m_stats.m_numOfErrors;
 			}
 			return false;
 		}
+	}
+	
+	status = m_sdk.FinishRegistration( user, m_pinGood );
+	
+	if ( status != MPinSDK::Status::OK )
+	{
+		LogMessage( enLogLevel_Error, "Failed in FinishRegistration(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
+		if ( m_bStatsEnabled )
+		{
+			++m_stats.m_numOfErrors;
+		}
+		return false;
 	}
 	
 	GetCurrentTime(now);
@@ -284,8 +294,6 @@ bool CMpinClient::_Authenticate( const String& aPin )
 	
 	MPinSDK::UserPtr user = *itr;
 	
-	m_pinPad.SetPin( aPin );
-	
 	if ( aPin == m_pinGood )
 	{
 		LogMessage( enLogLevel_Info, "Authenticating user [%s] with correct PIN...", user->GetId().c_str() );
@@ -299,7 +307,19 @@ bool CMpinClient::_Authenticate( const String& aPin )
 	GetCurrentTime(now);
 	Millisecs startTime = now.ToMillisecs();
 
-	MPinSDK::Status status = m_sdk.Authenticate( user );
+	MPinSDK::Status status = m_sdk.StartAuthentication( user );
+	
+	if ( status != MPinSDK::Status::OK )
+	{
+		LogMessage( enLogLevel_Error, "Failed in StartAuthentication(): %s [%d]", status.GetErrorMessage().c_str(), status.GetStatusCode() );
+		if ( m_bStatsEnabled )
+		{
+			++m_stats.m_numOfErrors;
+		}
+		return false;
+	}
+	
+	status = m_sdk.FinishAuthentication( user, aPin );
 	
 	if ( aPin == m_pinGood )
 	{

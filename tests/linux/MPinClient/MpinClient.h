@@ -29,7 +29,6 @@ typedef MPinSDK::String String;
 typedef MPinSDK::StringMap StringMap;
 	
 class CStorage;
-class CPinPad;
 class CContext;
 
 class CMpinClient
@@ -87,24 +86,11 @@ private:
 		String	m_errorMsg;
 	};
 
-	class CPinPad : public MPinSDK::IPinPad
-	{
-	public:
-		CPinPad()	{}
-		virtual ~CPinPad()	{}
-		virtual String Show(MPinSDK::UserPtr user, Mode mode) { return m_pin; }
-
-		void SetPin( const String& aPin )	{ m_pin = aPin; }
-
-	private:
-		String	m_pin;
-	};
-
 	class CContext : public MPinSDK::IContext
 	{
 	public:
-		CContext( const String& aId, CStorage* apStorageSecure, CStorage* apStorageNonSecure, CPinPad* apPinPad ) :
-			m_id(aId), m_pStorageSecure(apStorageSecure), m_pStorageNonSecure(apStorageNonSecure), m_pPinPad(apPinPad)
+		CContext( const String& aId, CStorage* apStorageSecure, CStorage* apStorageNonSecure ) :
+			m_id(aId), m_pStorageSecure(apStorageSecure), m_pStorageNonSecure(apStorageNonSecure)
 		{}		
 
 		virtual ~CContext() {}
@@ -112,14 +98,12 @@ private:
 		virtual MPinSDK::IHttpRequest* CreateHttpRequest() const;
 		virtual void ReleaseHttpRequest( IN MPinSDK::IHttpRequest *request ) const	{ delete request; }
 		virtual MPinSDK::IStorage* GetStorage( MPinSDK::IStorage::Type type ) const	{ return (type == MPinSDK::IStorage::SECURE) ? m_pStorageSecure : m_pStorageNonSecure; }
-		virtual MPinSDK::IPinPad* GetPinPad() const									{ return m_pPinPad; }
 		virtual MPinSDK::CryptoType GetMPinCryptoType() const						{ return MPinSDK::CRYPTO_NON_TEE; }
 
 	private:
 		String		m_id;
 		CStorage*	m_pStorageSecure;
 		CStorage*	m_pStorageNonSecure;
-		CPinPad*	m_pPinPad;
 	};
 
 	CMpinClient(const CMpinClient& orig);
@@ -134,7 +118,6 @@ private:
 	MPinSDK		m_sdk;
 	CStorage	m_storageSecure;
 	CStorage	m_storageNonSecure;
-	CPinPad		m_pinPad;
 	CContext	m_context;
 	
 	bool		m_bInitialized;

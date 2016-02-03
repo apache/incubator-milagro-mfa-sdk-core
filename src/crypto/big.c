@@ -101,7 +101,7 @@ void BIG_output(BIG a)
 	{
 		BIG_copy(b,a);
 		BIG_shr(b,i*4);
-		printf("%01x",b[0]&15);
+		printf("%01x",(unsigned int)(b[0]&15));
 	}
 }
 
@@ -111,8 +111,8 @@ void BIG_rawoutput(BIG a)
 	int i;
 	printf("(");
 	for (i=0;i<NLEN-1;i++)
-		printf("%llx,",a[i]);
-	printf("%llx)",a[NLEN-1]);
+		printf("%ldx,",a[i]);
+	printf("%ldx)",a[NLEN-1]);
 }
 
 /* Swap a and b if d=1 */
@@ -192,7 +192,7 @@ void BIG_doutput(DBIG a)
 	{
 		BIG_dcopy(b,a);
 		BIG_dshr(b,i*4);
-		printf("%01x",b[0]&15);
+		printf("%01x",(unsigned int)(b[0]&15));
 	}
 }
 
