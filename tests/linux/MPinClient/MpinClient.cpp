@@ -57,7 +57,7 @@ bool CMpinClient::CStorage::SetData(const String& data)
 	file << data;
 	file.close();
 	
-	LogMessage( enLogLevel_Debug1, "Writing data to [%s]:\n%s", m_fileName.c_str(), data.c_str() );
+	LogMessage( enLogLevel_Debug3, "Writing data to [%s]:\n%s", m_fileName.c_str(), data.c_str() );
 	
 	return true;
 }
@@ -71,7 +71,7 @@ bool CMpinClient::CStorage::GetData(OUT String &data)
 	
 	data = buffer.str();
 	
-	LogMessage( enLogLevel_Debug1, "Reading data from [%s]:\n%s", m_fileName.c_str(), data.c_str() );
+	LogMessage( enLogLevel_Debug3, "Reading data from [%s]:\n%s", m_fileName.c_str(), data.c_str() );
 	
 	return true;
 }
@@ -89,8 +89,8 @@ CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String
 	_Init(aBackendUrl);	
 }
 
-CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId, const String& aPinGood, const String& aPinBad ) :
-	m_bInitialized(false), m_id(aClientId), m_userId(aUserId), m_pinGood(aPinGood), m_pinBad(aPinBad),
+CMpinClient::CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId, const String& aPinGood, const String& aPinBad, const String& aRegOTC ) :
+	m_bInitialized(false), m_id(aClientId), m_userId(aUserId), m_pinGood(aPinGood), m_pinBad(aPinBad), m_regOTC(aRegOTC),
 	m_storageSecure( String().Format("sec-%d", aClientId) ), m_storageNonSecure( String().Format("%d", aClientId) ),
 	m_context( String().Format("%d",aClientId), &m_storageSecure, &m_storageNonSecure ),
 	m_thread(aUserId), m_queue(aUserId.c_str()), m_bIdle(false), m_bStatsEnabled(true)
@@ -175,7 +175,7 @@ bool CMpinClient::_Register()
 	GetCurrentTime(now);
 	Millisecs startTime = now.ToMillisecs();
 
-	MPinSDK::Status status = m_sdk.StartRegistration( user, "{ \"data\": \"test\" }" );
+	MPinSDK::Status status = m_sdk.StartRegistration( user, m_regOTC, "{ \"data\": \"test\" }" );
 	
 	if ( status != MPinSDK::Status::OK )
 	{

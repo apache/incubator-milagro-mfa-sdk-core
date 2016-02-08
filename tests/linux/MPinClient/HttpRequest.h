@@ -50,6 +50,7 @@ private:
 	String			m_id;
 	
 	CvHttpRequest	m_request;
+	CMapHttpHeaders m_requestHeaders;
 	String			m_requestData;	//Used for debugging purposes only	
 	StringMap		m_queryParams;
 	Seconds			m_timeout;

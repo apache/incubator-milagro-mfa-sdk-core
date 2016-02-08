@@ -35,7 +35,7 @@ class CMpinClient
 {
 public:
 
-	CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId, const String& aPinGood, const String& aPinBad );
+	CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId, const String& aPinGood, const String& aPinBad, const String& aRegOTC = "" );
 	CMpinClient( int aClientId, const String& aBackendUrl, const String& aUserId );
 
 	virtual ~CMpinClient();
@@ -125,6 +125,8 @@ private:
 	String		m_userId;
 	String		m_pinGood;
 	String		m_pinBad;
+	
+	String		m_regOTC;
 	
 	enum enEvent_t
 	{

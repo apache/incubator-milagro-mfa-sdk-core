@@ -232,9 +232,8 @@ public:
     Status SetBackend(const String& server, const String& rpsPrefix = MPinSDK::DEFAULT_RPS_PREFIX);
     UserPtr MakeNewUser(const String& id, const String& deviceName = "") const;
 
-    Status StartRegistration(INOUT UserPtr user, const String& userData = "");
+    Status StartRegistration(INOUT UserPtr user, const String& activateCode = "", const String& userData = "");
     Status RestartRegistration(INOUT UserPtr user, const String& userData = "");
-    Status VerifyUser(INOUT UserPtr user, const String& mpinId, const String& activationKey);
     Status ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier = "");
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
@@ -339,7 +338,7 @@ private:
     HttpResponse MakeGetRequest(const String& url, HttpResponse::DataType expectedResponseType = HttpResponse::JSON) const;
     Status RewriteRelativeUrls();
     Status GetClientSettings(const String& backend, const String& rpsPrefix, OUT util::JsonObject *clientSettings) const;
-    Status RequestRegistration(INOUT UserPtr user, const String& userData);
+    Status RequestRegistration(INOUT UserPtr user, const String& activateCode, const String& userData);
     Status FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, const String& accessNumber, OUT String *otp, OUT util::JsonObject& authResultData);
     Status GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit);
     bool ValidateAccessNumber(const String& accessNumber);
