@@ -29,15 +29,11 @@ CHttpRequest::~CHttpRequest()
 
 void CHttpRequest::SetHeaders(const StringMap& headers)
 {
-	CMapHttpHeaders tmpHeaders;
-	
 	StringMap::const_iterator itr = headers.begin();
 	for ( ; itr != headers.end(); ++itr )
 	{
-		tmpHeaders[itr->first] = itr->second;
+		m_requestHeaders[itr->first] = itr->second;
 	}
-
-	m_request.SetHeaders( tmpHeaders );
 }
 
 void CHttpRequest::SetQueryParams(const StringMap& queryParams)
@@ -75,6 +71,13 @@ bool CHttpRequest::Execute( MPinSDK::IHttpRequest::Method method, const String& 
 		return false;
 	}
 	
+	if (m_requestHeaders.find("X-MIRACL-OS-Class") == m_requestHeaders.end())
+	{
+		m_requestHeaders["X-MIRACL-OS-Class"] = "linux";
+	}
+	
+	m_request.SetHeaders( m_requestHeaders );
+
 	String fullUrl = url;
 	
 	if ( !m_queryParams.empty() )
@@ -90,7 +93,7 @@ bool CHttpRequest::Execute( MPinSDK::IHttpRequest::Method method, const String& 
 		fullUrl.TrimRight("&");
 	}
 	
-//	printf( "--> %s %s [%s]\n", strMethod.c_str(), fullUrl.c_str(), m_requestData.c_str() );
+	printf( "--> %s %s [%s]\n", strMethod.c_str(), fullUrl.c_str(), m_requestData.c_str() );
 
 	m_request.SetMethod( cvHttpMethod );
 	m_request.SetUrl( fullUrl );
@@ -111,7 +114,7 @@ bool CHttpRequest::Execute( MPinSDK::IHttpRequest::Method method, const String& 
 
 	m_responseData = m_request.GetResponse();
 	
-//	printf( "<-- %ld [%s]\n", m_request.GetResponseCode(), m_responseData.c_str() );
+	printf( "<-- %ld [%s]\n", m_request.GetResponseCode(), m_responseData.c_str() );
 
 	return true;
 }

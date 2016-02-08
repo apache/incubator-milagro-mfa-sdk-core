@@ -40,7 +40,7 @@ void PrintUsage(const char* aExeName, const char* aMessage = NULL)
 	{
 		printf("%s\n", aMessage);
 	}
-	printf("Usage: %s --reg --auth -n <num-of-clients> -r <requests-per-second> [-u <user-prefix> -t <timeout-sec> -c <count>] -b <backend-url>\n", aExeName);
+	printf("Usage: %s --reg --auth -n <num-of-clients> -r <requests-per-second> [-u <user-id> -t <timeout-sec> -c <count> -o <reg-otc>] -b <backend-url>\n", aExeName);
 	printf("\n");
 }
 
@@ -48,7 +48,7 @@ struct sParams
 {
 	sParams() :
 		bRegister(false), bAuthenticate(false), numOfClients(0), requestsPerSecond(0),
-		count(1), userPrefix("test"), timeout(30)
+		count(1), userId("test%d@dispostable.com"), timeout(30)
 	{}
 
 	bool		bRegister;
@@ -57,8 +57,9 @@ struct sParams
 	uint32_t	requestsPerSecond;
 	uint32_t	count;
 	::String	backendUrl;
-	::String	userPrefix;
+	::String	userId;
 	Seconds		timeout;
+	::String	regOTC;
 };
 
 bool doargs(int argc, char **argv, OUT sParams& aParams)
@@ -81,7 +82,7 @@ bool doargs(int argc, char **argv, OUT sParams& aParams)
 	};
 	int option_index = 0;
 
-	while ((ch = getopt_long(argc, argv, "n:r:b:u:t:c:", long_options, &option_index)) > 0)
+	while ((ch = getopt_long(argc, argv, "n:r:b:u:t:c:o:", long_options, &option_index)) > 0)
 	{
 		switch (ch)
 		{
@@ -91,7 +92,7 @@ bool doargs(int argc, char **argv, OUT sParams& aParams)
 				break;
 			case 'b': aParams.backendUrl = optarg;
 				break;
-			case 'u': aParams.userPrefix = optarg;
+			case 'u': aParams.userId = optarg;
 				break;
 			case 't': aParams.timeout = atoi(optarg);
 				break;
@@ -100,6 +101,8 @@ bool doargs(int argc, char **argv, OUT sParams& aParams)
 			case 1: aParams.bRegister = true;
 				break;
 			case 2: aParams.bAuthenticate = true;
+				break;
+			case 'o': aParams.regOTC = optarg;
 				break;
 		}
 	}
@@ -158,7 +161,7 @@ void WaitAllDone(std::list<CMpinClient*> aListClients, const Seconds aTimeout)
 
 int main(int argc, char** argv)
 {
-	InitLogger(argv[0], enLogLevel_Info);
+	InitLogger(argv[0], enLogLevel_Debug1);
 	LogMessage(enLogLevel_Info, "========== Starting M-Pin Client Test ==========");
 
 	sParams params;
@@ -195,7 +198,15 @@ int main(int argc, char** argv)
 	for (int i = 0; i < params.numOfClients; ++i)
 	{
 		::String userId;
-		userId.Format("%s%d@dispostable.com", params.userPrefix.c_str(), i + 1);
+		if ( params.userId.find("%d") != ::String::npos )
+		{
+			userId.Format( params.userId.c_str(), i + 1 );
+		}
+		else
+		{
+			userId = params.userId;
+		}
+	
 
 		CMpinClient* pClient = NULL;
 
@@ -209,7 +220,7 @@ int main(int argc, char** argv)
 				pinBad.Format("%04d", rand() % 10000);
 			}
 
-			pClient = new CMpinClient(i + 1, params.backendUrl, userId, pinGood, pinBad);
+			pClient = new CMpinClient(i + 1, params.backendUrl, userId, pinGood, pinBad, params.regOTC);
 		}
 		else
 		{

@@ -752,7 +752,7 @@ UserPtr MPinSDK::MakeNewUser(const String& id, const String& deviceName) const
     return UserPtr(new User(id, deviceName));
 }
 
-Status MPinSDK::StartRegistration(UserPtr user, const String& userData)
+Status MPinSDK::StartRegistration(UserPtr user, const String& activateCode, const String& userData)
 {
     Status s = CheckIfBackendIsSet();
     if(s != Status::OK)
@@ -766,7 +766,7 @@ Status MPinSDK::StartRegistration(UserPtr user, const String& userData)
         return s;
     }
 
-    return RequestRegistration(user, userData);
+    return RequestRegistration(user, activateCode, userData);
 }
 
 Status MPinSDK::RestartRegistration(UserPtr user, const String& userData)
@@ -783,10 +783,10 @@ Status MPinSDK::RestartRegistration(UserPtr user, const String& userData)
         return s;
     }
 
-    return RequestRegistration(user, userData);
+    return RequestRegistration(user, "", userData);
 }
 
-Status MPinSDK::RequestRegistration(UserPtr user, const String& userData)
+Status MPinSDK::RequestRegistration(UserPtr user, const String& activateCode, const String& userData)
 {
     // Make request to RPA to add M-Pin ID
     util::JsonObject data;
@@ -800,6 +800,10 @@ Status MPinSDK::RequestRegistration(UserPtr user, const String& userData)
     {
         data["userData"] = json::String(userData);
     }
+	if(!activateCode.empty())
+	{
+		data["activateCode"] = json::String(activateCode);
+	}
 
     String url;
     if(user->GetState() == User::STARTED_REGISTRATION)
@@ -852,45 +856,6 @@ Status MPinSDK::RequestRegistration(UserPtr user, const String& userData)
     }
     
     return Status(Status::OK);
-}
-
-Status MPinSDK::VerifyUser(UserPtr user, const String& mpinId, const String &  activationKey)
-{
-    Status s = CheckIfBackendIsSet();
-    if(s != Status::OK)
-    {
-        return s;
-    }
-
-    s = CheckUserState(user, User::INVALID);
-    if(s != Status::OK)
-    {
-        return s;
-    }
-    
-    String url = m_clientSettings.GetStringParam("mobileVerifyURL");
-    
-    util::JsonObject body;
-    body["mpin_id"] = json::String(mpinId);
-    body["activate_key"] = json::String(activationKey);
-    
-    HttpResponse response = MakeRequest(url, IHttpRequest::POST, body);
-    
-    if(response.GetStatus() != HttpResponse::HTTP_OK)
-    {
-        Status s;
-        s.SetStatusCode(Status::IDENTITY_NOT_VERIFIED);
-        s.SetErrorMessage("Identity not verified");
-        return s;
-    }
-
-    String regOTT = response.GetJsonData().GetStringParam("regOTT");
-
-    user->SetStartedRegistration(mpinId, regOTT);
-    AddUser(user);
-    s = WriteUsersToStorage();
-    
-    return s;
 }
 
 Status MPinSDK::ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier)
