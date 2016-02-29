@@ -93,7 +93,7 @@ bool CHttpRequest::Execute( MPinSDK::IHttpRequest::Method method, const String& 
 		fullUrl.TrimRight("&");
 	}
 	
-	printf( "--> %s %s [%s]\n", strMethod.c_str(), fullUrl.c_str(), m_requestData.c_str() );
+	//printf( "--> %s %s [%s]\n", strMethod.c_str(), fullUrl.c_str(), m_requestData.c_str() );
 
 	m_request.SetMethod( cvHttpMethod );
 	m_request.SetUrl( fullUrl );
@@ -114,7 +114,7 @@ bool CHttpRequest::Execute( MPinSDK::IHttpRequest::Method method, const String& 
 
 	m_responseData = m_request.GetResponse();
 	
-	printf( "<-- %ld [%s]\n", m_request.GetResponseCode(), m_responseData.c_str() );
+	//printf( "<-- %ld [%s]\n", m_request.GetResponseCode(), m_responseData.c_str() );
 
 	return true;
 }

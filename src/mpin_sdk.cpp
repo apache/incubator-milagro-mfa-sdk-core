@@ -1091,9 +1091,11 @@ Status MPinSDK::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, 
     timePermitShares.push_back(user->m_timePermitShare1);
     timePermitShares.push_back(user->m_timePermitShare2);
 
+	int date =  user->GetTimePermitCache().GetDate();
+	
     // Authentication pass 1
     String u, ut;
-    s = m_crypto->AuthenticatePass1(user, pin, timePermitShares, u, ut);
+    s = m_crypto->AuthenticatePass1(user, pin, date, timePermitShares, u, ut);
     if(s != Status::OK)
     {
         m_crypto->CloseSession();
