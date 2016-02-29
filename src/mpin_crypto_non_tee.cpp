@@ -192,7 +192,7 @@ Status MPinCryptoNonTee::Register(UserPtr user, const String& pin, std::vector<S
     return Status(Status::OK);
 }
 
-Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, std::vector<String>& timePermitShares, String& commitmentU, String& commitmentUT)
+Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, int date, std::vector<String>& timePermitShares, String& commitmentU, String& commitmentUT)
 {
     const String& mpinId = user->GetMPinId();
 
@@ -230,7 +230,6 @@ Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, std:
     }
 
     // Gather the parameters for Authentication pass 1
-    int date = today();
 
     Octet cid(mpinId);
 

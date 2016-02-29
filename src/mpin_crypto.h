@@ -42,7 +42,7 @@ public:
     virtual Status OpenSession() = 0;
     virtual void CloseSession() = 0;
     virtual Status Register(IN UserPtr user, const String& pin, IN std::vector<String>& clientSecretShares) = 0;
-    virtual Status AuthenticatePass1(IN UserPtr user, const String& pin, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT) = 0;
+    virtual Status AuthenticatePass1(IN UserPtr user, const String& pin, int date, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT) = 0;
     virtual Status AuthenticatePass2(IN UserPtr user, const String& challenge, OUT String& validator) = 0;
     virtual void DeleteToken(const String& mpinId) = 0;
     
