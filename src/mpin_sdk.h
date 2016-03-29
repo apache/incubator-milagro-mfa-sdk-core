@@ -178,7 +178,6 @@ public:
 
     private:
         friend class MPinSDK;
-        friend class MPinSDKv2;
         User(const String& id, const String& deviceName);
         const String& GetDeviceName() const;
         const String& GetMPinIdHex() const;
@@ -245,7 +244,9 @@ public:
     Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
 
     void DeleteUser(INOUT UserPtr user);
-    void ListUsers(OUT std::vector<UserPtr>& users);
+    void ListUsers(OUT std::vector<UserPtr>& users) const;
+    void ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
+    void ListBackends(OUT std::vector<String>& backends) const;
     const char * GetVersion();
     bool CanLogout(IN UserPtr user);
     bool Logout(IN UserPtr user);
@@ -330,6 +331,9 @@ private:
 	};
 
 private:
+    typedef std::map<String, UserPtr> UsersMap;
+    typedef std::map<UserPtr, LogoutData> LogoutDataMap;
+    
     bool IsInitilized() const;
     bool IsBackendSet() const;
     Status CheckIfIsInitialized() const;
@@ -347,14 +351,13 @@ private:
     Status CheckUserState(IN UserPtr user, User::State expectedState);
 	Status WriteUsersToStorage();
 	Status LoadUsersFromStorage();
+    Status LoadUsersFromStorage(const String& backendServer, UsersMap& usersMap) const;
+    void ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const;
 
     static const char *DEFAULT_RPS_PREFIX;
     static const int AN_WITH_CHECKSUM_LEN = 7;
 
 private:
-    typedef std::map<String, UserPtr> UsersMap;
-    typedef std::map<UserPtr, LogoutData> LogoutDataMap;
-    
     State m_state;
     IContext *m_context;
     IMPinCrypto *m_crypto;

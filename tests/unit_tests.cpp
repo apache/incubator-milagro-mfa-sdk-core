@@ -35,7 +35,7 @@ typedef MPinSDK::String String;
 static AutoContext context;
 static MPinSDK sdk;
 static MPinSDK::StringMap config;
-static const char *backend = "http://192.168.98.89:8005";
+static const char *backend = "http://192.168.98.98:8005";
 
 using namespace boost::unit_test;
 
@@ -73,10 +73,6 @@ BOOST_AUTO_TEST_CASE(testNoInit)
     BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
 
     s = sdk.RestartRegistration(user);
-    BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
-    BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
-
-    s = sdk.VerifyUser(user, "", "");
     BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
     BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
 
@@ -181,6 +177,21 @@ BOOST_AUTO_TEST_CASE(testUsers2)
 
     std::vector<UserPtr> users;
     sdk.ListUsers(users);
+    BOOST_CHECK_EQUAL(users.size(), 1);
+
+    std::vector<String> backends;
+    sdk.ListBackends(backends);
+    BOOST_CHECK_EQUAL(backends.size(), 1);
+
+    if(!backends.empty())
+    {
+        users.clear();
+        sdk.ListUsers(users, backends[0]);
+        BOOST_CHECK_EQUAL(users.size(), 1);
+    }
+
+    users.clear();
+    sdk.ListUsers(users, backend);
     BOOST_CHECK_EQUAL(users.size(), 1);
 
     sdk.DeleteUser(user);

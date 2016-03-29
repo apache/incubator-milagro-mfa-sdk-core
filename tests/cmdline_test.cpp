@@ -36,6 +36,7 @@ struct Backend
 };
 
 static void TestBackend(const MPinSDK& sdk, const char *backend, const char *rpsPrefix);
+static void TestListBackendAndUsers(const MPinSDK& sdk);
 
 int main(int argc, char *argv[])
 {
@@ -84,6 +85,8 @@ int main(int argc, char *argv[])
         sdk.Destroy();
         return 0;
     }
+
+    TestListBackendAndUsers(sdk);
 
     vector<MPinSDK::UserPtr> users;
     sdk.ListUsers(users);
@@ -192,5 +195,24 @@ static void TestBackend(const MPinSDK& sdk, const char *beckend, const char *rps
     else
     {
         cout << "Backend test OK: " << beckend << endl;
+    }
+}
+
+static void TestListBackendAndUsers(const MPinSDK& sdk)
+{
+    vector<MPinSDK::String> backends;
+    sdk.ListBackends(backends);
+
+    cout << endl << "TestListBackendAndUsers: Got " << backends.size() << " backends" << endl;
+
+    for(vector<MPinSDK::String>::const_iterator backend = backends.begin(); backend != backends.end(); ++backend)
+    {
+        cout << "    Listing users for backend '" << *backend << "':" << endl;
+        vector<MPinSDK::UserPtr> users;
+        sdk.ListUsers(users, *backend);
+        for(vector<MPinSDK::UserPtr>::iterator user = users.begin(); user != users.end(); ++user)
+        {
+            cout << "        - " << (*user)->GetId() << endl;
+        }
     }
 }
