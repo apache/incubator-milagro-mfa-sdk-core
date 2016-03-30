@@ -201,20 +201,26 @@ Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, int 
         return Status(Status::CRYPTO_ERROR, String("Session is not opened or not initialized"));
     }
 
-    // Combine time permit shares
-    if(timePermitShares.size() != 2)
-    {
-        return Status(Status::CRYPTO_ERROR, String().Format("Expecting 2 time permit shares (provided=%d)", (int) timePermitShares.size()));
-    }
-
-    Octet tp1(timePermitShares[0]);
-    Octet tp2(timePermitShares[1]);
     Octet timePermit(Octet::TOKEN_SIZE);
 
-    int res = MPIN_RECOMBINE_G1(&tp1, &tp2, &timePermit);
-    if(res)
+    // Valid date (date != 0) means authentication *with* time permit and 2 time permit shares are expected
+    // Invalid date (date == 0) means authentication with *no* time permit and time permit shares are ignored
+    if(date != 0)
     {
-        return Status(Status::CRYPTO_ERROR, String().Format("MPIN_RECOMBINE_G1() failed with code %d", res));
+        // Combine time permit shares
+        if(timePermitShares.size() != 2)
+        {
+            return Status(Status::CRYPTO_ERROR, String().Format("Expecting 2 time permit shares (provided=%d)", (int) timePermitShares.size()));
+        }
+
+        Octet tp1(timePermitShares[0]);
+        Octet tp2(timePermitShares[1]);
+
+        int res = MPIN_RECOMBINE_G1(&tp1, &tp2, &timePermit);
+        if(res)
+        {
+            return Status(Status::CRYPTO_ERROR, String().Format("MPIN_RECOMBINE_G1() failed with code %d", res));
+        }
     }
 
     // Get the stored token
@@ -246,7 +252,7 @@ Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, int 
     Octet ut(Octet::TOKEN_SIZE);
 
     // Authentication pass 1
-    res = MPIN_CLIENT_1(date, &cid, &rng, &x, pin.GetHash(), &token, &clientSecret, &u, &ut, &timePermit);
+    int res = MPIN_CLIENT_1(date, &cid, &rng, &x, pin.GetHash(), &token, &clientSecret, &u, &ut, &timePermit);
     if(res)
     {
         return Status(Status::CRYPTO_ERROR, String().Format("MPIN_CLIENT_1() failed with code %d", res));

@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     Backend backends[] = 
     {
         {"https://m-pindemo.certivox.org"},
+        //{"http://192.168.10.159:8001"},
         //{"http://ec2-54-77-232-113.eu-west-1.compute.amazonaws.com", "/rps/"},
         //{"https://mpindemo-qa-v3.certivox.org", "rps"},
     };

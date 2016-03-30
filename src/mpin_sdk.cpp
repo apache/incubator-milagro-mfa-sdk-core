@@ -985,6 +985,12 @@ Status MPinSDK::StartAuthentication(INOUT UserPtr user)
         return s;
     }
 
+    bool useTimePermits = m_clientSettings.GetBoolParam("usePermits", true);
+    if(!useTimePermits)
+    {
+        return Status::OK;
+    }
+
     // Request a time permit share from the customer's D-TA and a signed request for a time permit share from CertiVox's D-TA.
     String mpinIdHex = user->GetMPinIdHex();
     String url = String().Format("%s/%s", m_clientSettings.GetStringParam("timePermitsURL"), mpinIdHex.c_str());
@@ -1073,8 +1079,10 @@ Status MPinSDK::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, 
         return s;
     }
 
+    bool useTimePermits = m_clientSettings.GetBoolParam("usePermits", true);
+
     // Check if time permit was obtained from StartAuthentication
-    if(user->m_timePermitShare1.empty() || user->m_timePermitShare2.empty())
+    if(useTimePermits && (user->m_timePermitShare1.empty() || user->m_timePermitShare2.empty()))
     {
         return Status(Status::FLOW_ERROR, String().Format("Cannot finish user '%s' authentication: Invalid time permit", user->GetId().c_str()));
     }
@@ -1088,10 +1096,13 @@ Status MPinSDK::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, 
     }
 
     std::vector<String> timePermitShares;
-    timePermitShares.push_back(user->m_timePermitShare1);
-    timePermitShares.push_back(user->m_timePermitShare2);
-
-	int date =  user->GetTimePermitCache().GetDate();
+    int date = 0;
+    if(useTimePermits)
+    {
+        timePermitShares.push_back(user->m_timePermitShare1);
+        timePermitShares.push_back(user->m_timePermitShare2);
+    	date = user->GetTimePermitCache().GetDate();
+    }
 	
     // Authentication pass 1
     String u, ut;

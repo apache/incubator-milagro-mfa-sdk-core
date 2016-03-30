@@ -303,10 +303,13 @@ inline std::string Reader::MatchExpectedString(InputStream& inputStream, const s
 }
 
 static void ConsumeUnicode(std::istream& str, std::vector<utf8::uint16_t>& uni16) {
-    str >> std::hex;
-    utf8::uint16_t cp;
-    str >> cp;
-    str >> std::dec;
+    char bytes[4];
+    memset(bytes, 0, sizeof(bytes));
+    str.get(bytes[0]);
+    str.get(bytes[1]);
+    str.get(bytes[2]);
+    str.get(bytes[3]);
+    utf8::uint16_t cp = (bytes[0] - '0') << 12 | (bytes[1] - '0') << 8 | (bytes[2] - '0') << 4 | (bytes[3] - '0');
     uni16.push_back(cp);
 }
 
