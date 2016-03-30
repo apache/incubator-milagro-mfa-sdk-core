@@ -1327,11 +1327,23 @@ void MPinSDK::DeleteUser(UserPtr user)
     m_logoutData.erase(user);
 }
 
-void MPinSDK::ListUsers(std::vector<UserPtr>& users)
+void MPinSDK::ListUsers(std::vector<UserPtr>& users) const
+{
+    ListUsers(users, m_users);
+}
+
+void MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const
+{
+    UsersMap usersMap;
+    LoadUsersFromStorage(backend, usersMap);
+    ListUsers(users, usersMap);
+}
+
+void MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const
 {
     users.clear();
-    users.reserve(m_users.size());
-    for(UsersMap::iterator i = m_users.begin(); i != m_users.end(); ++i)
+    users.reserve(usersMap.size());
+    for(UsersMap::const_iterator i = usersMap.begin(); i != usersMap.end(); ++i)
     {
         users.push_back(i->second);
     }
@@ -1458,7 +1470,11 @@ Status MPinSDK::WriteUsersToStorage()
 Status MPinSDK::LoadUsersFromStorage()
 {
     ClearUsers();
+    return LoadUsersFromStorage(m_RPAServer, m_users);
+}
 
+Status MPinSDK::LoadUsersFromStorage(const String& backendServer, UsersMap& usersMap) const
+{
 	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
 	String data;
 	storage->GetData(data);
@@ -1474,7 +1490,7 @@ Status MPinSDK::LoadUsersFromStorage()
         std::istringstream str(data);
         json::Reader::Read(allBackendsObject, str);
 
-        String backend = m_RPAServer;
+        String backend = backendServer;
         backend.ReplaceAll("https://", "");
         backend.ReplaceAll("http://", "");
 
@@ -1523,7 +1539,7 @@ Status MPinSDK::LoadUsersFromStorage()
 
             user->CacheTimePermit(timePermit, date);
 
-            m_users[id] = user;
+            usersMap[id] = user;
 		}
     }
     catch(const json::Exception& e)
@@ -1532,6 +1548,31 @@ Status MPinSDK::LoadUsersFromStorage()
     }
 
 	return Status(Status::OK);
+}
+
+void MPinSDK::ListBackends(OUT std::vector<String>& backends) const
+{
+	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
+	String data;
+	storage->GetData(data);
+    data.Trim();
+	if(data.empty())
+    {
+		return;
+	}
+
+	try
+    {
+        json::Object allBackendsObject;
+        std::istringstream str(data);
+        json::Reader::Read(allBackendsObject, str);
+
+        for(json::Object::const_iterator i = allBackendsObject.Begin(); i != allBackendsObject.End(); ++i)
+        {
+            backends.push_back(i->name);
+        }
+    }
+    catch(const json::Exception&) {}
 }
 
 const char * MPinSDK::GetVersion()
