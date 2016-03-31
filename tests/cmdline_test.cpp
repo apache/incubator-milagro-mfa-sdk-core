@@ -27,7 +27,10 @@ under the License.
 #include "contexts/cmdline_context.h"
 #include "CvLogger.h"
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
 
 struct Backend
 {
@@ -76,6 +79,13 @@ int main(int argc, char *argv[])
     for(size_t i = 0; i < backendCount; ++i)
     {
         TestBackend(sdk, backends[i].backend, backends[i].rpsPrefix);
+    }
+
+    bool testMaasWorkflow = false;
+    const char *maasBackend = "http://192.168.98.141:8001";
+    if(testMaasWorkflow)
+    {
+        s = sdk.SetBackend(maasBackend);
     }
 
     //s = sdk.SetBackend(backends[1].backend, backends[1].rpsPrefix);
@@ -146,7 +156,16 @@ int main(int argc, char *argv[])
         _getch();
     }
 
-    s = sdk.StartAuthentication(user);
+    MPinSDK::String accessCode;
+    if(testMaasWorkflow)
+    {
+        cout << "Enter access code: ";
+        cin >> accessCode;
+        MPinSDK::String userId = sdk.GetPrerollUserId(accessCode);
+        cout << "GetPrerollUserId() returned '" << userId << "'. Press any key to continue..." << endl;
+    }
+
+    s = sdk.StartAuthentication(user, accessCode);
     if(s != MPinSDK::Status::OK)
     {
         cout << "Failed to start user authentication: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
@@ -160,7 +179,14 @@ int main(int argc, char *argv[])
     cin >> pin;
 
     MPinSDK::String authData;
-    s = sdk.FinishAuthentication(user, pin, authData);
+    if(!testMaasWorkflow)
+    {
+        s = sdk.FinishAuthentication(user, pin, authData);
+    }
+    else
+    {
+        s = sdk.FinishAuthenticationAN(user, pin, accessCode);
+    }
     if(s != MPinSDK::Status::OK)
     {
         cout << "Failed to authenticate user: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;

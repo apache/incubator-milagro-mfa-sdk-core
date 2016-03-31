@@ -236,17 +236,19 @@ public:
     Status ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier = "");
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
-    Status StartAuthentication(INOUT UserPtr user);
+    Status StartAuthentication(INOUT UserPtr user, const String& accessCode = "");
     Status CheckAccessNumber(const String& accessNumber);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData);
     Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
     Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
 
+    String GetPrerollUserId(const String& accessCode);
+
     void DeleteUser(INOUT UserPtr user);
-    void ListUsers(OUT std::vector<UserPtr>& users) const;
-    void ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
-    void ListBackends(OUT std::vector<String>& backends) const;
+    Status ListUsers(OUT std::vector<UserPtr>& users) const;
+    Status ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
+    Status ListBackends(OUT std::vector<String>& backends) const;
     const char * GetVersion();
     bool CanLogout(IN UserPtr user);
     bool Logout(IN UserPtr user);
