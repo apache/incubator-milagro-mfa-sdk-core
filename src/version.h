@@ -25,6 +25,6 @@ under the License.
 #define _MPIN_SDK_VERSION_H_
 
 #define MPIN_SDK_VERSION "1.0.0"
-#define MPIN_SDK_V2_VERSION "2.0.0"
+#define MPIN_SDK_V2_VERSION "2.1.0"
 
 #endif // _MPIN_SDK_VERSION_H_

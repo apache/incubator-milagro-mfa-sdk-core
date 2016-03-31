@@ -970,7 +970,7 @@ Status MPinSDK::FinishRegistration(INOUT UserPtr user, const String& pin)
     return Status::OK;
 }
 
-Status MPinSDK::StartAuthentication(INOUT UserPtr user)
+Status MPinSDK::StartAuthentication(INOUT UserPtr user, const String& accessCode)
 {
     Status s = CheckIfBackendIsSet();
     if(s != Status::OK)
@@ -983,6 +983,16 @@ Status MPinSDK::StartAuthentication(INOUT UserPtr user)
     if(s != Status::OK)
     {
         return s;
+    }
+
+    String codeStatusURL = m_clientSettings.GetStringParam("codeStatusURL");
+    if(!codeStatusURL.empty() && !accessCode.empty())
+    {
+        util::JsonObject data;
+        data["status"] = json::String("user");
+        data["wid"] = json::String(accessCode);
+        data["user"] = json::String(user->GetId());
+        MakeRequest(codeStatusURL, IHttpRequest::POST, data);
     }
 
     bool useTimePermits = m_clientSettings.GetBoolParam("usePermits", true);
@@ -1322,6 +1332,33 @@ bool MPinSDK::ValidateAccessNumberChecksum(const String& accessNumber)
     return calculatedCheckSum == checkSum;
 }
 
+String MPinSDK::GetPrerollUserId(const String& accessCode)
+{
+    Status s = CheckIfBackendIsSet();
+    if(s != Status::OK)
+    {
+        return "";
+    }
+
+    String codeStatusUrl = m_clientSettings.GetStringParam("codeStatusURL");
+    if(codeStatusUrl.empty())
+    {
+        return "";
+    }
+
+    util::JsonObject data;
+    data["status"] = json::String("wid");
+    data["wid"] = json::String(accessCode);
+
+    HttpResponse response = MakeRequest(codeStatusUrl, IHttpRequest::POST, data);
+    if(response.GetStatus() != HttpResponse::HTTP_OK)
+    {
+        return "";
+    }
+
+    return response.GetJsonData().GetStringParam("prerollId");
+}
+
 void MPinSDK::DeleteUser(UserPtr user)
 {
     UsersMap::iterator i = m_users.find(user->GetId());
@@ -1338,16 +1375,35 @@ void MPinSDK::DeleteUser(UserPtr user)
     m_logoutData.erase(user);
 }
 
-void MPinSDK::ListUsers(std::vector<UserPtr>& users) const
+Status MPinSDK::ListUsers(std::vector<UserPtr>& users) const
 {
+    Status s = CheckIfBackendIsSet();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
     ListUsers(users, m_users);
+    return Status::OK;
 }
 
-void MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const
+Status MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const
 {
+    Status s = CheckIfIsInitialized();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
     UsersMap usersMap;
-    LoadUsersFromStorage(backend, usersMap);
+    s = LoadUsersFromStorage(backend, usersMap);
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
     ListUsers(users, usersMap);
+    return Status::OK;
 }
 
 void MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const
@@ -1561,15 +1617,21 @@ Status MPinSDK::LoadUsersFromStorage(const String& backendServer, UsersMap& user
 	return Status(Status::OK);
 }
 
-void MPinSDK::ListBackends(OUT std::vector<String>& backends) const
+Status MPinSDK::ListBackends(OUT std::vector<String>& backends) const
 {
-	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
+    Status s = CheckIfIsInitialized();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
+    IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
 	String data;
 	storage->GetData(data);
     data.Trim();
 	if(data.empty())
     {
-		return;
+		return Status::OK;
 	}
 
 	try
@@ -1583,7 +1645,12 @@ void MPinSDK::ListBackends(OUT std::vector<String>& backends) const
             backends.push_back(i->name);
         }
     }
-    catch(const json::Exception&) {}
+    catch(const json::Exception& e)
+    {
+        return Status(Status::STORAGE_ERROR, e.what());
+    }
+
+    return Status::OK;
 }
 
 const char * MPinSDK::GetVersion()
