@@ -991,7 +991,7 @@ Status MPinSDK::StartAuthentication(INOUT UserPtr user, const String& accessCode
         util::JsonObject data;
         data["status"] = json::String("user");
         data["wid"] = json::String(accessCode);
-        data["user"] = json::String(user->GetId());
+        data["userId"] = json::String(user->GetId());
         MakeRequest(codeStatusURL, IHttpRequest::POST, data);
     }
 
