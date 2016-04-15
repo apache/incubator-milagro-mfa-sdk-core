@@ -42,18 +42,27 @@ public:
 
 Octet::Octet(size_t maxSize)
 {
-    this->max = maxSize;
+    this->max = 0;
     this->len = 0;
     this->val = (char *) calloc(maxSize, 1);
+	if(this->val != NULL)
+	{
+		this->max = maxSize;		
+	}		
 }
 
 Octet::Octet(const String& str)
 {
+    this->max = 0;
+    this->len = 0;
     size_t maxSize = str.size();
-    this->max = maxSize;
-    this->len = maxSize;
     this->val = (char *) malloc(maxSize);
-    memcpy(this->val, str.c_str(), maxSize);
+	if(this->val != NULL)
+	{
+		this->max = maxSize;
+		this->len = maxSize;
+		memcpy(this->val, str.c_str(), maxSize);		
+	}
 }
 
 Octet::~Octet()
