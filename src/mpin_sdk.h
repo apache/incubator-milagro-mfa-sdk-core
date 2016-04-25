@@ -246,6 +246,7 @@ public:
     String GetPrerollUserId(const String& accessCode);
 
     void DeleteUser(INOUT UserPtr user);
+    void DeleteUser(INOUT UserPtr user, const String& backend);
     Status ListUsers(OUT std::vector<UserPtr>& users) const;
     Status ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
     Status ListBackends(OUT std::vector<String>& backends) const;
@@ -351,7 +352,10 @@ private:
     bool ValidateAccessNumberChecksum(const String& accessNumber);
     void AddUser(IN UserPtr user);
     Status CheckUserState(IN UserPtr user, User::State expectedState);
-	Status WriteUsersToStorage();
+    void DeleteUser(INOUT UserPtr user, const String& backend, UsersMap& usersMap);
+    String MakeBackendKey(const String& backendServer) const;
+	Status WriteUsersToStorage() const;
+	Status WriteUsersToStorage(const String& backendServer, const UsersMap& usersMap) const;
 	Status LoadUsersFromStorage();
     Status LoadUsersFromStorage(const String& backendServer, UsersMap& usersMap) const;
     void ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const;

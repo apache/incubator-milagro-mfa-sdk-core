@@ -1361,8 +1361,29 @@ String MPinSDK::GetPrerollUserId(const String& accessCode)
 
 void MPinSDK::DeleteUser(UserPtr user)
 {
-    UsersMap::iterator i = m_users.find(user->GetId());
-    if(i == m_users.end() || user != i->second)
+    DeleteUser(user, m_RPAServer);
+}
+
+void MPinSDK::DeleteUser(INOUT UserPtr user, const String& backend)
+{
+    if(MakeBackendKey(backend) == MakeBackendKey(m_RPAServer))
+    {
+        DeleteUser(user, m_RPAServer, m_users);
+    }
+    else
+    {
+        UsersMap usersMap;
+        LoadUsersFromStorage(backend, usersMap);
+        DeleteUser(user, backend, usersMap);
+    }
+}
+
+void MPinSDK::DeleteUser(INOUT UserPtr user, const String& backend, UsersMap& usersMap)
+{
+    UsersMap::iterator i = usersMap.find(user->GetId());
+    //if(i == m_users.end() || user != i->second)
+    // TODO: Get back to the full user check after the SDK is refactored to store full user list (for all backends)
+    if(i == m_users.end())
     {
         return;
     }
@@ -1370,9 +1391,9 @@ void MPinSDK::DeleteUser(UserPtr user)
 	m_crypto->DeleteRegOTT(i->second->GetMPinId());
     m_crypto->DeleteToken(i->second->GetMPinId());
     i->second->Invalidate();
-    m_users.erase(i);
-    WriteUsersToStorage();
-    m_logoutData.erase(user);
+    m_logoutData.erase(i->second);
+    usersMap.erase(i);
+    WriteUsersToStorage(backend, usersMap);
 }
 
 Status MPinSDK::ListUsers(std::vector<UserPtr>& users) const
@@ -1459,7 +1480,21 @@ Status MPinSDK::CheckUserState(UserPtr user, User::State expectedState)
     return Status(Status::OK);
 }
 
-Status MPinSDK::WriteUsersToStorage()
+String MPinSDK::MakeBackendKey(const String& backendServer) const
+{
+    String backend = backendServer;
+    backend.ReplaceAll("https://", "");
+    backend.ReplaceAll("http://", "");
+    backend.TrimRight("/");
+    return backend;
+}
+
+Status MPinSDK::WriteUsersToStorage() const
+{
+    return WriteUsersToStorage(m_RPAServer, m_users);
+}
+
+Status MPinSDK::WriteUsersToStorage(const String& backendServer, const UsersMap& usersMap) const
 {
 	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
 	String data;
@@ -1475,14 +1510,12 @@ Status MPinSDK::WriteUsersToStorage()
             json::Reader::Read(allBackendsObject, strIn);
         }
 
-        String backend = m_RPAServer;
-        backend.ReplaceAll("https://", "");
-        backend.ReplaceAll("http://", "");
+        String backend = MakeBackendKey(backendServer);
 
         json::Object& rootObject = (json::Object&) allBackendsObject[backend];
         rootObject.Clear();
 		
-		for (UsersMap::iterator i = m_users.begin(); i != m_users.end(); ++i)
+		for (UsersMap::const_iterator i = usersMap.begin(); i != usersMap.end(); ++i)
 		{
 			UserPtr user = i->second;
 
@@ -1557,9 +1590,7 @@ Status MPinSDK::LoadUsersFromStorage(const String& backendServer, UsersMap& user
         std::istringstream str(data);
         json::Reader::Read(allBackendsObject, str);
 
-        String backend = backendServer;
-        backend.ReplaceAll("https://", "");
-        backend.ReplaceAll("http://", "");
+        String backend = MakeBackendKey(backendServer);
 
         json::Object::const_iterator i = allBackendsObject.Find(backend);
         if(i == allBackendsObject.End())
