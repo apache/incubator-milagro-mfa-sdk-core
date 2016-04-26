@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     }
 
     bool testMaasWorkflow = false;
-    const char *maasBackend = "http://192.168.98.141:8001";
+    const char *maasBackend = "http://mpinaas-demo.miracl.net:8001";
     if(testMaasWorkflow)
     {
         s = sdk.SetBackend(maasBackend);
@@ -161,8 +161,17 @@ int main(int argc, char *argv[])
     {
         cout << "Enter access code: ";
         cin >> accessCode;
-        MPinSDK::String userId = sdk.GetPrerollUserId(accessCode);
-        cout << "GetPrerollUserId() returned '" << userId << "'. Press any key to continue..." << endl;
+        MPinSDK::SessionDetails sd;
+        s = sdk.GetSessionDetails(accessCode, sd);
+        if(s == MPinSDK::Status::OK)
+        {
+            cout << "GetSessionDetails() returned prerollId = '"
+                << sd.prerollId << "' appName = '" << sd.appName << "' appIconUrl = '" << sd.appIconUrl << "'" << endl;
+        }
+        else
+        {
+            cout << "ERROR: GetSessionDetails() returned status = " << s.GetStatusCode() << ", error = '" << s.GetErrorMessage() << "'" << endl;
+        }
     }
 
     s = sdk.StartAuthentication(user, accessCode);

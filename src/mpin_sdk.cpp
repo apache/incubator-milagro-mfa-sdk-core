@@ -405,6 +405,7 @@ Status MPinSDK::HttpResponse::TranslateToMPinStatus(Context context)
     case GET_CLIENT_SETTINGS:
     case AUTHENTICATE_PASS1:
     case AUTHENTICATE_PASS2:
+    case GET_SESSION_DETAILS:
         break;
     case REGISTER:
         if(m_httpStatus == HTTP_FORBIDDEN)
@@ -1332,18 +1333,27 @@ bool MPinSDK::ValidateAccessNumberChecksum(const String& accessNumber)
     return calculatedCheckSum == checkSum;
 }
 
-String MPinSDK::GetPrerollUserId(const String& accessCode)
+void MPinSDK::SessionDetails::Clear()
 {
+    prerollId.clear();
+    appName.clear();
+    appIconUrl.clear();
+}
+
+Status MPinSDK::GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails)
+{
+    sessionDetails.Clear();
+
     Status s = CheckIfBackendIsSet();
     if(s != Status::OK)
     {
-        return "";
+        return s;
     }
 
     String codeStatusUrl = m_clientSettings.GetStringParam("codeStatusURL");
     if(codeStatusUrl.empty())
     {
-        return "";
+        return Status::OK;
     }
 
     util::JsonObject data;
@@ -1353,10 +1363,15 @@ String MPinSDK::GetPrerollUserId(const String& accessCode)
     HttpResponse response = MakeRequest(codeStatusUrl, IHttpRequest::POST, data);
     if(response.GetStatus() != HttpResponse::HTTP_OK)
     {
-        return "";
+        return response.TranslateToMPinStatus(HttpResponse::GET_SESSION_DETAILS);
     }
 
-    return response.GetJsonData().GetStringParam("prerollId");
+    const util::JsonObject& json = response.GetJsonData();
+    sessionDetails.prerollId = json.GetStringParam("prerollId");
+    sessionDetails.appName = json.GetStringParam("appName");
+    sessionDetails.appIconUrl = json.GetStringParam("appLogoURL");
+
+    return Status::OK;
 }
 
 void MPinSDK::DeleteUser(UserPtr user)
