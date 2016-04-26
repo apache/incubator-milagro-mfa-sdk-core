@@ -185,15 +185,6 @@ public:
         return *operator->();
     }
 
-    operator bool() const
-    {
-        if (!holder)
-        {
-            return false;
-        }
-        return holder->target != NULL;
-    }
-
     element_type* get() const
     {
         return operator->();
@@ -202,6 +193,21 @@ public:
 private:
     Holder* holder;
 };
+
+template <typename T, typename U> bool operator==(const shared_ptr<T>& lhs, const shared_ptr<U>& rhs)
+{
+    return lhs.get() == rhs.get();
+}
+
+template <typename T, typename U> bool operator!=(const shared_ptr<T>& lhs, const shared_ptr<U>& rhs)
+{
+    return !(lhs == rhs);
+}
+
+template <typename T> bool operator<(const shared_ptr<T>& lhs, const shared_ptr<T>& rhs)
+{
+    return lhs.get() < rhs.get();
+}
 
 template<typename T> shared_ptr<T> make_shared() { return shared_ptr<T>(new T()); }
 template<typename T, typename Arg1> shared_ptr<T> make_shared(const Arg1& arg1) { return shared_ptr<T>(new T(arg1)); }
