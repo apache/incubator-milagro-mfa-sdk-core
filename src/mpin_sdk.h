@@ -221,6 +221,16 @@ public:
 		Status status;
 	};
 
+    class SessionDetails
+    {
+    public:
+        void Clear();
+
+        String prerollId;
+        String appName;
+        String appIconUrl;
+    };
+
     MPinSDK();
     ~MPinSDK();
     Status Init(const StringMap& config, IN IContext* ctx);
@@ -243,7 +253,7 @@ public:
     Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
     Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
 
-    String GetPrerollUserId(const String& accessCode);
+    Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
 
     void DeleteUser(INOUT UserPtr user);
     void DeleteUser(INOUT UserPtr user, const String& backend);
@@ -282,6 +292,7 @@ private:
             AUTHENTICATE_PASS1,
             AUTHENTICATE_PASS2,
             AUTHENTICATE_RPA,
+            GET_SESSION_DETAILS,
         };
 
         enum DataType
