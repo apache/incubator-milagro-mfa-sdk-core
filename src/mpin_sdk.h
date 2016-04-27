@@ -173,29 +173,33 @@ public:
         };
 
         const String& GetId() const;
+        const String& GetBackend() const;
         const String& GetMPinId() const;
         State GetState() const;
 
     private:
         friend class MPinSDK;
         User(const String& id, const String& deviceName);
+        String GetKey() const;
         const String& GetDeviceName() const;
         const String& GetMPinIdHex() const;
         const String& GetRegOTT() const;
         const TimePermitCache& GetTimePermitCache() const;
         void CacheTimePermit(const String& timePermit, int date);
+        void SetBackend(const String& backend);
         void SetStartedRegistration(const String& mpinIdHex, const String& regOTT);
         void SetActivated();
         void SetRegistered();
         void Invalidate();
         void Block();
-        Status RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT);
+        Status RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& backend);
         String GetStateString() const;
         static String StateToString(State state);
         static State StringToState(const String& stateString);
 
     private:
         String m_id;
+        String m_backend;
         String m_deviceName;
         State m_state;
         String m_mpinId;
@@ -256,14 +260,14 @@ public:
     Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
 
     void DeleteUser(INOUT UserPtr user);
-    void DeleteUser(INOUT UserPtr user, const String& backend);
-    Status ListUsers(OUT std::vector<UserPtr>& users) const;
     Status ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
+    Status ListUsers(OUT std::vector<UserPtr>& users) const;
+    Status ListAllUsers(OUT std::vector<UserPtr>& users) const;
     Status ListBackends(OUT std::vector<String>& backends) const;
-    const char * GetVersion();
     bool CanLogout(IN UserPtr user);
     bool Logout(IN UserPtr user);
 	String GetClientParam(const String& key);
+    const char * GetVersion();
 
     static const char *CONFIG_BACKEND;
     static const char *CONFIG_RPS_PREFIX;
@@ -361,15 +365,10 @@ private:
     Status GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit);
     bool ValidateAccessNumber(const String& accessNumber);
     bool ValidateAccessNumberChecksum(const String& accessNumber);
-    void AddUser(IN UserPtr user);
     Status CheckUserState(IN UserPtr user, User::State expectedState);
-    void DeleteUser(INOUT UserPtr user, const String& backend, UsersMap& usersMap);
     String MakeBackendKey(const String& backendServer) const;
 	Status WriteUsersToStorage() const;
-	Status WriteUsersToStorage(const String& backendServer, const UsersMap& usersMap) const;
 	Status LoadUsersFromStorage();
-    Status LoadUsersFromStorage(const String& backendServer, UsersMap& usersMap) const;
-    void ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const;
 
     static const char *DEFAULT_RPS_PREFIX;
     static const int AN_WITH_CHECKSUM_LEN = 7;

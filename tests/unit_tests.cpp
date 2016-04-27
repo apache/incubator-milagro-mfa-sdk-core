@@ -191,10 +191,14 @@ BOOST_AUTO_TEST_CASE(testUsers2)
     }
 
     users.clear();
+    sdk.ListAllUsers(users);
+    BOOST_CHECK_EQUAL(users.size(), 1);
+
+    users.clear();
     sdk.ListUsers(users, backend);
     BOOST_CHECK_EQUAL(users.size(), 1);
 
-    sdk.DeleteUser(users[0], backend);
+    sdk.DeleteUser(users[0]);
     users.clear();
     sdk.ListUsers(users, backend);
     BOOST_CHECK(users.empty());

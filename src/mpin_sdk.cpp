@@ -121,9 +121,19 @@ User::User(const String& id, const String& deviceName) : m_id(id), m_deviceName(
 {
 }
 
+String User::GetKey() const
+{
+    return String().Format("%s@%s", m_id.c_str(), m_backend.c_str());
+}
+
 const String& User::GetId() const
 {
     return m_id;
+}
+
+const String& User::GetBackend() const
+{
+    return m_backend;
 }
 
 const String& User::GetDeviceName() const
@@ -161,6 +171,11 @@ void User::CacheTimePermit(const String& timePermit, int date)
     m_timePermitCache.Set(timePermit, date);
 }
 
+void User::SetBackend(const String& backend)
+{
+    m_backend = backend;
+}
+
 void User::SetStartedRegistration(const String& mpinIdHex, const String& regOTT)
 {
     m_state = STARTED_REGISTRATION;
@@ -193,8 +208,9 @@ void User::Block()
     m_state = BLOCKED;
 }
 
-Status User::RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT)
+Status User::RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& backend)
 {
+    SetBackend(backend);
     SetStartedRegistration(mpinIdHex, regOTT);
 
     State state = StringToState(stateString);
@@ -637,6 +653,12 @@ Status MPinSDK::Init(const StringMap& config, IContext* ctx)
         return Status(Status::FLOW_ERROR, String("CRYPTO_TEE crypto type is currently not supported"));
     }
 
+	Status s = LoadUsersFromStorage();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
     m_state = INITIALIZED;
     
     String backend = config.Get(CONFIG_BACKEND);
@@ -738,12 +760,6 @@ Status MPinSDK::SetBackend(const String& backend, const String& rpsPrefix)
         return s;
     }
 
-	s = LoadUsersFromStorage();
-    if(s != Status::OK)
-    {
-        return s;
-    }
-
     m_state = BACKEND_SET;
     return Status(Status::OK);
 }
@@ -828,7 +844,8 @@ Status MPinSDK::RequestRegistration(UserPtr user, const String& activateCode, co
     bool userIsNew = (user->GetState() == User::INVALID);
     if(userIsNew)
     {
-        AddUser(user);
+        user->SetBackend(MakeBackendKey(m_RPAServer));
+	    m_users[user->GetKey()] = user;
     }
 
     String mpinIdHex = response.GetJsonData().GetStringParam("mpinId");
@@ -837,7 +854,7 @@ Status MPinSDK::RequestRegistration(UserPtr user, const String& activateCode, co
 
     if(userIsNew || userDataChanged)
     {
-    	user->SetStartedRegistration(mpinIdHex, regOTT);
+        user->SetStartedRegistration(mpinIdHex, regOTT);
         writeUsersToStorage = true;
     }
 
@@ -1374,92 +1391,9 @@ Status MPinSDK::GetSessionDetails(const String& accessCode, OUT SessionDetails& 
     return Status::OK;
 }
 
-void MPinSDK::DeleteUser(UserPtr user)
-{
-    DeleteUser(user, m_RPAServer);
-}
-
-void MPinSDK::DeleteUser(INOUT UserPtr user, const String& backend)
-{
-    if(MakeBackendKey(backend) == MakeBackendKey(m_RPAServer))
-    {
-        DeleteUser(user, m_RPAServer, m_users);
-    }
-    else
-    {
-        UsersMap usersMap;
-        LoadUsersFromStorage(backend, usersMap);
-        DeleteUser(user, backend, usersMap);
-    }
-}
-
-void MPinSDK::DeleteUser(INOUT UserPtr user, const String& backend, UsersMap& usersMap)
-{
-    UsersMap::iterator i = usersMap.find(user->GetId());
-    //if(i == m_users.end() || user != i->second)
-    // TODO: Get back to the full user check after the SDK is refactored to store full user list (for all backends)
-    if(i == m_users.end())
-    {
-        return;
-    }
-
-	m_crypto->DeleteRegOTT(i->second->GetMPinId());
-    m_crypto->DeleteToken(i->second->GetMPinId());
-    i->second->Invalidate();
-    m_logoutData.erase(i->second);
-    usersMap.erase(i);
-    WriteUsersToStorage(backend, usersMap);
-}
-
-Status MPinSDK::ListUsers(std::vector<UserPtr>& users) const
-{
-    Status s = CheckIfBackendIsSet();
-    if(s != Status::OK)
-    {
-        return s;
-    }
-
-    ListUsers(users, m_users);
-    return Status::OK;
-}
-
-Status MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const
-{
-    Status s = CheckIfIsInitialized();
-    if(s != Status::OK)
-    {
-        return s;
-    }
-
-    UsersMap usersMap;
-    s = LoadUsersFromStorage(backend, usersMap);
-    if(s != Status::OK)
-    {
-        return s;
-    }
-
-    ListUsers(users, usersMap);
-    return Status::OK;
-}
-
-void MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const UsersMap& usersMap) const
-{
-    users.clear();
-    users.reserve(usersMap.size());
-    for(UsersMap::const_iterator i = usersMap.begin(); i != usersMap.end(); ++i)
-    {
-        users.push_back(i->second);
-    }
-}
-
-void MPinSDK::AddUser(UserPtr user)
-{
-	m_users[user->GetId()] = user;
-}
-
 Status MPinSDK::CheckUserState(UserPtr user, User::State expectedState)
 {
-    UsersMap::iterator i = m_users.find(user->GetId());
+    UsersMap::iterator i = m_users.find(user->GetKey());
     if(expectedState == User::INVALID)
     {
         if(i != m_users.end())
@@ -1483,7 +1417,12 @@ Status MPinSDK::CheckUserState(UserPtr user, User::State expectedState)
 
     if(user != i->second)
     {
-        return Status(Status::FLOW_ERROR, String().Format("Different user with the '%s' id was previously added", user->GetId().c_str()));
+        return Status(Status::FLOW_ERROR, String().Format("Different user object with the '%s' id was previously added", user->GetId().c_str()));
+    }
+
+    if(user->GetBackend() != MakeBackendKey(m_RPAServer))
+    {
+        return Status(Status::FLOW_ERROR, String().Format("User '%s' is registered within a different backend than the current one", user->GetId().c_str()));
     }
 
     if(user->GetState() != expectedState)
@@ -1495,172 +1434,66 @@ Status MPinSDK::CheckUserState(UserPtr user, User::State expectedState)
     return Status(Status::OK);
 }
 
-String MPinSDK::MakeBackendKey(const String& backendServer) const
+void MPinSDK::DeleteUser(UserPtr user)
 {
-    String backend = backendServer;
-    backend.ReplaceAll("https://", "");
-    backend.ReplaceAll("http://", "");
-    backend.TrimRight("/");
-    return backend;
+    Status s = CheckIfIsInitialized();
+    if(s != Status::OK)
+    {
+        return;
+    }
+
+    UsersMap::iterator i = m_users.find(user->GetKey());
+    if(i == m_users.end() || user != i->second)
+    {
+        return;
+    }
+
+	m_crypto->DeleteRegOTT(i->second->GetMPinId());
+    m_crypto->DeleteToken(i->second->GetMPinId());
+    i->second->Invalidate();
+    m_logoutData.erase(i->second);
+    m_users.erase(i);
+    WriteUsersToStorage();
 }
 
-Status MPinSDK::WriteUsersToStorage() const
+Status MPinSDK::ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const
 {
-    return WriteUsersToStorage(m_RPAServer, m_users);
-}
+    Status s = CheckIfIsInitialized();
+    if(s != Status::OK)
+    {
+        return s;
+    }
 
-Status MPinSDK::WriteUsersToStorage(const String& backendServer, const UsersMap& usersMap) const
-{
-	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
-	String data;
-	storage->GetData(data);
-    data.Trim();
-	
-	try
-	{
-        json::Object allBackendsObject;
-        if(!data.empty())
+    users.clear();
+    users.reserve(m_users.size());
+
+    String backendKey = MakeBackendKey(backend);
+
+    for(UsersMap::const_iterator i = m_users.begin(); i != m_users.end(); ++i)
+    {
+        if(backendKey.empty() || backendKey == i->second->GetBackend())
         {
-            std::istringstream strIn(data);
-            json::Reader::Read(allBackendsObject, strIn);
+            users.push_back(i->second);
         }
-
-        String backend = MakeBackendKey(backendServer);
-
-        json::Object& rootObject = (json::Object&) allBackendsObject[backend];
-        rootObject.Clear();
-		
-		for (UsersMap::const_iterator i = usersMap.begin(); i != usersMap.end(); ++i)
-		{
-			UserPtr user = i->second;
-
-            json::Object timePermitCacheObject;
-            timePermitCacheObject["date"] = json::Number(user->GetTimePermitCache().GetDate());
-            timePermitCacheObject["timePermit"] = json::String(util::HexEncode(user->GetTimePermitCache().GetTimePermit()));
-
-			json::Object userObject;
-            userObject["timePermitCache"] = timePermitCacheObject;
-
-            if(!user->GetDeviceName().empty())
-            {
-                userObject["deviceName"] = json::String(user->GetDeviceName());
-            }
-
-            userObject["state"] = json::String(user->GetStateString());
-
-            rootObject[user->GetMPinIdHex()] = userObject;
-			
-            Status s;
-            switch(user->GetState())
-            {
-            case User::STARTED_REGISTRATION:
-            case User::ACTIVATED:
-                s = m_crypto->SaveRegOTT(user->GetMPinId(), user->GetRegOTT());
-                break;
-            case User::REGISTERED:
-                s = m_crypto->DeleteRegOTT(user->GetMPinId());
-                break;
-            default:
-                break;
-            }
-			if(s != Status::OK)
-			{
-				return s;
-			}
-		}
-
-		std::stringstream strOut;
-		json::Writer::Write(allBackendsObject, strOut);
-		storage->SetData(strOut.str());
-		
-	}
-    catch(const json::Exception& e)
-    {
-        return Status(Status::STORAGE_ERROR, e.what());
     }
-    
-    return Status(Status::OK);
+
+    return Status::OK;
 }
 
-Status MPinSDK::LoadUsersFromStorage()
+Status MPinSDK::ListUsers(OUT std::vector<UserPtr>& users) const
 {
-    ClearUsers();
-    return LoadUsersFromStorage(m_RPAServer, m_users);
+    Status s = CheckIfBackendIsSet();
+    if(s != Status::OK)
+    {
+        return s;
+    }
+
+    return ListUsers(users, m_RPAServer);
 }
 
-Status MPinSDK::LoadUsersFromStorage(const String& backendServer, UsersMap& usersMap) const
+Status MPinSDK::ListAllUsers(OUT std::vector<UserPtr>& users) const
 {
-	IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
-	String data;
-	storage->GetData(data);
-    data.Trim();
-	if(data.empty())
-    {
-		return Status(Status::OK);
-	}
-
-	try
-    {
-        json::Object allBackendsObject;
-        std::istringstream str(data);
-        json::Reader::Read(allBackendsObject, str);
-
-        String backend = MakeBackendKey(backendServer);
-
-        json::Object::const_iterator i = allBackendsObject.Find(backend);
-        if(i == allBackendsObject.End())
-        {
-            return Status(Status::OK);
-        }
-
-        const json::Object& rootObject = (const json::Object&) i->element;
-        for(i = rootObject.Begin(); i != rootObject.End(); ++i)
-        {
-            const String& mpinIdHex = i->name;
-			String mpinId = util::HexDecode(mpinIdHex);
-			util::JsonObject mpinIdJson;
-			if(!mpinIdJson.Parse(mpinId.c_str()))
-            {
-                return Status(Status::STORAGE_ERROR, String().Format("Failed to parse mpinId json: '%s'", mpinId.c_str()));
-            }
-            const json::Object& userObject = (const json::Object&) i->element;
-			const std::string& id = ((const json::String&) mpinIdJson["userID"]).Value();
-            std::string deviceName;
-            json::Object::const_iterator dni = userObject.Find("deviceName");
-            if(dni != userObject.End())
-            {
-                deviceName = ((const json::String&) dni->element).Value();
-            }
-
-			String regOTT;
-            Status s = m_crypto->LoadRegOTT(mpinId, regOTT);
-			if(s != Status::OK)
-			{
-				return s;
-			}
-
-            UserPtr user = MakeNewUser(id, deviceName);
-            s = user->RestoreState(((const json::String&) userObject["state"]).Value(), mpinIdHex, regOTT);
-            if(s != Status::OK)
-            {
-                return s;
-            }
-
-            const json::Object& timePermitCacheObject = (const json::Object&) userObject["timePermitCache"];
-            int date = (int) ((const json::Number&) timePermitCacheObject["date"]).Value();
-            const String& timePermit = util::HexDecode(((const json::String&) timePermitCacheObject["timePermit"]).Value());
-
-            user->CacheTimePermit(timePermit, date);
-
-            usersMap[id] = user;
-		}
-    }
-    catch(const json::Exception& e)
-    {
-        return Status(Status::STORAGE_ERROR, e.what());
-    }
-
-	return Status(Status::OK);
+    return ListUsers(users, "");
 }
 
 Status MPinSDK::ListBackends(OUT std::vector<String>& backends) const
@@ -1671,9 +1504,10 @@ Status MPinSDK::ListBackends(OUT std::vector<String>& backends) const
         return s;
     }
 
-    IStorage* storage = m_context->GetStorage(IStorage::NONSECURE);
-	String data;
-	storage->GetData(data);
+    backends.clear();
+
+    String data;
+    m_context->GetStorage(IStorage::NONSECURE)->GetData(data);
     data.Trim();
 	if(data.empty())
     {
@@ -1699,9 +1533,141 @@ Status MPinSDK::ListBackends(OUT std::vector<String>& backends) const
     return Status::OK;
 }
 
-const char * MPinSDK::GetVersion()
+String MPinSDK::MakeBackendKey(const String& backendServer) const
 {
-    return MPIN_SDK_V2_VERSION;
+    String backend = backendServer;
+    backend.ReplaceAll("https://", "");
+    backend.ReplaceAll("http://", "");
+    backend.TrimRight("/");
+    return backend;
+}
+
+Status MPinSDK::WriteUsersToStorage() const
+{
+	try
+	{
+        json::Object rootObject;
+        for (UsersMap::const_iterator i = m_users.begin(); i != m_users.end(); ++i)
+		{
+			UserPtr user = i->second;
+
+            json::Object timePermitCacheObject;
+            timePermitCacheObject["date"] = json::Number(user->GetTimePermitCache().GetDate());
+            timePermitCacheObject["timePermit"] = json::String(util::HexEncode(user->GetTimePermitCache().GetTimePermit()));
+
+			json::Object userObject;
+            userObject["timePermitCache"] = timePermitCacheObject;
+
+            if(!user->GetDeviceName().empty())
+            {
+                userObject["deviceName"] = json::String(user->GetDeviceName());
+            }
+
+            userObject["state"] = json::String(user->GetStateString());
+
+            ((json::Object&) rootObject[user->GetBackend()])[user->GetMPinIdHex()] = userObject;
+
+            Status s;
+            switch(user->GetState())
+            {
+            case User::STARTED_REGISTRATION:
+            case User::ACTIVATED:
+                s = m_crypto->SaveRegOTT(user->GetMPinId(), user->GetRegOTT());
+                break;
+            case User::REGISTERED:
+                s = m_crypto->DeleteRegOTT(user->GetMPinId());
+                break;
+            default:
+                break;
+            }
+			if(s != Status::OK)
+			{
+				return s;
+			}
+        }
+
+		std::stringstream strOut;
+		json::Writer::Write(rootObject, strOut);
+		m_context->GetStorage(IStorage::NONSECURE)->SetData(strOut.str());
+	}
+    catch(const json::Exception& e)
+    {
+        return Status(Status::STORAGE_ERROR, e.what());
+    }
+
+    return Status::OK;
+}
+
+Status MPinSDK::LoadUsersFromStorage()
+{
+    ClearUsers();
+
+	String data;
+	m_context->GetStorage(IStorage::NONSECURE)->GetData(data);
+    data.Trim();
+	if(data.empty())
+    {
+		return Status(Status::OK);
+	}
+
+	try
+    {
+        json::Object rootObject;
+        std::istringstream str(data);
+        json::Reader::Read(rootObject, str);
+
+        for(json::Object::const_iterator backendsIter = rootObject.Begin(); backendsIter != rootObject.End(); ++backendsIter)
+        {
+            const json::Object& backendObject = (const json::Object&) backendsIter->element;
+
+            for(json::Object::const_iterator usersIter = backendObject.Begin(); usersIter != backendObject.End(); ++usersIter)
+            {
+                const String& mpinIdHex = usersIter->name;
+			    String mpinId = util::HexDecode(mpinIdHex);
+			    util::JsonObject mpinIdJson;
+			    if(!mpinIdJson.Parse(mpinId.c_str()))
+                {
+                    return Status(Status::STORAGE_ERROR, String().Format("Failed to parse mpinId json: '%s'", mpinId.c_str()));
+                }
+                const json::Object& userObject = (const json::Object&) usersIter->element;
+			    const std::string& id = ((const json::String&) mpinIdJson["userID"]).Value();
+                std::string deviceName;
+                json::Object::const_iterator dni = userObject.Find("deviceName");
+                if(dni != userObject.End())
+                {
+                    deviceName = ((const json::String&) dni->element).Value();
+                }
+
+			    String regOTT;
+                Status s = m_crypto->LoadRegOTT(mpinId, regOTT);
+			    if(s != Status::OK)
+			    {
+				    return s;
+			    }
+
+                UserPtr user = MakeNewUser(id, deviceName);
+                s = user->RestoreState(((const json::String&) userObject["state"]).Value(), mpinIdHex, regOTT, backendsIter->name);
+                if(s != Status::OK)
+                {
+                    return s;
+                }
+
+                const json::Object& timePermitCacheObject = (const json::Object&) userObject["timePermitCache"];
+                int date = (int) ((const json::Number&) timePermitCacheObject["date"]).Value();
+                const String& timePermit = util::HexDecode(((const json::String&) timePermitCacheObject["timePermit"]).Value());
+
+                user->CacheTimePermit(timePermit, date);
+
+                m_users[user->GetKey()] = user;
+            }
+        }
+    }
+    catch(const json::Exception& e)
+    {
+        return Status(Status::STORAGE_ERROR, e.what());
+    }
+
+    return Status::OK;
 }
 
 bool MPinSDK::CanLogout(UserPtr user)
@@ -1772,4 +1738,9 @@ String MPinSDK::GetClientParam(const String& key)
 	StringVisitor sv;
 	m_clientSettings[key].Accept(sv);
 	return sv.GetData();
+}
+
+const char * MPinSDK::GetVersion()
+{
+    return MPIN_SDK_V2_VERSION;
 }
