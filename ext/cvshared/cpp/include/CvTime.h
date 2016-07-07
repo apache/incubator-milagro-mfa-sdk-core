@@ -48,11 +48,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 	#include "windows.h"
 
 	#define CLOCK_REALTIME	0
-	struct timespec
-	{
-		time_t	tv_sec;		/* seconds */
-		time_t	tv_nsec;	/* nanoseconds */
-	};
 
 	namespace CvShared
 	{
@@ -595,14 +590,14 @@ bool Days::operator>( const Days& aOther ) const	{ return m_value > aOther.m_val
 
 TimeSpec::TimeSpec()								{ tv_sec = 0; tv_nsec = 0; }
 TimeSpec::TimeSpec( const struct timespec& aTimespec )	{ tv_sec = aTimespec.tv_sec; tv_nsec = aTimespec.tv_nsec; }
-TimeSpec::TimeSpec( const Nanosecs& aNanosecs )		{ tv_sec = aNanosecs.ToSeconds(); tv_nsec = aNanosecs.Value() % Seconds(1).ToNanosecs(); }
-TimeSpec::TimeSpec( const Microsecs& aMicrosecs )	{ tv_sec = aMicrosecs.ToSeconds(); tv_nsec = Microsecs( aMicrosecs.Value() % Seconds(1).ToMicrosecs() ).ToNanosecs(); }
-TimeSpec::TimeSpec( const Millisecs& aMillisecs )	{ tv_sec = aMillisecs.ToSeconds(); tv_nsec = Millisecs( aMillisecs.Value() % Seconds(1).ToMillisecs() ).ToNanosecs(); }
+TimeSpec::TimeSpec( const Nanosecs& aNanosecs )		{ tv_sec = aNanosecs.ToSeconds(); tv_nsec = (long) aNanosecs.Value() % Seconds(1).ToNanosecs(); }
+TimeSpec::TimeSpec( const Microsecs& aMicrosecs )	{ tv_sec = aMicrosecs.ToSeconds(); tv_nsec = (long) Microsecs( aMicrosecs.Value() % Seconds(1).ToMicrosecs() ).ToNanosecs(); }
+TimeSpec::TimeSpec( const Millisecs& aMillisecs )	{ tv_sec = aMillisecs.ToSeconds(); tv_nsec = (long) Millisecs( aMillisecs.Value() % Seconds(1).ToMillisecs() ).ToNanosecs(); }
 TimeSpec::TimeSpec( const Seconds& aSeconds )		{ tv_sec = aSeconds.Value(); tv_nsec = 0; }
 TimeSpec::TimeSpec( const Minutes& aMinutes )		{ tv_sec = aMinutes.ToSeconds(); tv_nsec = 0; }
 TimeSpec::TimeSpec( const Hours& aHours )			{ tv_sec = aHours.ToSeconds(); tv_nsec = 0; }
 TimeSpec::TimeSpec( const Days& aDays )				{ tv_sec = aDays.ToSeconds(); tv_nsec = 0; }
-TimeSpec::TimeSpec( const TimeVal& aTimeval )		{ tv_sec = aTimeval.tv_sec; tv_nsec = Microsecs( aTimeval.tv_usec ).ToNanosecs(); }	
+TimeSpec::TimeSpec( const TimeVal& aTimeval )		{ tv_sec = aTimeval.tv_sec; tv_nsec = (long) Microsecs( aTimeval.tv_usec ).ToNanosecs(); }	
 
 TimeValue_t TimeSpec::ToNanosecs() const			{ return Seconds(tv_sec).ToNanosecs() + Nanosecs(tv_nsec).Value(); }
 TimeValue_t TimeSpec::ToMicrosecs() const			{ return Seconds(tv_sec).ToMicrosecs() + Nanosecs(tv_nsec).ToMicrosecs(); }	
@@ -642,7 +637,7 @@ TimeSpec& TimeSpec::operator-=( const TimeSpec& aOther )
 		if ( tv_nsec < 0 )
 		{
 			--tv_sec;
-			tv_nsec += Seconds(1).ToNanosecs();
+			tv_nsec += (long) Seconds(1).ToNanosecs();
 		}
 	}
 	else

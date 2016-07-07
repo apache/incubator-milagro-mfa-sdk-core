@@ -540,12 +540,20 @@ MPinSDK::HttpResponse MPinSDK::MakeRequest(const String& url, HttpMethod method,
     String requestBody = bodyJson.ToString();
     HttpResponse response(url, requestBody);
 
+    StringMap headers = m_customHeaders;
     if(method != IHttpRequest::GET)
     {
-        StringMap headers;
         headers.Put(IHttpRequest::CONTENT_TYPE_HEADER, IHttpRequest::JSON_CONTENT_TYPE);
         headers.Put(IHttpRequest::ACCEPT_HEADER, IHttpRequest::TEXT_PLAIN_CONTENT_TYPE);
+    }
+
+    if(!headers.empty())
+    {
         r->SetHeaders(headers);
+    }
+
+    if(method != IHttpRequest::GET)
+    {
         r->SetContent(requestBody);
     }
 
@@ -630,12 +638,18 @@ Status MPinSDK::RewriteRelativeUrls()
 
 Status MPinSDK::Init(const StringMap& config, IContext* ctx)
 {
+    return Init(config, ctx, StringMap());
+}
+
+Status MPinSDK::Init(const StringMap& config, IContext* ctx, const StringMap& customHeaders)
+{
     if(IsInitilized())
     {
         return Status(Status::OK);
     }
 
     m_context = ctx;
+    m_customHeaders = customHeaders;
 
     if(ctx->GetMPinCryptoType() == CRYPTO_NON_TEE)
     {

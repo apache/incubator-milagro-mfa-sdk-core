@@ -5,6 +5,9 @@ dist/
 *.opensdf
 *.suo
 *.user
+.vs/
+*.VC.db
+*.VC.opendb
 *tokens.json
 *users.json
 cvlog.txt
