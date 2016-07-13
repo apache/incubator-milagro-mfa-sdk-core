@@ -238,6 +238,7 @@ public:
     MPinSDK();
     ~MPinSDK();
     Status Init(const StringMap& config, IN IContext* ctx);
+    Status Init(const StringMap& config, IN IContext* ctx, const StringMap& customHeaders);
     void Destroy();
     void ClearUsers();
 
@@ -381,6 +382,7 @@ private:
     util::JsonObject m_clientSettings;
     UsersMap m_users;
     LogoutDataMap m_logoutData;
+    StringMap m_customHeaders;
 };
 
 #endif // _MPIN_SDK_H_
