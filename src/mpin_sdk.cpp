@@ -401,7 +401,14 @@ void MPinSDK::HttpResponse::SetHttpError(int httpStatus)
     }
     else if(httpStatus >= 400)
     {
-        m_mpinStatus.SetStatusCode(Status::HTTP_REQUEST_ERROR);
+        if (httpStatus == HTTP_NOT_ACCEPTABLE)
+        {
+            m_mpinStatus.SetStatusCode(Status::BAD_USER_AGENT);
+        }
+        else
+        {
+            m_mpinStatus.SetStatusCode(Status::HTTP_REQUEST_ERROR);
+        }
     }
     else if(httpStatus >= 300)
     {
