@@ -128,6 +128,7 @@ public:
             HTTP_SERVER_ERROR, // Remote error, that was not reduced to one of the above - the remote server returned internal server error status (5xx)
             HTTP_REQUEST_ERROR, // Remote error, that was not reduced to one of the above - invalid data sent to server, the remote server returned 4xx error status
             BAD_USER_AGENT, // Remote error - user agent not supported
+            CLIENT_SECRET_EXPIRED, // Remote error - re-registration required because server master secret expired
         };
 
         Status();
@@ -285,6 +286,7 @@ private:
         static const int HTTP_FORBIDDEN = 403;
         static const int HTTP_NOT_ACCEPTABLE = 406;
         static const int HTTP_REQUEST_TIMEOUT = 408;
+        static const int HTTP_CONFLICT = 409;
         static const int HTTP_GONE = 410;
         static const int HTTP_PRECONDITION_FAILED = 412;
 

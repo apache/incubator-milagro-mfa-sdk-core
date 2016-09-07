@@ -485,6 +485,11 @@ Status MPinSDK::HttpResponse::TranslateToMPinStatus(Context context)
             m_mpinStatus.SetStatusCode(Status::IDENTITY_NOT_AUTHORIZED);
             m_mpinStatus.SetErrorMessage("Identity not authorized");
         }
+        else if (m_httpStatus == HTTP_CONFLICT)
+        {
+            m_mpinStatus.SetStatusCode(Status::CLIENT_SECRET_EXPIRED);
+            m_mpinStatus.SetErrorMessage("Client secret expired");
+        }
         break;
     }
 
