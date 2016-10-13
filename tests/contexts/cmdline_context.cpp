@@ -22,42 +22,25 @@ under the License.
  */
 
 #include "cmdline_context.h"
-#include "../common/http_request.h"
 #include "../common/file_storage.h"
-
-#include <iostream>
-#include <fstream>
 
 typedef MPinSDK::String String;
 typedef MPinSDK::IHttpRequest IHttpRequest;
 typedef MPinSDK::CryptoType CryptoType;
-typedef MPinSDK::UserPtr UserPtr;
-using namespace std;
 
 /*
  * Context class impl
  */
 
-CmdLineContext::CmdLineContext(const String& usersFile, const String& tokensFile)
+CmdLineContext::CmdLineContext(const String& usersFile, const String& tokensFile) :
+    m_nonSecureStorage(new FileStorage(usersFile)), m_secureStorage(new FileStorage(tokensFile))
 {
-    m_nonSecureStorage = new FileStorage(usersFile);
-    m_secureStorage = new FileStorage(tokensFile);
 }
 
 CmdLineContext::~CmdLineContext()
 {
     delete m_nonSecureStorage;
     delete m_secureStorage;
-}
-
-IHttpRequest * CmdLineContext::CreateHttpRequest() const
-{
-    return new HttpRequest();
-}
-
-void CmdLineContext::ReleaseHttpRequest(IN IHttpRequest *request) const
-{
-    delete request;
 }
 
 MPinSDK::IStorage * CmdLineContext::GetStorage(IStorage::Type type) const

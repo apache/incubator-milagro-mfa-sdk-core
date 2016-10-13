@@ -21,23 +21,36 @@ under the License.
 #define _MPIN_SDK_TEST_ACCESS_NUMBER_THREAD_H_
 
 #include "mpin_sdk.h"
+#include "test_context.h"
 #include "CvThread.h"
+#include "CvMutex.h"
 
 class AccessNumberThread : public CvShared::CvThread
 {
 public:
     typedef MPinSDK::String String;
+    typedef MPinSDK::StringMap StringMap;
+    typedef MPinSDK::IHttpRequest IHttpRequest;
 
+    AccessNumberThread(TestContext& context);
+    virtual ~AccessNumberThread();
     void Start(const String& backend, const String& webOTT, const String& authenticateURL);
     virtual long Body(void*);
+    bool IsFinished();
+    void WaitWhileFinished();
 
     static const int MAX_TRIES = 5;
     static const int RETRY_INTERVAL_MILLISEC = 1000;
+    static const int WAIT_INTERVAL_MILLISEC = 100;
 
 private:
     String m_backend;
     String m_webOTT;
     String m_authenticateURL;
+    TestContext& m_context;
+    IHttpRequest *m_req;
+    bool m_finished;
+    CvShared::CvMutex m_mutex;
 };
 
 #endif // _MPIN_SDK_TEST_ACCESS_NUMBER_THREAD_H_

@@ -18,21 +18,31 @@ under the License.
 */
 
 #include "access_number_thread.h"
-#include "../common/http_request.h"
 #include "CvTime.h"
+
+AccessNumberThread::AccessNumberThread(TestContext & context) : m_context(context), m_req(NULL), m_finished(false)
+{
+    m_mutex.Create();
+}
+
+AccessNumberThread::~AccessNumberThread()
+{
+    WaitWhileFinished();
+}
 
 void AccessNumberThread::Start(const String& backend, const String& webOTT, const String& authenticateURL)
 {
     m_backend = backend;
     m_webOTT = webOTT;
     m_authenticateURL = authenticateURL;
+    m_finished = false;
+    m_req = m_context.CreateHttpRequest();
     Create(NULL);
 }
 
 long AccessNumberThread::Body(void*)
 {
-    HttpRequest req;
-    HttpRequest::StringMap headers;
+    StringMap headers;
     headers.Put("Content-Type", "application/json");
     headers.Put("Accept", "*/*");
 
@@ -43,24 +53,46 @@ long AccessNumberThread::Body(void*)
     String url = String().Format("%s/rps/accessnumber", m_backend.c_str());
 
     int retryCount = 0;
-    while(req.GetHttpStatusCode() != 200 && retryCount++ < MAX_TRIES)
+    while(m_req->GetHttpStatusCode() != 200 && retryCount++ < MAX_TRIES)
     {
         CvShared::SleepFor(CvShared::Millisecs(RETRY_INTERVAL_MILLISEC).Value());
 
-        req.SetHeaders(headers);
-        req.SetContent(payload);
-        req.Execute(MPinSDK::IHttpRequest::POST, url);
+        m_req->SetHeaders(headers);
+        m_req->SetContent(payload);
+        m_req->Execute(MPinSDK::IHttpRequest::POST, url);
     }
 
     json.Clear();
     util::JsonObject mpinResponse;
-    mpinResponse.Parse(req.GetResponseData().c_str());
+    mpinResponse.Parse(m_req->GetResponseData().c_str());
     json["mpinResponse"] = mpinResponse;
     payload = json.ToString();
 
-    req.SetHeaders(headers);
-    req.SetContent(payload);
-    req.Execute(MPinSDK::IHttpRequest::POST, m_authenticateURL);
+    m_req->SetHeaders(headers);
+    m_req->SetContent(payload);
+    m_req->Execute(MPinSDK::IHttpRequest::POST, m_authenticateURL);
+
+    m_context.ReleaseHttpRequest(m_req);
+    m_req = NULL;
+
+    {
+        CvShared::CvMutexLock lock(m_mutex);
+        m_finished = true;
+    }
 
     return 0;
+}
+
+bool AccessNumberThread::IsFinished()
+{
+    CvShared::CvMutexLock lock(m_mutex);
+    return m_finished;
+}
+
+void AccessNumberThread::WaitWhileFinished()
+{
+    while (!IsFinished())
+    {
+        CvShared::SleepFor(CvShared::Millisecs(WAIT_INTERVAL_MILLISEC).Value());
+    }
 }

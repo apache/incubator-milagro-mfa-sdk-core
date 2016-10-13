@@ -11,3 +11,4 @@ dist/
 *tokens.json
 *users.json
 cvlog.txt
+unit_tests_recorded_data.inc

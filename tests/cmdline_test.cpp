@@ -18,12 +18,10 @@ under the License.
 */
 
 #include <iostream>
-#include <fstream>
 #include <conio.h>
-#include <map>
 #include <vector>
 
-#include "mpin_sdk.h"
+#include "common/test_mpin_sdk.h"
 #include "contexts/cmdline_context.h"
 #include "CvLogger.h"
 
@@ -63,11 +61,13 @@ int main(int argc, char *argv[])
     }
 
     CmdLineContext context("windows_test_users.json", "windows_test_tokens.json");
-    MPinSDK sdk;
+    //context.EnterRequestRecorderMode("cmdline_recorded_data.json");
+    //context.EnterRequestPlayerMode("cmdline_recorded_data.json");
+    TestMPinSDK sdk(context);
 
     cout << "Using MPinSDK version " << sdk.GetVersion() << endl;
 
-    MPinSDK::Status s = sdk.Init(config, &context);
+    MPinSDK::Status s = sdk.Init(config);
     if(s != MPinSDK::Status::OK)
     {
         cout << "Failed to initialize MPinSDK: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;

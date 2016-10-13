@@ -17,11 +17,9 @@ specific language governing permissions and limitations
 under the License.
 */
 
-#include "mpin_sdk.h"
+#include "common/test_mpin_sdk.h"
 #include "contexts/auto_context.h"
-#include "common/http_request.h"
 #include "common/access_number_thread.h"
-#include "CvTime.h"
 #include "CvLogger.h"
 
 #define BOOST_TEST_MODULE Simple testcases
@@ -31,13 +29,47 @@ typedef MPinSDK::User User;
 typedef MPinSDK::UserPtr UserPtr;
 typedef MPinSDK::Status Status;
 typedef MPinSDK::String String;
-
-static AutoContext context;
-static MPinSDK sdk;
-static MPinSDK::StringMap config;
-static const char *backend = "http://192.168.98.98:8005";
-
 using namespace boost::unit_test;
+
+
+static char RECORDED_DATA_JSON[] = {
+#include "unit_tests_recorded_data.inc"
+};
+
+class MemBuf : public std::streambuf
+{
+public:
+    MemBuf(char *buf, size_t len)
+    {
+        this->setg(buf, buf, buf + len);
+    }
+};
+
+static const char * GetRecordedDataFileName()
+{
+    int argc = framework::master_test_suite().argc;
+    if (argc > 1)
+    {
+        char **argv = framework::master_test_suite().argv;
+        return argv[1];
+    }
+    return "unit_tests_recorded_data.json";
+}
+
+class TestNameData : public TestContext::AutoContextData
+{
+public:
+    virtual String Get() const
+    {
+        return framework::current_test_case().p_name.get();
+    }
+};
+
+static TestNameData testNameData;
+static AutoContext context(testNameData);
+static TestMPinSDK sdk(context);
+static MPinSDK::StringMap config;
+static const char *backend = "http://10.10.40.62:8005";
 
 static std::ostream& operator<<(std::ostream& ostr, const Status& s)
 {
@@ -53,12 +85,10 @@ BOOST_AUTO_TEST_CASE(testNoInit)
 
     CvShared::InitLogger("cvlog.txt", CvShared::enLogLevel_None);
 
-    int argc = framework::master_test_suite().argc;
-    if(argc > 1)
-    {
-        char **argv = framework::master_test_suite().argv;
-        backend = argv[1];
-    }
+    //context.EnterRequestRecorderMode(GetRecordedDataFileName());
+    MemBuf buf(RECORDED_DATA_JSON, sizeof(RECORDED_DATA_JSON));
+    std::istream recordedDataInputStream(&buf);
+    context.EnterRequestPlayerMode(recordedDataInputStream);
 
     Status s = sdk.TestBackend("12354");
     BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
@@ -115,7 +145,7 @@ BOOST_AUTO_TEST_CASE(testInit)
 
     config.Put(MPinSDK::CONFIG_BACKEND, backend);
 
-    Status s = sdk.Init(config, &context);
+    Status s = sdk.Init(config);
 
     BOOST_CHECK_EQUAL(s, Status::OK);
 
@@ -395,10 +425,14 @@ BOOST_AUTO_TEST_CASE(testAuthenticate1)
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
+    context.SetAdditionalContextData("SecondAuth");
+
     //s = sdk.StartAuthentication(user);
     s = sdk.FinishAuthentication(user, "1234");
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
+
+    context.SetAdditionalContextData("");
 
     sdk.DeleteUser(user);
 
@@ -432,12 +466,12 @@ BOOST_AUTO_TEST_CASE(testAuthenticate2)
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
     //s = sdk.StartAuthentication(user);
-    s = sdk.FinishAuthentication(user, "1111");
+    s = sdk.FinishAuthentication(user, "1112");
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
     //s = sdk.StartAuthentication(user);
-    s = sdk.FinishAuthentication(user, "1111");
+    s = sdk.FinishAuthentication(user, "1113");
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::BLOCKED);
 
@@ -479,8 +513,6 @@ BOOST_AUTO_TEST_CASE(testAuthenticateOTP)
     BOOST_MESSAGE("    testAuthenticateOTP finished");
 }
 
-static AccessNumberThread g_accessNumberThread;
-
 BOOST_AUTO_TEST_CASE(testAuthenticateAN1)
 {
     BOOST_MESSAGE("Starting testAuthenticateAN1...");
@@ -501,18 +533,19 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN1)
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
     // Request access number
-    HttpRequest req;
-    HttpRequest::StringMap headers;
+    MPinSDK::IHttpRequest *req = context.CreateHttpRequest();
+    MPinSDK::StringMap headers;
     headers.Put("Content-Type", "application/json");
     headers.Put("Accept", "*/*");
-    req.SetHeaders(headers);
+    req->SetHeaders(headers);
 
     String url = String().Format("%s/rps/getAccessNumber", backend);
-    bool res = req.Execute(MPinSDK::IHttpRequest::POST, url);
+    bool res = req->Execute(MPinSDK::IHttpRequest::POST, url);
     BOOST_CHECK(res);
-    BOOST_CHECK_EQUAL(req.GetHttpStatusCode(), 200);
+    BOOST_CHECK_EQUAL(req->GetHttpStatusCode(), 200);
 
-    String data = req.GetResponseData();
+    String data = req->GetResponseData();
+    context.ReleaseHttpRequest(req);
     util::JsonObject json;
     res = json.Parse(data.c_str());
     BOOST_CHECK(res);
@@ -521,7 +554,8 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN1)
     BOOST_CHECK(accessNumber.length() > 0);
 
     // Start access number thread
-    g_accessNumberThread.Start(backend, json.GetStringParam("webOTT"), sdk.GetClientParam("authenticateURL"));
+    AccessNumberThread accessNumberThread(context);
+    accessNumberThread.Start(backend, json.GetStringParam("webOTT"), sdk.GetClientParam("authenticateURL"));
 
     // Authenticate with access number
     s = sdk.StartAuthentication(user);
@@ -561,18 +595,19 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN2)
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
     // Request access number
-    HttpRequest req;
-    HttpRequest::StringMap headers;
+    MPinSDK::IHttpRequest *req = context.CreateHttpRequest();
+    MPinSDK::StringMap headers;
     headers.Put("Content-Type", "application/json");
     headers.Put("Accept", "*/*");
-    req.SetHeaders(headers);
+    req->SetHeaders(headers);
 
     String url = String().Format("%s/rps/getAccessNumber", backend);
-    bool res = req.Execute(MPinSDK::IHttpRequest::POST, url);
+    bool res = req->Execute(MPinSDK::IHttpRequest::POST, url);
     BOOST_CHECK(res);
-    BOOST_CHECK_EQUAL(req.GetHttpStatusCode(), 200);
+    BOOST_CHECK_EQUAL(req->GetHttpStatusCode(), 200);
 
-    String data = req.GetResponseData();
+    String data = req->GetResponseData();
+    context.ReleaseHttpRequest(req);
     util::JsonObject json;
     res = json.Parse(data.c_str());
     BOOST_CHECK(res);
@@ -589,7 +624,8 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN2)
     }
 
     // Start access number thread
-    g_accessNumberThread.Start(backend, json.GetStringParam("webOTT"), sdk.GetClientParam("authenticateURL"));
+    AccessNumberThread accessNumberThread(context);
+    accessNumberThread.Start(backend, json.GetStringParam("webOTT"), sdk.GetClientParam("authenticateURL"));
 
     // Authenticate with access number
     s = sdk.StartAuthentication(user);
@@ -612,14 +648,11 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN2)
     // Fix access number - must fail with incorrect pin already
     accessNumber = originalAccessNumber;
     //s = sdk.StartAuthentication(user);
-    s = sdk.FinishAuthenticationAN(user, "1233", accessNumber);
+    s = sdk.FinishAuthenticationAN(user, "1235", accessNumber);
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
     sdk.DeleteUser(user);
-
-    // Wait the AccessNumberThread to complete
-    CvShared::SleepFor(CvShared::Millisecs(AccessNumberThread::RETRY_INTERVAL_MILLISEC * AccessNumberThread::MAX_TRIES).Value());
 
     BOOST_MESSAGE("    testAuthenticateAN2 finished");
 }

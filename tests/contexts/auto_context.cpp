@@ -22,41 +22,24 @@ under the License.
  */
 
 #include "auto_context.h"
-#include "../common/http_request.h"
 #include "../common/memory_storage.h"
 
-#include <iostream>
-#include <fstream>
-
 typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
 typedef MPinSDK::CryptoType CryptoType;
-typedef MPinSDK::UserPtr UserPtr;
 
 /*
  * Context class impl
  */
 
-AutoContext::AutoContext()
+AutoContext::AutoContext(const AutoContextData& autoContextData) :
+    TestContext(autoContextData), m_nonSecureStorage(new MemoryStorage()), m_secureStorage(new MemoryStorage())
 {
-    m_nonSecureStorage = new MemoryStorage();
-    m_secureStorage = new MemoryStorage();
 }
 
 AutoContext::~AutoContext()
 {
     delete m_nonSecureStorage;
     delete m_secureStorage;
-}
-
-IHttpRequest * AutoContext::CreateHttpRequest() const
-{
-    return new HttpRequest();
-}
-
-void AutoContext::ReleaseHttpRequest(IN IHttpRequest *request) const
-{
-    delete request;
 }
 
 MPinSDK::IStorage * AutoContext::GetStorage(IStorage::Type type) const

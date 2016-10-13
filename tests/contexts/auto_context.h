@@ -25,19 +25,17 @@ under the License.
 #define _AUTO_CONTEXT_H_
 
 #include "mpin_sdk.h"
+#include "../common/test_context.h"
 
-class AutoContext : public MPinSDK::IContext
+class AutoContext : public TestContext
 {
 public:
     typedef MPinSDK::String String;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
     typedef MPinSDK::IStorage IStorage;
     typedef MPinSDK::CryptoType CryptoType;
 
-    AutoContext();
+    AutoContext(const AutoContextData& autoContextData);
     ~AutoContext();
-    virtual IHttpRequest * CreateHttpRequest() const;
-    virtual void ReleaseHttpRequest(IN IHttpRequest *request) const;
     virtual IStorage * GetStorage(IStorage::Type type) const;
     virtual CryptoType GetMPinCryptoType() const;
 
