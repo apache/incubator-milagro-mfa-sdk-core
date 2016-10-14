@@ -75,14 +75,24 @@
   <ItemGroup>
     <ClCompile Include="..\..\tests\common\access_number_thread.cpp" />
     <ClCompile Include="..\..\tests\common\file_storage.cpp" />
+    <ClCompile Include="..\..\tests\common\http_player.cpp" />
+    <ClCompile Include="..\..\tests\common\http_recorded_data.cpp" />
+    <ClCompile Include="..\..\tests\common\http_recorder.cpp" />
     <ClCompile Include="..\..\tests\common\http_request.cpp" />
     <ClCompile Include="..\..\tests\common\memory_storage.cpp" />
+    <ClCompile Include="..\..\tests\common\test_context.cpp" />
+    <ClCompile Include="..\..\tests\common\test_mpin_sdk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\tests\common\access_number_thread.h" />
     <ClInclude Include="..\..\tests\common\file_storage.h" />
+    <ClInclude Include="..\..\tests\common\http_player.h" />
+    <ClInclude Include="..\..\tests\common\http_recorded_data.h" />
+    <ClInclude Include="..\..\tests\common\http_recorder.h" />
     <ClInclude Include="..\..\tests\common\http_request.h" />
     <ClInclude Include="..\..\tests\common\memory_storage.h" />
+    <ClInclude Include="..\..\tests\common\test_context.h" />
+    <ClInclude Include="..\..\tests\common\test_mpin_sdk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -251,6 +251,24 @@ void OverwriteJsonValues(json::UnknownElement& element)
  * StringMap class
  */
 
+StringMap::StringMap(const json::Object & object)
+{
+    for (json::Object::const_iterator i = object.Begin(); i != object.End(); ++i)
+    {
+        (*this)[i->name] = ((const json::String&) i->element).Value();
+    }
+}
+
+json::Object StringMap::ToJsonObject() const
+{
+    json::Object object;
+    for (StringMap::const_iterator i = begin(); i != end(); ++i)
+    {
+        object[i->first] = json::String(i->second);
+    }
+    return object;
+}
+
 bool StringMap::Put(const String& key, const String& value)
 {
     iterator i = find(key);

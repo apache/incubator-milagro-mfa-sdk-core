@@ -80,7 +80,7 @@ SRC = $(call add_src_dir, src)
 SRC += $(call add_src_dir_including, ext/cvshared/cpp, \
 		%linux/CvHttpRequest.cpp %linux/CvThread.cpp %linux/CvLogger.cpp %linux/CvMutex.cpp %CvString.cpp %CvTime.cpp %CvXcode.cpp)
 SRC += $(call add_src_dir_including, tests, \
-        %auto_context.cpp %access_number_thread.cpp %memory_storage.cpp %http_request.cpp %unit_tests.cpp)
+        %auto_context.cpp %access_number_thread.cpp %http_player.cpp %http_recorded_data.cpp %http_recorder.cpp %http_request.cpp %memory_storage.cpp %test_context.cpp %test_mpin_sdk.cpp %unit_tests.cpp)
 
 # Generate a list of object files
 OBJ = $(call cpp_to_obj, $(call c_to_obj, $(SRC)))
@@ -102,6 +102,12 @@ $(foreach cfile, $(C_SRC), $(eval $(call generate_c_rule, $(cfile), $(call c_to_
 
 # Generate rules for each object file that depends on the corresponding .cpp file
 $(foreach cppfile, $(CPP_SRC), $(eval $(call generate_cpp_rule, $(cppfile), $(call cpp_to_obj, $(cppfile)))))
+
+# Generate unit tests recorded data include file
+$(BUILD_DIR)/tests/unit_tests.o: $(SRC_DIR)/tests/unit_tests_recorded_data.inc
+
+$(SRC_DIR)/tests/unit_tests_recorded_data.inc: $(SRC_DIR)/tests/unit_tests_recorded_data.json
+	$(shell xxd -i < $< > $@)
 
 # Clean target
 clean:

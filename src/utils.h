@@ -82,6 +82,9 @@ void OverwriteJsonValues(json::UnknownElement& element);
 class StringMap : public std::map<String, String>
 {
 public:
+    StringMap() {}
+    StringMap(const json::Object& object);
+    json::Object ToJsonObject() const;
     bool Put(const String& key, const String& value);
     const char * Get(const String& key) const;
 };

@@ -24,20 +24,17 @@ under the License.
 #ifndef _CMDLINE_CONTEXT_H_
 #define _CMDLINE_CONTEXT_H_
 
-#include "mpin_sdk.h"
+#include "../common/test_context.h"
 
-class CmdLineContext : public MPinSDK::IContext
+class CmdLineContext : public TestContext
 {
 public:
     typedef MPinSDK::String String;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
     typedef MPinSDK::IStorage IStorage;
     typedef MPinSDK::CryptoType CryptoType;
 
     CmdLineContext(const String& usersFile, const String& tokensFile);
     ~CmdLineContext();
-    virtual IHttpRequest * CreateHttpRequest() const;
-    virtual void ReleaseHttpRequest(IN IHttpRequest *request) const;
     virtual IStorage * GetStorage(IStorage::Type type) const;
     virtual CryptoType GetMPinCryptoType() const;
 
