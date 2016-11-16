@@ -282,6 +282,14 @@ bool StringMap::Put(const String& key, const String& value)
     return true;
 }
 
+void StringMap::PutAll(const StringMap& other)
+{
+    for (StringMap::const_iterator i = other.begin(); i != other.end(); ++i)
+    {
+        (*this)[i->first] = i->second;
+    }
+}
+
 const char * StringMap::Get(const String& key) const
 {
     const_iterator i = find(key);
