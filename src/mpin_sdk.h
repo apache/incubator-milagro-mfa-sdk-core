@@ -241,6 +241,7 @@ public:
     ~MPinSDK();
     Status Init(const StringMap& config, IN IContext* ctx);
     Status Init(const StringMap& config, IN IContext* ctx, const StringMap& customHeaders);
+    void SetClientId(const String& clientId);
     void Destroy();
     void ClearUsers();
 
@@ -259,6 +260,7 @@ public:
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData);
     Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
     Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
+    Status FinishAuthenticationMFA(INOUT UserPtr user, const String& pin, OUT String& authzCode);
 
     Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
 

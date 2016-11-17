@@ -661,7 +661,7 @@ Status MPinSDK::Init(const StringMap& config, IContext* ctx, const StringMap& cu
     }
 
     m_context = ctx;
-    m_customHeaders = customHeaders;
+    m_customHeaders.PutAll(customHeaders);
 
     if(ctx->GetMPinCryptoType() == CRYPTO_NON_TEE)
     {
@@ -703,6 +703,11 @@ Status MPinSDK::Init(const StringMap& config, IContext* ctx, const StringMap& cu
     return SetBackend(backend, rpsPrefix);
 }
 
+void MPinSDK::SetClientId(const String& clientId)
+{
+    m_customHeaders["X-MIRACL-Client-ID"] = clientId;
+}
+
 void MPinSDK::Destroy()
 {
     if(!IsInitilized())
@@ -715,6 +720,8 @@ void MPinSDK::Destroy()
     delete m_crypto;
     m_crypto = NULL;
     m_context = NULL;
+
+    m_customHeaders.clear();
 
     m_state = NOT_INITIALIZED;
 }
@@ -1115,6 +1122,16 @@ Status MPinSDK::FinishAuthenticationAN(INOUT UserPtr user, const String& pin, co
         m_logoutData.insert(std::make_pair(user, logoutData));
     }
 
+    return s;
+}
+
+Status MPinSDK::FinishAuthenticationMFA(INOUT UserPtr user, const String& pin, OUT String& authzCode)
+{
+    util::JsonObject authResult;
+
+    Status s = FinishAuthenticationImpl(user, pin, "", NULL, authResult);
+
+    authzCode = authResult.GetStringParam("code");
     return s;
 }
 
