@@ -263,6 +263,11 @@ MPinSDK::Status s = sdk->Init( config, Context::Instance() );
 This method clears the `MPinSDK` instance and releases any allocated data by it.
 After calling this method, one should use `Init()` again in order to re-use the `MPinSDK` instance.
 
+##### `void SetClientId(const String& clientId);`
+This method will set a specific _Client ID_ which the SDK should use when sending requests to the backend.
+As an example, the MIRACL MFA Platform issues _Client IDs_ for registered applications, which use the platform for authenticating users.
+When the SDK is used to authenticate users specifically for this registered application, the _Client ID_ should be set by the app using this method. 
+
 ##### `Status TestBackend(const String& server, const String& rpsPrefix = "rps") const;`
 This method will test whether `server` is a valid back-end URL by trying to retrieve Client Settings from it.
 Optionally, a custom RPS prefix might be specified if it was customized at the back-end and is different than the default `"rps"`.
@@ -453,6 +458,13 @@ The returned status might be:
 * `Status::INCORRECT_PIN` - The authentication failed because of incorrect PIN. After the 3rd (configurable in the RPS) unsuccessful authentication attempt, the method will still return `Status::INCORRECT_PIN` but the User State will be set to `BLOCKED`.
 * `Status::INCORRECT_ACCESS_NUMBER` - The authentication failed because of incorrect Access Number.
 
+##### `Status FinishAuthenticationMFA(INOUT UserPtr user, const String& pin, OUT String& authzCode);`
+This method is almost identical to the standard `FinishAuthentication()`, but it returns back an _Authorization Code_, which should be used further by the app back-end to validate the authenticated user.
+This method is useful when authenticating users against the MIRACL MFA Platform.
+For this flow to work, the app should also set a _Client ID_ through the `SetClientId()` method.
+The Platform will provide the _Authorization Code_ as a result from the authentication.
+This code should be then passed by the app to the back-end, where it should be verified using one of the MFA Paltform SDK flavors.
+
 ##### `bool CanLogout(IN UserPtr user);`
 This method is used after authentication with an Access Number/Code through `FinishAuthenticationAN()`.
 After such an authentication, the Mobile Device can log out the end-user from the Browser session, if the RPA supports that functionality.
@@ -482,3 +494,11 @@ Client settings that might interest the applications are:
 
 ##### User Authentication to an Online Session
 ![*](M-Pin SDK - Authentication to Browser Session flow.png)
+
+#### MIRACL MFA Platform Flows
+
+##### Authentication into a Mobile App
+![*](Mobile App Login.png)
+
+##### Authentication to a Web App
+_Coming soon..._
