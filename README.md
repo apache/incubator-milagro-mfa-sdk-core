@@ -501,4 +501,4 @@ Client settings that might interest the applications are:
 ![*](Mobile App Login.png)
 
 ##### Authentication to a Web App
-_Coming soon..._
+![*](MFA Platform Login.png)
