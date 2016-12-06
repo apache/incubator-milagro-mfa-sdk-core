@@ -237,8 +237,20 @@ public:
         String appIconUrl;
     };
 
+    class ServiceDetails
+    {
+    public:
+        String name;
+        String backendUrl;
+        String rpsPrefix;
+        String logoUrl;
+    };
+
     MPinSDK();
     ~MPinSDK();
+
+    Status GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails);
+
     Status Init(const StringMap& config, IN IContext* ctx);
     Status Init(const StringMap& config, IN IContext* ctx, const StringMap& customHeaders);
     void SetClientId(const String& clientId);
@@ -294,6 +306,7 @@ private:
 
         enum Context
         {
+            GET_SERVICE_DETAILS,
             GET_CLIENT_SETTINGS,
             REGISTER,
             GET_CLIENT_SECRET1,
@@ -322,6 +335,7 @@ private:
         const StringMap& GetHeaders() const;
         void SetNetworkError(const String& error);
         void SetHttpError(int httpStatus);
+        void SetResponseJsonParseError(const String& jsonParseError);
         Status TranslateToMPinStatus(Context context);
 
     private:
