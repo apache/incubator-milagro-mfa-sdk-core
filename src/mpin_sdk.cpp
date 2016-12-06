@@ -371,6 +371,11 @@ void MPinSDK::HttpResponse::SetNetworkError(const String& error)
     m_mpinStatus.SetErrorMessage(String().Format("HTTP request to '%s' failed. Error: '%s'", m_requestUrl.c_str(), error.c_str()));
 }
 
+void MPinSDK::HttpResponse::SetResponseJsonParseError(const String& jsonParseError)
+{
+    SetResponseJsonParseError(String(m_rawData).Trim(), jsonParseError);
+}
+
 void MPinSDK::HttpResponse::SetResponseJsonParseError(const String& responseJson, const String& jsonParseError)
 {
     m_httpStatus = NON_HTTP_ERROR;
@@ -425,6 +430,7 @@ Status MPinSDK::HttpResponse::TranslateToMPinStatus(Context context)
 {
     switch(context)
     {
+    case GET_SERVICE_DETAILS:
     case GET_CLIENT_SETTINGS:
     case AUTHENTICATE_PASS1:
     case AUTHENTICATE_PASS2:
@@ -646,6 +652,36 @@ Status MPinSDK::RewriteRelativeUrls()
     }
 
     return Status(Status::OK);
+}
+
+Status MPinSDK::GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails)
+{
+    HttpResponse response = MakeGetRequest(String().Format("%s/service", String(url).TrimRight("/").c_str()));
+    if (response.GetStatus() != HttpResponse::HTTP_OK)
+    {
+        return response.TranslateToMPinStatus(HttpResponse::GET_SERVICE_DETAILS);
+    }
+
+    try
+    {
+        const util::JsonObject& data = response.GetJsonData();
+        serviceDetails.name = ((const json::String&) data["name"]).Value();
+        serviceDetails.backendUrl = ((const json::String&) data["url"]).Value();
+        serviceDetails.rpsPrefix = ((const json::String&) data["rps_prefix"]).Value();
+        serviceDetails.logoUrl = ((const json::String&) data["logo_url"]).Value();
+        String type = ((const json::String&) data["type"]).Value();
+        if (type != "online")
+        {
+            throw json::Exception(String().Format("Unexpected service details type: '%s'. Must be 'online'", type.c_str()));
+        }
+
+        return Status::OK;
+    }
+    catch (json::Exception& e)
+    {
+        response.SetResponseJsonParseError(e.what());
+        return response.TranslateToMPinStatus(HttpResponse::GET_SERVICE_DETAILS);
+    }
 }
 
 Status MPinSDK::Init(const StringMap& config, IContext* ctx)
