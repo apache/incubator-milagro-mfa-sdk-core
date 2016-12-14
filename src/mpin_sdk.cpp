@@ -435,6 +435,7 @@ Status MPinSDK::HttpResponse::TranslateToMPinStatus(Context context)
     case AUTHENTICATE_PASS1:
     case AUTHENTICATE_PASS2:
     case GET_SESSION_DETAILS:
+    case ABORT_SESSION:
         break;
     case REGISTER:
         if(m_httpStatus == HTTP_FORBIDDEN)
@@ -1466,6 +1467,33 @@ Status MPinSDK::GetSessionDetails(const String& accessCode, OUT SessionDetails& 
     sessionDetails.prerollId = json.GetStringParam("prerollId");
     sessionDetails.appName = json.GetStringParam("appName");
     sessionDetails.appIconUrl = json.GetStringParam("appLogoURL");
+
+    return Status::OK;
+}
+
+Status MPinSDK::AbortSession(const String& accessCode)
+{
+    Status s = CheckIfBackendIsSet();
+    if (s != Status::OK)
+    {
+        return s;
+    }
+
+    String codeStatusUrl = m_clientSettings.GetStringParam("codeStatusURL");
+    if (codeStatusUrl.empty())
+    {
+        return Status::OK;
+    }
+
+    util::JsonObject data;
+    data["status"] = json::String("abort");
+    data["wid"] = json::String(accessCode);
+
+    HttpResponse response = MakeRequest(codeStatusUrl, IHttpRequest::POST, data);
+    if (response.GetStatus() != HttpResponse::HTTP_OK)
+    {
+        return response.TranslateToMPinStatus(HttpResponse::ABORT_SESSION);
+    }
 
     return Status::OK;
 }

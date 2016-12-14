@@ -275,6 +275,7 @@ public:
     Status FinishAuthenticationMFA(INOUT UserPtr user, const String& pin, OUT String& authzCode);
 
     Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
+    Status AbortSession(const String& accessCode);
 
     void DeleteUser(INOUT UserPtr user);
     Status ListUsers(OUT std::vector<UserPtr>& users, const String& backend) const;
@@ -317,6 +318,7 @@ private:
             AUTHENTICATE_PASS2,
             AUTHENTICATE_RPA,
             GET_SESSION_DETAILS,
+            ABORT_SESSION,
         };
 
         enum DataType
