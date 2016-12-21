@@ -176,6 +176,14 @@ bool JsonObject::GetBoolParam(const char *name, bool defaultValue) const
     }
 }
 
+void JsonObject::PutIfNotEmpty(const std::string& name, const std::string& value)
+{
+    if (!value.empty())
+    {
+        (*this)[name] = json::String(value);
+    }
+}
+
 std::string JsonObject::GetParseError() const
 {
     return m_parseError;
@@ -189,40 +197,51 @@ void JsonObject::Copy(const json::Object& other)
     }
 }
 
-
-class JsonVisitor : public json::Visitor
+std::string GetOptionalStringParam(const json::Object& object, const std::string& name, const std::string& defaultValue)
 {
-public:
-    virtual void Visit(json::Array& array)
+    json::Object::const_iterator i = object.Find(name);
+    if (i == object.End())
     {
-        OverwriteJsonValues(array);
+        return defaultValue;
     }
+    return ((const json::String&) i->element).Value();
+}
 
-    virtual void Visit(json::Object& object)
+namespace
+{
+    class JsonVisitor : public json::Visitor
     {
-        OverwriteJsonValues(object);
-    }
+    public:
+        virtual void Visit(json::Array& array)
+        {
+            OverwriteJsonValues(array);
+        }
 
-    virtual void Visit(json::Number& number)
-    {
-        number.Value() = 0.0;
-    }
+        virtual void Visit(json::Object& object)
+        {
+            OverwriteJsonValues(object);
+        }
 
-    virtual void Visit(json::String& string)
-    {
-        OverwriteString(string.Value());
-    }
+        virtual void Visit(json::Number& number)
+        {
+            number.Value() = 0.0;
+        }
 
-    virtual void Visit(json::Boolean& boolean)
-    {
-        boolean.Value() = false;
-    }
+        virtual void Visit(json::String& string)
+        {
+            OverwriteString(string.Value());
+        }
 
-    virtual void Visit(json::Null& null)
-    {
-    }
-};
+        virtual void Visit(json::Boolean& boolean)
+        {
+            boolean.Value() = false;
+        }
 
+        virtual void Visit(json::Null& null)
+        {
+        }
+    };
+}
 
 void OverwriteJsonValues(json::Object& object)
 {

@@ -102,6 +102,12 @@
     <ClCompile Include="..\..\src\utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mpin_sdk_base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mfa_sdk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\mpin_crypto.h">
@@ -164,9 +170,6 @@
     <ClInclude Include="..\..\ext\cvshared\cpp\include\CvXcode.h">
       <Filter>ext\cvshared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\version.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ext\cvshared\cpp\include\CvThread.h">
       <Filter>ext\cvshared</Filter>
     </ClInclude>
@@ -186,6 +189,12 @@
       <Filter>src\crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mpin_sdk_base.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mfa_sdk.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,15 +27,15 @@ under the License.
 #include <string>
 #include <vector>
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 
 
 class IMPinCrypto
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::Status Status;
-    typedef MPinSDK::UserPtr UserPtr;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::Status Status;
+    typedef MPinSDKBase::UserPtr UserPtr;
 
     virtual ~IMPinCrypto() {}
 

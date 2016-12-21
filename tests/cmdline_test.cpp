@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     //context.EnterRequestPlayerMode("cmdline_recorded_data.json");
     TestMPinSDK sdk(context);
 
-    cout << "Using MPinSDK version " << sdk.GetVersion() << endl;
+    cout << "MPinSDK test" << endl;
 
     MPinSDK::Status s = sdk.Init(config);
     if(s != MPinSDK::Status::OK)
@@ -159,22 +159,23 @@ int main(int argc, char *argv[])
     MPinSDK::String accessCode;
     if(testMaasWorkflow)
     {
-        cout << "Enter access code: ";
-        cin >> accessCode;
-        MPinSDK::SessionDetails sd;
-        s = sdk.GetSessionDetails(accessCode, sd);
-        if(s == MPinSDK::Status::OK)
-        {
-            cout << "GetSessionDetails() returned prerollId = '"
-                << sd.prerollId << "' appName = '" << sd.appName << "' appIconUrl = '" << sd.appIconUrl << "'" << endl;
-        }
-        else
-        {
-            cout << "ERROR: GetSessionDetails() returned status = " << s.GetStatusCode() << ", error = '" << s.GetErrorMessage() << "'" << endl;
-        }
+        //cout << "Enter access code: ";
+        //cin >> accessCode;
+        //MPinSDK::SessionDetails sd;
+        //s = sdk.GetSessionDetails(accessCode, sd);
+        //if(s == MPinSDK::Status::OK)
+        //{
+        //    cout << "GetSessionDetails() returned prerollId = '"
+        //        << sd.prerollId << "' appName = '" << sd.appName << "' appIconUrl = '" << sd.appIconUrl << "'" << endl;
+        //}
+        //else
+        //{
+        //    cout << "ERROR: GetSessionDetails() returned status = " << s.GetStatusCode() << ", error = '" << s.GetErrorMessage() << "'" << endl;
+        //}
     }
 
-    s = sdk.StartAuthentication(user, accessCode);
+    //s = sdk.StartAuthentication(user, accessCode);
+    s = sdk.StartAuthentication(user);
     if(s != MPinSDK::Status::OK)
     {
         cout << "Failed to start user authentication: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
