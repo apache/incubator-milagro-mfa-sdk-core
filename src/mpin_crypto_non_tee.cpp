@@ -24,8 +24,8 @@ under the License.
 #include "mpin_crypto_non_tee.h"
 
 
-typedef MPinSDK::String String;
-typedef MPinSDK::Status Status;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::Status Status;
 
 class Octet : public octet
 {

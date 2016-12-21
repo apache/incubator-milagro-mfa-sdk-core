@@ -99,8 +99,10 @@
     <ClCompile Include="..\..\src\crypto\rand.c" />
     <ClCompile Include="..\..\src\crypto\rom.c" />
     <ClCompile Include="..\..\src\crypto\version.c" />
+    <ClCompile Include="..\..\src\mfa_sdk.cpp" />
     <ClCompile Include="..\..\src\mpin_crypto_non_tee.cpp" />
     <ClCompile Include="..\..\src\mpin_sdk.cpp" />
+    <ClCompile Include="..\..\src\mpin_sdk_base.cpp" />
     <ClCompile Include="..\..\src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,15 +125,16 @@
     <ClInclude Include="..\..\src\json\reader.h" />
     <ClInclude Include="..\..\src\json\visitor.h" />
     <ClInclude Include="..\..\src\json\writer.h" />
+    <ClInclude Include="..\..\src\mfa_sdk.h" />
     <ClInclude Include="..\..\src\mpin_crypto.h" />
     <ClInclude Include="..\..\src\mpin_crypto_non_tee.h" />
     <ClInclude Include="..\..\src\mpin_sdk.h" />
+    <ClInclude Include="..\..\src\mpin_sdk_base.h" />
     <ClInclude Include="..\..\src\utf8.h" />
     <ClInclude Include="..\..\src\utf8\checked.h" />
     <ClInclude Include="..\..\src\utf8\core.h" />
     <ClInclude Include="..\..\src\utf8\unchecked.h" />
     <ClInclude Include="..\..\src\utils.h" />
-    <ClInclude Include="..\..\src\version.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\json\elements.inl" />

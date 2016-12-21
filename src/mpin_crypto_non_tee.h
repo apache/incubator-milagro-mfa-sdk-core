@@ -33,9 +33,9 @@ extern "C"
 class MPinCryptoNonTee : public IMPinCrypto
 {
 public:
-    typedef MPinSDK::IStorage IStorage;
+    typedef MPinSDKBase::IStorage IStorage;
     typedef util::JsonObject JsonObject;
-    typedef MPinSDK::UserPtr UserPtr;
+    typedef MPinSDKBase::UserPtr UserPtr;
 
     MPinCryptoNonTee();
     ~MPinCryptoNonTee();

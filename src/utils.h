@@ -67,6 +67,7 @@ public:
     int64_t GetInt64Param(const char *name, int64_t defaultValue = 0) const;
     bool GetBoolParam(const char *name, bool defaultValue = false) const;
     std::string GetParseError() const;
+    void PutIfNotEmpty(const std::string& name, const std::string& value);
     
 private:
     void Copy(const json::Object& other);
@@ -74,6 +75,8 @@ private:
 private:
     String m_parseError;
 };
+
+std::string GetOptionalStringParam(const json::Object& object, const std::string& name, const std::string& defaultValue = "");
 
 void OverwriteJsonValues(json::Object& object);
 void OverwriteJsonValues(json::Array& array);
