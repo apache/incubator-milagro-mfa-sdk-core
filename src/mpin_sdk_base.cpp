@@ -1013,7 +1013,7 @@ Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode
     data.PutIfNotEmpty("deviceName", user->GetDeviceName());
     data.PutIfNotEmpty("userData", userData);
     data.PutIfNotEmpty("activateCode", activateCode);
-    data.PutIfNotEmpty("accessCode", accessCode);
+    data.PutIfNotEmpty("wid", accessCode);
     data.PutIfNotEmpty("pushToken", pushToken);
 
     String url;
