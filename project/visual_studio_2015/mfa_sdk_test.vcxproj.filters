@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
-      <UniqueIdentifier>{8d8eb6a0-6fa5-40bc-98d7-c54ff7d5cef3}</UniqueIdentifier>
+      <UniqueIdentifier>{02134220-2075-4a74-8956-02c14ae1217a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tests\cmdline_test.cpp">
+    <ClCompile Include="..\..\tests\mfa_sdk_test.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

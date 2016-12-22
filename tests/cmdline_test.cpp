@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         config.Put(MPinSDK::CONFIG_RPS_PREFIX, backend.rpsPrefix);
     }
 
-    CmdLineContext context("windows_test_users.json", "windows_test_tokens.json");
+    CmdLineContext context("mpin_sdk_test_users.json", "mpin_sdk_test_tokens.json");
     //context.EnterRequestRecorderMode("cmdline_recorded_data.json");
     //context.EnterRequestPlayerMode("cmdline_recorded_data.json");
     TestMPinSDK sdk(context);
@@ -79,13 +79,6 @@ int main(int argc, char *argv[])
     for(size_t i = 0; i < backendCount; ++i)
     {
         TestBackend(sdk, backends[i].backend, backends[i].rpsPrefix);
-    }
-
-    bool testMaasWorkflow = false;
-    const char *maasBackend = "http://mpinaas-demo.miracl.net:8001";
-    if(testMaasWorkflow)
-    {
-        s = sdk.SetBackend(maasBackend);
     }
 
     //s = sdk.SetBackend(backends[1].backend, backends[1].rpsPrefix);
@@ -156,25 +149,6 @@ int main(int argc, char *argv[])
         _getch();
     }
 
-    MPinSDK::String accessCode;
-    if(testMaasWorkflow)
-    {
-        //cout << "Enter access code: ";
-        //cin >> accessCode;
-        //MPinSDK::SessionDetails sd;
-        //s = sdk.GetSessionDetails(accessCode, sd);
-        //if(s == MPinSDK::Status::OK)
-        //{
-        //    cout << "GetSessionDetails() returned prerollId = '"
-        //        << sd.prerollId << "' appName = '" << sd.appName << "' appIconUrl = '" << sd.appIconUrl << "'" << endl;
-        //}
-        //else
-        //{
-        //    cout << "ERROR: GetSessionDetails() returned status = " << s.GetStatusCode() << ", error = '" << s.GetErrorMessage() << "'" << endl;
-        //}
-    }
-
-    //s = sdk.StartAuthentication(user, accessCode);
     s = sdk.StartAuthentication(user);
     if(s != MPinSDK::Status::OK)
     {
@@ -189,14 +163,7 @@ int main(int argc, char *argv[])
     cin >> pin;
 
     MPinSDK::String authData;
-    if(!testMaasWorkflow)
-    {
-        s = sdk.FinishAuthentication(user, pin, authData);
-    }
-    else
-    {
-        s = sdk.FinishAuthenticationAN(user, pin, accessCode);
-    }
+    s = sdk.FinishAuthentication(user, pin, authData);
     if(s != MPinSDK::Status::OK)
     {
         cout << "Failed to authenticate user: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;

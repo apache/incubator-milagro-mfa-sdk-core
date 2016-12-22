@@ -80,7 +80,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tests\contexts\auto_context.cpp" />
     <ClCompile Include="..\..\tests\unit_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -90,9 +89,6 @@
     <ProjectReference Include="mpin_sdk_test_common.vcxproj">
       <Project>{ab7741c8-a26b-4d8d-a0bc-806b5ac86cd9}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\tests\contexts\auto_context.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
