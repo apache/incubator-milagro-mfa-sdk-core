@@ -51,7 +51,7 @@ public:
         String customerIconUrl;
     };
 
-    MfaSDK(){}
+    MfaSDK();
 
     Status GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails);
     void SetCID(const String& cid);

@@ -33,6 +33,8 @@ typedef MPinSDKBase::String String;
 typedef MPinSDKBase::StringMap StringMap;
 typedef MPinSDKBase::IHttpRequest::Method HttpMethod;
 
+MfaSDK::MfaSDK() {}
+
 Status MfaSDK::GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails)
 {
     HttpResponse response = MakeGetRequest(String().Format("%s/service", String(url).TrimRight("/").c_str()));
@@ -122,7 +124,7 @@ Status MfaSDK::GetSessionDetails(const String& accessCode, OUT SessionDetails& s
     sessionDetails.appIconUrl = json.GetStringParam("appLogoURL");
     sessionDetails.customerId = json.GetStringParam("customerId");
     sessionDetails.customerName = json.GetStringParam("customerName");
-    sessionDetails.customerIconUrl = json.GetStringParam("customerIconURL");
+    sessionDetails.customerIconUrl = json.GetStringParam("customerLogoURL");
 
     return Status::OK;
 }
