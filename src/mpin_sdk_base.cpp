@@ -442,12 +442,19 @@ Status MPinSDKBase::HttpResponse::TranslateToMPinStatus(Context context)
 {
     switch (context)
     {
-    case GET_SERVICE_DETAILS:
     case GET_CLIENT_SETTINGS:
     case AUTHENTICATE_PASS1:
     case AUTHENTICATE_PASS2:
     case GET_SESSION_DETAILS:
     case ABORT_SESSION:
+    case GET_ACCESS_CODE:
+        break;
+    case GET_SERVICE_DETAILS:
+        if (m_httpStatus == HTTP_PRECONDITION_FAILED)
+        {
+            m_mpinStatus.SetStatusCode(Status::BAD_CLIENT_VERSION);
+            m_mpinStatus.SetErrorMessage("Wrong client app version");
+        }
         break;
     case REGISTER:
         if (m_httpStatus == HTTP_FORBIDDEN)

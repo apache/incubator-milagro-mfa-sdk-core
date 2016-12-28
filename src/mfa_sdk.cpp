@@ -176,24 +176,57 @@ Status MfaSDK::FinishRegistration(INOUT UserPtr user, const String& pin)
     return MPinSDKBase::FinishRegistration(user, pin);
 }
 
+Status MfaSDK::GetAccessCode(const String& authzUrl, OUT String& accessCode)
+{
+    Status s = CheckIfIsInitialized();
+    if (s != Status::OK)
+    {
+        return s;
+    }
+
+    HttpResponse response = MakeRequest(authzUrl, IHttpRequest::POST, util::JsonObject());
+    if (response.GetStatus() != HttpResponse::HTTP_OK)
+    {
+        return response.TranslateToMPinStatus(HttpResponse::GET_ACCESS_CODE);
+    }
+
+    try
+    {
+        const util::JsonObject& data = response.GetJsonData();
+        String qrURL = ((const json::String&) data["qrURL"]).Value();
+        size_t index = qrURL.find_last_of('#');
+        if (qrURL.empty() || index >= qrURL.length() - 1)
+        {
+            throw json::Exception(String().Format("Failed to extract accessCode from qrURL: '%s'", qrURL.c_str()));
+        }
+        accessCode = qrURL.substr(index + 1);
+        return Status::OK;
+    }
+    catch (json::Exception& e)
+    {
+        response.SetResponseJsonParseError(e.what());
+        return response.TranslateToMPinStatus(HttpResponse::GET_ACCESS_CODE);
+    }
+}
+
 Status MfaSDK::StartAuthentication(INOUT UserPtr user, const String& accessCode)
 {
     return MPinSDKBase::StartAuthentication(user, accessCode);
 }
 
-Status MfaSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authzCode)
+Status MfaSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode)
+{
+    return MPinSDKBase::FinishAuthenticationAC(user, pin, accessCode);
+}
+
+Status MfaSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String& authzCode)
 {
     util::JsonObject authResult;
 
-    Status s = FinishAuthenticationImpl(user, pin, "", NULL, authResult);
+    Status s = FinishAuthenticationImpl(user, pin, accessCode, NULL, authResult);
 
     authzCode = authResult.GetStringParam("code");
     return s;
-}
-
-Status MfaSDK::FinishAuthenticationAC(INOUT UserPtr user, const String& pin, const String& accessCode)
-{
-    return MPinSDKBase::FinishAuthenticationAC(user, pin, accessCode);
 }
 
 Status MfaSDK::ListUsers(OUT std::vector<UserPtr>& users) const

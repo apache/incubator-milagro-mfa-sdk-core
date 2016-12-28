@@ -65,9 +65,11 @@ public:
     Status ConfirmRegistration(INOUT UserPtr user);
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
+    Status GetAccessCode(const String& authzUrl, OUT String& accessCode);
+
     Status StartAuthentication(INOUT UserPtr user, const String& accessCode);
-    Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authzCode);
-    Status FinishAuthenticationAC(INOUT UserPtr user, const String& pin, const String& accessCode);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String& authzCode);
 
     Status ListUsers(OUT std::vector<UserPtr>& users) const;
 };

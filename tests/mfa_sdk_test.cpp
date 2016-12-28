@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     }
 
     string pin = GetStringFromStdin("Enter pin: ");
-    s = sdk.FinishAuthenticationAC(user, pin, accessCode);
+    s = sdk.FinishAuthentication(user, pin, accessCode);
     if (s != Status::OK)
     {
         cout << "Failed to authenticate user: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
