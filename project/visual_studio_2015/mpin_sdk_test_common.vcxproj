@@ -82,6 +82,7 @@
     <ClCompile Include="..\..\tests\common\memory_storage.cpp" />
     <ClCompile Include="..\..\tests\common\test_context.cpp" />
     <ClCompile Include="..\..\tests\common\test_mpin_sdk.cpp" />
+    <ClCompile Include="..\..\tests\common\url_parsing_test.cpp" />
     <ClCompile Include="..\..\tests\contexts\auto_context.cpp" />
     <ClCompile Include="..\..\tests\contexts\cmdline_context.cpp" />
   </ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="..\..\tests\common\memory_storage.h" />
     <ClInclude Include="..\..\tests\common\test_context.h" />
     <ClInclude Include="..\..\tests\common\test_mpin_sdk.h" />
+    <ClInclude Include="..\..\tests\common\url_parsing_test.h" />
     <ClInclude Include="..\..\tests\contexts\auto_context.h" />
     <ClInclude Include="..\..\tests\contexts\cmdline_context.h" />
   </ItemGroup>

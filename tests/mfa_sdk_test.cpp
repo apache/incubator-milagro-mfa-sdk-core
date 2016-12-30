@@ -19,6 +19,7 @@ under the License.
 
 #include <mfa_sdk.h>
 #include "contexts/cmdline_context.h"
+#include "common/url_parsing_test.h"
 #include <CvLogger.h>
 #include <iostream>
 #include <conio.h>
@@ -30,6 +31,7 @@ using std::endl;
 using std::string;
 using std::vector;
 typedef MfaSDK::Status Status;
+typedef MfaSDK::String String;
 typedef MfaSDK::StringMap StringMap;
 typedef MfaSDK::User User;
 typedef MfaSDK::UserPtr UserPtr;
@@ -46,18 +48,37 @@ int main(int argc, char *argv[])
 {
     CvShared::InitLogger("cvlog.txt", CvShared::enLogLevel_None);
 
+    if (true)
+    {
+        cout << "URL Parsing test:" << endl << endl;
+        DoStandaloneUrlParsingTest();
+        cout << endl;
+    }
+
+    const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en";
+
     const char *backend = "https://api.dev.miracl.net";
-    StringMap config;
-    config.Put(MfaSDK::CONFIG_BACKEND, backend);
 
     CmdLineContext context("mfa_sdk_test_users.json", "mfa_sdk_test_tokens.json");
     MfaSDK sdk;
+
+    sdk.AddTrustedDomain("miracl.net");
+
+    // TODO: Shouldn't CID setting be moved to Init?
     sdk.SetCID("dd");
 
-    Status s = sdk.Init(config, &context);
+    Status s = sdk.Init(StringMap(), &context);
     if (s != Status::OK)
     {
-        cout << "Failed to initialize MPinSDK: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+        cout << "Failed to initialize SDK: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+        _getch();
+        return 0;
+    }
+
+    s = sdk.SetBackend(backend);
+    if (s != Status::OK)
+    {
+        cout << "Failed to set SDK backend: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
         _getch();
         return 0;
     }
@@ -75,7 +96,15 @@ int main(int argc, char *argv[])
         user = sdk.MakeNewUser("slav.klenov@miracl.com");
         cout << "Did not found any registered users. Will register new user '" << user->GetId() << "'" << endl;
 
-        string accessCode = GetStringFromStdin("Enter access code: ");
+        //string accessCode = GetStringFromStdin("Enter access code: ");
+        String accessCode;
+        s = sdk.GetAccessCode(authzUrl, accessCode);
+        if (s != Status::OK)
+        {
+            cout << "Failed to get access code: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+            _getch();
+            return 0;
+        }
 
         s = sdk.StartRegistration(user, accessCode, "");
         if (s != Status::OK)
@@ -117,7 +146,16 @@ int main(int argc, char *argv[])
         _getch();
     }
 
-    string accessCode = GetStringFromStdin("Enter access code: ");
+    //string accessCode = GetStringFromStdin("Enter access code: ");
+    String accessCode;
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    if (s != Status::OK)
+    {
+        cout << "Failed to get access code: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+        _getch();
+        return 0;
+    }
+
     s = sdk.StartAuthentication(user, accessCode);
     if (s != Status::OK)
     {

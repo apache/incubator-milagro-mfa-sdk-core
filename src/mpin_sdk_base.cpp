@@ -32,6 +32,7 @@ typedef MPinSDKBase::UserPtr UserPtr;
 typedef MPinSDKBase::String String;
 typedef MPinSDKBase::StringMap StringMap;
 typedef MPinSDKBase::IHttpRequest::Method HttpMethod;
+using util::Url;
 
 /*
 * Status class
@@ -438,6 +439,13 @@ void MPinSDKBase::HttpResponse::SetHttpError(int httpStatus)
     }
 }
 
+void MPinSDKBase::HttpResponse::SetUntrustedDomainError(const String& error)
+{
+    m_httpStatus = NON_HTTP_ERROR;
+    m_mpinStatus.SetStatusCode(Status::UNTRUSTED_DOMAIN_ERROR);
+    m_mpinStatus.SetErrorMessage(String().Format("Request to untrusted url '%s' failed. Error: '%s'", m_requestUrl.c_str(), error.c_str()));
+}
+
 Status MPinSDKBase::HttpResponse::TranslateToMPinStatus(Context context)
 {
     switch (context)
@@ -572,11 +580,44 @@ Status MPinSDKBase::CheckIfBackendIsSet() const
     return Status(Status::FLOW_ERROR, "MPinSDK backend was not set");
 }
 
+Status MPinSDKBase::CheckUrl(const String & url) const
+{
+    if (m_trustedDomains.empty())
+    {
+        return Status::OK;
+    }
+
+    Url parsedUrl(url);
+    if (parsedUrl.GetScheme() != "https")
+    {
+        return Status(Status::UNTRUSTED_DOMAIN_ERROR, "Request must be made over https");
+    }
+
+    const String& host = parsedUrl.GetHost();
+    for (UrlVector::const_iterator domain = m_trustedDomains.begin(); domain != m_trustedDomains.end(); ++domain)
+    {
+        if (host.EndsWith(domain->GetHost()))
+        {
+            return Status::OK;
+        }
+    }
+
+    return Status(Status::UNTRUSTED_DOMAIN_ERROR, "Not in trusted domains list");
+}
+
 MPinSDKBase::HttpResponse MPinSDKBase::MakeRequest(const String& url, HttpMethod method, const util::JsonObject& bodyJson, HttpResponse::DataType expectedResponseType) const
 {
-    IHttpRequest *r = m_context->CreateHttpRequest();
     String requestBody = bodyJson.ToString();
     HttpResponse response(url, requestBody);
+
+    Status s = CheckUrl(url);
+    if (s != Status::OK)
+    {
+        response.SetUntrustedDomainError(s.GetErrorMessage());
+        return response;
+    }
+
+    IHttpRequest *r = m_context->CreateHttpRequest();
 
     StringMap headers = m_customHeaders;
     if (method != IHttpRequest::GET)
@@ -752,6 +793,16 @@ void MPinSDKBase::AddCustomHeaders(const StringMap& customHeaders)
 void MPinSDKBase::ClearCustomHeaders()
 {
     m_customHeaders.clear();
+}
+
+void MPinSDKBase::AddTrustedDomain(const String & domain)
+{
+    m_trustedDomains.push_back(Url(domain));
+}
+
+void MPinSDKBase::ClearTrustedDomains()
+{
+    m_trustedDomains.clear();
 }
 
 Status MPinSDKBase::GetClientSettings(const String& backend, const String& rpsPrefix, OUT util::JsonObject *clientSettings) const

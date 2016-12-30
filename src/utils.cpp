@@ -57,6 +57,27 @@ int String::GetHash() const
     return hash;
 }
 
+String String::ToLower() const
+{
+    String res;
+    res.resize(length());
+    std::transform(begin(), end(), res.begin(), tolower);
+    return res;
+}
+
+bool String::EndsWith(const std::string& suffix) const
+{
+    size_t len = length();
+    size_t suffixLen = suffix.length();
+
+    if (suffixLen > len)
+    {
+        return false;
+    }
+
+    return compare(len - suffixLen, suffixLen, suffix) == 0;
+}
+
 String::~String()
 {
     Overwrite();
@@ -343,4 +364,75 @@ std::string HexDecode(const std::string& str)
     CvShared::CvHex::Decode(str, hexDecodedStr);
     return hexDecodedStr;
 }
+
+
+/*
+ * Url parsing
+ */
+
+namespace
+{
+    std::string URL_SCHEME_END = "://";
+}
+
+Url::Url(const std::string& url)
+{
+    String reminder = url;
+
+    size_t pos = reminder.find(URL_SCHEME_END);
+    if (pos != String::npos)
+    {
+        m_scheme = String(reminder.substr(0, pos)).ToLower();
+        reminder = String(reminder.substr(pos + URL_SCHEME_END.length())).TrimLeft("/");
+    }
+
+    pos = reminder.find_first_of('/');
+    if (pos != String::npos)
+    {
+        m_path = reminder.substr(pos + 1);
+        reminder = reminder.substr(0, pos);
+    }
+
+    pos = reminder.find_first_of(':');
+    if (pos != String::npos)
+    {
+        m_port = reminder.substr(pos + 1);
+    }
+
+    m_host = String(reminder.substr(0, pos)).ToLower();
+}
+
+Url::Url(const std::string & scheme, const std::string & host, const std::string & port, const std::string & path) :
+    m_scheme(scheme), m_host(host), m_port(port), m_path(path) {}
+
+const String& Url::GetScheme() const
+{
+    return m_scheme;
+}
+
+const String& Url::GetHost() const
+{
+    return m_host;
+}
+
+const String& Url::GetPort() const
+{
+    return m_port;
+}
+
+const String& Url::GetPath() const
+{
+    return m_path;
+}
+
+bool Url::operator==(const Url & other)
+{
+    return !(*this != other);
+}
+
+bool Url::operator!=(const Url & other)
+{
+    return m_scheme != other.m_scheme || m_host != other.m_host || m_port != other.m_port || m_path != other.m_path;
+}
+
 }

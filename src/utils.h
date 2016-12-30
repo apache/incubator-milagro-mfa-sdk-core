@@ -48,6 +48,8 @@ public:
     String& Trim(const std::string& chars = " \t\f\v\n\r");
     void Overwrite(char c = ' ');
     int GetHash() const;
+    String ToLower() const;
+    bool EndsWith(const std::string& suffix) const;
 };
 
 void OverwriteString(std::string& str, char c = ' ');
@@ -97,6 +99,26 @@ public:
 std::string HexEncode(const char *str, size_t len);
 std::string HexEncode(const std::string& str);
 std::string HexDecode(const std::string& str);
+
+
+class Url
+{
+public:
+    Url(const std::string& url);
+    Url(const std::string& scheme, const std::string& host, const std::string& port, const std::string& path);
+    const String& GetScheme() const;
+    const String& GetHost() const;
+    const String& GetPort() const;
+    const String& GetPath() const;
+    bool operator==(const Url& other);
+    bool operator!=(const Url& other);
+
+private:
+    String m_scheme;
+    String m_host;
+    String m_port;
+    String m_path;
+};
 
 }
 

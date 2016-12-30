@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\tests\contexts\cmdline_context.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tests\common\url_parsing_test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\tests\common\file_storage.h">
@@ -72,6 +75,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\tests\contexts\cmdline_context.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tests\common\url_parsing_test.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

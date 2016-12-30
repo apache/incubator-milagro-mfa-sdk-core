@@ -130,6 +130,7 @@ public:
             BAD_USER_AGENT, // Remote error - user agent not supported
             CLIENT_SECRET_EXPIRED, // Remote error - re-registration required because server master secret expired
             BAD_CLIENT_VERSION, // Remote error - wrong client app version
+            UNTRUSTED_DOMAIN_ERROR, // Local error - a request to a domain, that is not in the trusted list was attempted
         };
 
         Status();
@@ -244,6 +245,9 @@ public:
     void AddCustomHeaders(const StringMap& customHeaders);
     void ClearCustomHeaders();
 
+    void AddTrustedDomain(const String& domain);
+    void ClearTrustedDomains();
+
     Status TestBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX) const;
     Status SetBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX);
 
@@ -308,6 +312,7 @@ protected:
         void SetNetworkError(const String& error);
         void SetHttpError(int httpStatus);
         void SetResponseJsonParseError(const String& jsonParseError);
+        void SetUntrustedDomainError(const String& error);
         Status TranslateToMPinStatus(Context context);
 
     private:
@@ -345,6 +350,7 @@ protected:
     bool IsBackendSet() const;
     Status CheckIfIsInitialized() const;
     Status CheckIfBackendIsSet() const;
+    Status CheckUrl(const String& url) const;
     HttpResponse MakeRequest(const String& url, IHttpRequest::Method method, const util::JsonObject& bodyJson, HttpResponse::DataType expectedResponseType = HttpResponse::JSON) const;
     HttpResponse MakeGetRequest(const String& url, HttpResponse::DataType expectedResponseType = HttpResponse::JSON) const;
     Status RewriteRelativeUrls();
@@ -376,6 +382,7 @@ protected:
 protected:
     typedef std::map<String, UserPtr> UsersMap;
     typedef std::map<UserPtr, LogoutData> LogoutDataMap;
+    typedef std::vector<util::Url> UrlVector;
     State m_state;
     IContext *m_context;
     IMPinCrypto *m_crypto;
@@ -384,6 +391,7 @@ protected:
     UsersMap m_users;
     LogoutDataMap m_logoutData;
     StringMap m_customHeaders;
+    UrlVector m_trustedDomains;
 };
 
 template <typename Filter>
