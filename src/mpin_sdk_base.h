@@ -94,6 +94,7 @@ public:
         virtual ~IStorage() {}
         virtual bool SetData(const String& data) = 0;
         virtual bool GetData(OUT String &data) = 0;
+        virtual bool ClearData() = 0;
         virtual const String& GetErrorMessage() const = 0;
     };
 

@@ -25,6 +25,8 @@ under the License.
 typedef MPinSDK::String String;
 using std::fstream;
 using std::stringbuf;
+using std::cout;
+using std::endl;
 
 FileStorage::FileStorage(const String& fileName) : m_fileName(fileName)
 {
@@ -49,6 +51,13 @@ bool FileStorage::GetData(String &data)
     data = buf.str();
     file.close();
 
+    return true;
+}
+
+bool FileStorage::ClearData()
+{
+    cout << "Clearing old version of '" << m_fileName << "' storage." << endl;
+    SetData("");
     return true;
 }
 

@@ -79,6 +79,7 @@ private:
 };
 
 std::string GetOptionalStringParam(const json::Object& object, const std::string& name, const std::string& defaultValue = "");
+int GetOptionalIntParam(const json::Object& object, const std::string& name, int defaultValue = 0);
 
 void OverwriteJsonValues(json::Object& object);
 void OverwriteJsonValues(json::Array& array);

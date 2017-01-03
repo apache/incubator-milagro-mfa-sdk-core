@@ -18,8 +18,11 @@ under the License.
 */
 
 #include "memory_storage.h"
+#include <iostream>
 
 typedef MPinSDK::String String;
+using std::cout;
+using std::endl;
 
 bool MemoryStorage::SetData(const String& data)
 {
@@ -30,6 +33,13 @@ bool MemoryStorage::SetData(const String& data)
 bool MemoryStorage::GetData(String &data)
 {
     data = m_data;
+    return true;
+}
+
+bool MemoryStorage::ClearData()
+{
+    cout << "Clearing old version of 'memory' storage." << endl;
+    SetData("");
     return true;
 }
 

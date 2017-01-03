@@ -228,6 +228,16 @@ std::string GetOptionalStringParam(const json::Object& object, const std::string
     return ((const json::String&) i->element).Value();
 }
 
+int GetOptionalIntParam(const json::Object& object, const std::string& name, int defaultValue)
+{
+    json::Object::const_iterator i = object.Find(name);
+    if (i == object.End())
+    {
+        return defaultValue;
+    }
+    return static_cast<int>(((const json::Number&) i->element).Value());
+}
+
 namespace
 {
     class JsonVisitor : public json::Visitor

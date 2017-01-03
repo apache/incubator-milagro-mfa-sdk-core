@@ -30,6 +30,7 @@ public:
     FileStorage(const String& fileName);
     virtual bool SetData(const String& data);
     virtual bool GetData(String &data);
+    virtual bool ClearData();
     virtual const String& GetErrorMessage() const;
 
 private:

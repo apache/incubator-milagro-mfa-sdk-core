@@ -1541,11 +1541,16 @@ Status MPinSDKBase::ListAllUsers(OUT std::vector<UserPtr>& users) const
     return FilterUsers(users, AllUsersFilter);
 }
 
+namespace
+{
+    int USERS_JSON_VERSION = 1;
+}
+
 Status MPinSDKBase::WriteUsersToStorage() const
 {
     try
     {
-        json::Object rootObject;
+        json::Object dataObject;
         for (UsersMap::const_iterator i = m_users.begin(); i != m_users.end(); ++i)
         {
             UserPtr user = i->second;
@@ -1563,7 +1568,7 @@ Status MPinSDKBase::WriteUsersToStorage() const
             timePermitCacheObject["timePermit"] = json::String(util::HexEncode(user->GetTimePermitCache().GetTimePermit()));
             userObject["timePermitCache"] = timePermitCacheObject;
 
-            rootObject[user->GetMPinIdHex()] = userObject;
+            dataObject[user->GetMPinIdHex()] = userObject;
 
             Status s;
             switch (user->GetState())
@@ -1584,6 +1589,10 @@ Status MPinSDKBase::WriteUsersToStorage() const
             }
         }
 
+        json::Object rootObject;
+        rootObject["version"] = json::Number(USERS_JSON_VERSION);
+        rootObject["data"] = dataObject;
+
         std::stringstream strOut;
         json::Writer::Write(rootObject, strOut);
         m_context->GetStorage(IStorage::NONSECURE)->SetData(strOut.str());
@@ -1601,11 +1610,12 @@ Status MPinSDKBase::LoadUsersFromStorage()
     ClearUsers();
 
     String data;
-    m_context->GetStorage(IStorage::NONSECURE)->GetData(data);
+    IStorage *storage = m_context->GetStorage(IStorage::NONSECURE);
+    storage->GetData(data);
     data.Trim();
     if (data.empty())
     {
-        return Status(Status::OK);
+        return Status::OK;
     }
 
     try
@@ -1614,7 +1624,15 @@ Status MPinSDKBase::LoadUsersFromStorage()
         std::istringstream str(data);
         json::Reader::Read(rootObject, str);
 
-        for (json::Object::const_iterator usersIter = rootObject.Begin(); usersIter != rootObject.End(); ++usersIter)
+        int version = util::GetOptionalIntParam(rootObject, "version", 0);
+        if (version != USERS_JSON_VERSION)
+        {
+            storage->ClearData();
+            return Status::OK;
+        }
+
+        const json::Object& dataObject = (const json::Object&) rootObject["data"];
+        for (json::Object::const_iterator usersIter = dataObject.Begin(); usersIter != dataObject.End(); ++usersIter)
         {
             const String& mpinIdHex = usersIter->name;
             String mpinId = util::HexDecode(mpinIdHex);
