@@ -24,6 +24,15 @@ under the License.
 #include "utils.h"
 #include "CvXcode.h"
 
+// TODO: Uncomment this to enable translation of non-ANSI characters to lowercase. Tested and
+// working on windows, but requires extensive testing on devices with different C locales).
+// Requires C++11 (codecvt).
+//#define USE_UNICODE_TO_LOWER
+
+#ifdef USE_UNICODE_TO_LOWER
+#include <locale>
+#include <codecvt>
+#endif // USE_UNICODE_TO_LOWER
 
 namespace util
 {
@@ -57,6 +66,38 @@ int String::GetHash() const
     return hash;
 }
 
+#ifdef USE_UNICODE_TO_LOWER
+namespace
+{
+    std::wstring ToWString(const std::string& s)
+    {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.from_bytes(s);
+    }
+
+    std::string FromWString(const std::wstring& s)
+    {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.to_bytes(s);
+    }
+
+    const std::locale locale("");
+
+    wchar_t WCharToLower(wchar_t c)
+    {
+        return std::tolower(c, locale);
+    }
+}
+
+String String::ToLower() const
+{
+    std::string res;
+    std::wstring wsrc = ToWString(*this);
+    std::wstring wres;
+    std::transform(wsrc.begin(), wsrc.end(), std::back_inserter(wres), WCharToLower);
+    return FromWString(wres);
+}
+#else
 String String::ToLower() const
 {
     String res;
@@ -64,6 +105,7 @@ String String::ToLower() const
     std::transform(begin(), end(), res.begin(), tolower);
     return res;
 }
+#endif // USE_UNICODE_TO_LOWER
 
 bool String::EndsWith(const std::string& suffix) const
 {

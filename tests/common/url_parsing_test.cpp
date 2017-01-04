@@ -52,6 +52,15 @@ namespace
         { ":///test.com:121/", Url("", "test.com", "121", "") },
         { "/:///", Url("/", "", "", "") },
         { "http://test.com/:80/path", Url("http", "test.com", "", ":80/path") },
+        // Uncomment for unicode tolower test { "https://ПрОбА.net", Url("https", "проба.net", "", "") },
+        { "https://проба.net", Url("https", "проба.net", "", "") },
+        { "HtTpS://tESt.CoM/:80/path", Url("https", "test.com", "", ":80/path") },
+        { "https://世丕且且世两上与丑万丣丕且丗丕.japan.com", Url("https", "世丕且且世两上与丑万丣丕且丗丕.japan.com", "", "") },
+        { "https://ひほわれよう.japan.com:7130/存在する", Url("https", "ひほわれよう.japan.com", "7130", "存在する") },
+        // Uncomment for unicode tolower test { "http://Über.STRAßE.com", Url("http", "über.straße.com", "", "") },
+        { "http://über.straße.com", Url("http", "über.straße.com", "", "") },
+        { "https://这是一份非常简单的说明书.china.com", Url("https", "这是一份非常简单的说明书.china.com", "", "") },
+        { "HTTP://這是一份非常簡單的說明書.china.com", Url("http", "這是一份非常簡單的說明書.china.com", "", "") },
     };
 }
 
