@@ -366,7 +366,8 @@ protected:
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
     Status StartAuthentication(INOUT UserPtr user, const String& accessCode);
-    Status FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String *otp, OUT util::JsonObject& authResultData);
+    Status FinishAuthenticationImpl(INOUT UserPtr user, const String& pin,
+        const String& accessCode, OUT String *otp, OUT util::JsonObject& authResultData, bool authzRequest = false);
     Status GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit);
     Status FinishAuthenticationAC(INOUT UserPtr user, const String& pin, const String& accessCode);
 

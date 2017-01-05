@@ -223,7 +223,7 @@ Status MfaSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, const
 {
     util::JsonObject authResult;
 
-    Status s = FinishAuthenticationImpl(user, pin, accessCode, NULL, authResult);
+    Status s = FinishAuthenticationImpl(user, pin, accessCode, NULL, authResult, true);
 
     authzCode = authResult.GetStringParam("code");
     return s;

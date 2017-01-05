@@ -1296,7 +1296,8 @@ Status MPinSDKBase::StartAuthentication(INOUT UserPtr user, const String& access
     return Status::OK;
 }
 
-Status MPinSDKBase::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String *otp, OUT util::JsonObject& authResultData)
+Status MPinSDKBase::FinishAuthenticationImpl(INOUT UserPtr user, const String& pin,
+    const String& accessCode, OUT String *otp, OUT util::JsonObject& authResultData, bool authzRequest)
 {
     Status s = CheckIfBackendIsSet();
     if (s != Status::OK)
@@ -1396,6 +1397,7 @@ Status MPinSDKBase::FinishAuthenticationImpl(INOUT UserPtr user, const String& p
     url = m_clientSettings.GetStringParam(accessCode.empty() ? "authenticateURL" : "mobileAuthenticateURL");
     requestData.Clear();
     requestData["mpinResponse"] = response.GetJsonData();
+    requestData["authzRequest"] = json::Boolean(authzRequest);
     response = MakeRequest(url, IHttpRequest::POST, requestData);
     if (response.GetStatus() != HttpResponse::HTTP_OK)
     {
