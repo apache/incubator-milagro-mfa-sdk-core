@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        user = sdk.MakeNewUser("slav.klenov@miracl.com");
+        user = sdk.MakeNewUser("test@example.com");
         cout << "Did not found any registered users. Will register new user '" << user->GetId() << "'" << endl;
     }
 
