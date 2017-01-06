@@ -204,6 +204,7 @@ public:
         String GetStateString() const;
         static String StateToString(State state);
         static State StringToState(const String& stateString);
+        static String MakeKey(const String& id, const String& backend, const String& customerId, const String& appId);
 
         String m_id;
         String m_backend;
@@ -252,6 +253,7 @@ public:
     Status TestBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX) const;
     Status SetBackend(const String& server, const String& rpsPrefix = DEFAULT_RPS_PREFIX);
 
+    bool IsUserExisting(const String& id, const String& customerId = "", const String& appId = "");
     UserPtr MakeNewUser(const String& id, const String& deviceName = "") const;
     void DeleteUser(INOUT UserPtr user);
     void ClearUsers();
@@ -358,6 +360,7 @@ protected:
     Status GetClientSettings(const String& backend, const String& rpsPrefix, OUT util::JsonObject *clientSettings) const;
     String MakeBackendKey(const String& backendServer) const;
     Status CheckUserState(IN UserPtr user, User::State expectedState);
+    bool IsUserKeyExisting(const String& key);
 
     Status StartRegistration(INOUT UserPtr user, const String& activateCode, const String& userData, const String& accessCode, const String& pushToken);
     Status RestartRegistration(INOUT UserPtr user, const String& userData);

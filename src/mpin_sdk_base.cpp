@@ -120,9 +120,14 @@ User::User(const String& id, const String& deviceName) : m_id(id), m_deviceName(
 {
 }
 
+String User::MakeKey(const String& id, const String& backend, const String& customerId, const String& appId)
+{
+    return String().Format("%s:%s:%s:%s", id.c_str(), backend.c_str(), customerId.c_str(), appId.c_str());
+}
+
 String User::GetKey() const
 {
-    return String().Format("%s@%s", m_id.c_str(), m_backend.c_str());
+    return MakeKey(m_id, m_backend, m_customerId, m_appId);
 }
 
 const String& User::GetId() const
@@ -866,6 +871,15 @@ Status MPinSDKBase::SetBackend(const String& backend, const String& rpsPrefix)
     return Status(Status::OK);
 }
 
+String MPinSDKBase::MakeBackendKey(const String& backendServer) const
+{
+    String backend = backendServer;
+    backend.ReplaceAll("https://", "");
+    backend.ReplaceAll("http://", "");
+    backend.TrimRight("/");
+    return backend;
+}
+
 UserPtr MPinSDKBase::MakeNewUser(const String& id, const String& deviceName) const
 {
     return UserPtr(new User(id, deviceName));
@@ -903,106 +917,30 @@ void MPinSDKBase::ClearUsers()
     m_logoutData.clear();
 }
 
-bool MPinSDKBase::CanLogout(UserPtr user)
+bool MPinSDKBase::IsUserExisting(const String& id, const String& customerId, const String& appId)
 {
-    LogoutDataMap::iterator i = m_logoutData.find(user);
-    if (i == m_logoutData.end()) return false;
-    if (i->second.logoutURL.empty()) return false;
-    return true;
+    return IsUserKeyExisting(User::MakeKey(id, MakeBackendKey(m_RPAServer), customerId, appId));
 }
 
-bool MPinSDKBase::Logout(UserPtr user)
+bool MPinSDKBase::IsUserKeyExisting(const String& key)
 {
-    LogoutDataMap::iterator i = m_logoutData.find(user);
-    if (i == m_logoutData.end()) return false;
-    if (i->second.logoutURL.empty()) return false;
-    util::JsonObject logoutData;
-    if (!logoutData.Parse(i->second.logoutData.c_str()))
-    {
-        return false;
-    }
-
-    String url = String().Format("%s%s", m_RPAServer.c_str(), i->second.logoutURL.c_str());
-    HttpResponse response = MakeRequest(url, IHttpRequest::POST, logoutData);
-
-    if (response.GetStatus() != HttpResponse::HTTP_OK)
-    {
-        return false;
-    }
-    m_logoutData.erase(i);
-    return true;
-}
-
-namespace
-{
-    class StringVisitor :public json::Visitor
-    {
-    public:
-        virtual ~StringVisitor() {}
-
-        virtual void Visit(json::Array& array) {}
-        virtual void Visit(json::Object& object) {}
-        virtual void Visit(json::Null& null) {}
-
-        virtual void Visit(json::Number& number)
-        {
-            data << (int)number.Value();
-        }
-
-        virtual void Visit(json::String& string)
-        {
-            data << string.Value();
-        }
-
-        virtual void Visit(json::Boolean& boolean)
-        {
-            data << (boolean.Value() ? "true" : "false");
-        }
-
-        String GetData()
-        {
-            return data.str();
-        }
-
-    private:
-        std::stringstream data;
-    };
-}
-
-String MPinSDKBase::GetClientParam(const String& key)
-{
-    StringVisitor sv;
-    m_clientSettings[key].Accept(sv);
-    return sv.GetData();
-}
-
-String MPinSDKBase::MakeBackendKey(const String& backendServer) const
-{
-    String backend = backendServer;
-    backend.ReplaceAll("https://", "");
-    backend.ReplaceAll("http://", "");
-    backend.TrimRight("/");
-    return backend;
+    UsersMap::iterator i = m_users.find(key);
+    return i != m_users.end();
 }
 
 Status MPinSDKBase::CheckUserState(UserPtr user, User::State expectedState)
 {
-    UsersMap::iterator i = m_users.find(user->GetKey());
     if (expectedState == User::INVALID)
     {
-        if (i != m_users.end())
-        {
-            return Status(Status::FLOW_ERROR, String().Format("User '%s' was already added", user->GetId().c_str()));
-        }
-
         if (user->GetState() != User::INVALID)
         {
             return Status(Status::FLOW_ERROR, String().Format("Invalid '%s' user state: current state=%s, expected state=%s",
                 user->GetId().c_str(), User::StateToString(user->GetState()).c_str(), User::StateToString(expectedState).c_str()));
         }
-
         return Status(Status::OK);
     }
+
+    UsersMap::iterator i = m_users.find(user->GetKey());
 
     if (i == m_users.end())
     {
@@ -1092,35 +1030,38 @@ Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode
         return response.TranslateToMPinStatus(HttpResponse::REGISTER);
     }
 
-    bool writeUsersToStorage = false;
-
-    bool userIsNew = (user->GetState() == User::INVALID);
-    if (userIsNew)
-    {
-        user->SetBackend(MakeBackendKey(m_RPAServer));
-        m_users[user->GetKey()] = user;
-    }
-
     String mpinIdHex = response.GetJsonData().GetStringParam("mpinId");
     String regOTT = response.GetJsonData().GetStringParam("regOTT");
-    bool userDataChanged = (regOTT != user->GetRegOTT() || mpinIdHex != user->GetMPinIdHex());
-    // TODO: Check customerId and appId with Stan
     String customerId = response.GetJsonData().GetStringParam("customerId");
     String appId = response.GetJsonData().GetStringParam("appId");
 
-    if (userIsNew || userDataChanged)
+    String newUserKey = User::MakeKey(user->GetId(), MakeBackendKey(m_RPAServer), customerId, appId);
+    if (user->GetKey() != newUserKey && IsUserKeyExisting(newUserKey))
     {
-        user->SetStartedRegistration(mpinIdHex, regOTT, customerId, appId);
-        writeUsersToStorage = true;
+        return Status(Status::FLOW_ERROR, String().Format("User '%s' was already added", user->GetKey().c_str()));
     }
+
+    bool userDataChanged =
+        (regOTT != user->GetRegOTT() || mpinIdHex != user->GetMPinIdHex() || customerId != user->GetCustomerId() || appId != user->GetAppId());
+
+    m_users.erase(user->GetKey());
+    if (mpinIdHex != user->GetMPinIdHex() && !user->GetMPinId().empty())
+    {
+        m_crypto->DeleteRegOTT(user->GetMPinId());
+    }
+
+    user->SetBackend(MakeBackendKey(m_RPAServer));
+    user->SetStartedRegistration(mpinIdHex, regOTT, customerId, appId);
+
+    m_users[user->GetKey()] = user;
 
     if (response.GetJsonData().GetBoolParam("active"))
     {
         user->SetActivated();
-        writeUsersToStorage = true;
+        userDataChanged = true;
     }
 
-    if (writeUsersToStorage)
+    if (userDataChanged)
     {
         Status s = WriteUsersToStorage();
         if (s != Status::OK)
@@ -1532,6 +1473,79 @@ bool MPinSDKBase::LogoutData::ExtractFrom(const util::JsonObject& json)
 
 namespace
 {
+    class StringVisitor :public json::Visitor
+    {
+    public:
+        virtual ~StringVisitor() {}
+
+        virtual void Visit(json::Array& array) {}
+        virtual void Visit(json::Object& object) {}
+        virtual void Visit(json::Null& null) {}
+
+        virtual void Visit(json::Number& number)
+        {
+            data << (int)number.Value();
+        }
+
+        virtual void Visit(json::String& string)
+        {
+            data << string.Value();
+        }
+
+        virtual void Visit(json::Boolean& boolean)
+        {
+            data << (boolean.Value() ? "true" : "false");
+        }
+
+        String GetData()
+        {
+            return data.str();
+        }
+
+    private:
+        std::stringstream data;
+    };
+}
+
+String MPinSDKBase::GetClientParam(const String& key)
+{
+    StringVisitor sv;
+    m_clientSettings[key].Accept(sv);
+    return sv.GetData();
+}
+
+bool MPinSDKBase::CanLogout(UserPtr user)
+{
+    LogoutDataMap::iterator i = m_logoutData.find(user);
+    if (i == m_logoutData.end()) return false;
+    if (i->second.logoutURL.empty()) return false;
+    return true;
+}
+
+bool MPinSDKBase::Logout(UserPtr user)
+{
+    LogoutDataMap::iterator i = m_logoutData.find(user);
+    if (i == m_logoutData.end()) return false;
+    if (i->second.logoutURL.empty()) return false;
+    util::JsonObject logoutData;
+    if (!logoutData.Parse(i->second.logoutData.c_str()))
+    {
+        return false;
+    }
+
+    String url = String().Format("%s%s", m_RPAServer.c_str(), i->second.logoutURL.c_str());
+    HttpResponse response = MakeRequest(url, IHttpRequest::POST, logoutData);
+
+    if (response.GetStatus() != HttpResponse::HTTP_OK)
+    {
+        return false;
+    }
+    m_logoutData.erase(i);
+    return true;
+}
+
+namespace
+{
     bool AllUsersFilter(const UserPtr& user)
     {
         return true;
@@ -1630,6 +1644,8 @@ Status MPinSDKBase::LoadUsersFromStorage()
         if (version != USERS_JSON_VERSION)
         {
             storage->ClearData();
+            m_context->GetStorage(IStorage::SECURE)->ClearData();
+            m_crypto->ClearTokens();
             return Status::OK;
         }
 

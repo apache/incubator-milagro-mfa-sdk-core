@@ -49,6 +49,7 @@ public:
     virtual Status AuthenticatePass1(IN UserPtr user, const String& pin, int date, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT);
     virtual Status AuthenticatePass2(IN UserPtr user, const String& challenge, OUT String& validator);
     virtual void DeleteToken(const String& mpinId);
+    virtual void ClearTokens();
 
 	virtual Status SaveRegOTT(const String& mpinId, const String& regOTT);
     virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT);

@@ -465,6 +465,11 @@ void MPinCryptoNonTee::DeleteToken(const String& mpinId)
     }
 }
 
+void MPinCryptoNonTee::ClearTokens()
+{
+    m_tokens.Clear();
+}
+
 String MPinCryptoNonTee::GetToken(const String& mpinId)
 {
     try

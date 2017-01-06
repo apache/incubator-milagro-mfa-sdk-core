@@ -89,29 +89,44 @@ int main(int argc, char *argv[])
     if (!users.empty())
     {
         user = users[0];
-        cout << "Authenticating user '" << user->GetId() << "'" << endl;
     }
     else
     {
         user = sdk.MakeNewUser("slav.klenov@miracl.com");
         cout << "Did not found any registered users. Will register new user '" << user->GetId() << "'" << endl;
+    }
 
-        //string accessCode = GetStringFromStdin("Enter access code: ");
-        String accessCode;
-        s = sdk.GetAccessCode(authzUrl, accessCode);
-        if (s != Status::OK)
+    if (user->GetState() != User::REGISTERED)
+    {
+        if (user->GetState() == User::INVALID)
         {
-            cout << "Failed to get access code: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
-            _getch();
-            return 0;
+            //string accessCode = GetStringFromStdin("Enter access code: ");
+            String accessCode;
+            s = sdk.GetAccessCode(authzUrl, accessCode);
+            if (s != Status::OK)
+            {
+                cout << "Failed to get access code: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+                _getch();
+                return 0;
+            }
+
+            s = sdk.StartRegistration(user, accessCode, "");
+            if (s != Status::OK)
+            {
+                cout << "Failed to start user registration: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+                _getch();
+                return 0;
+            }
         }
-
-        s = sdk.StartRegistration(user, accessCode, "");
-        if (s != Status::OK)
+        else
         {
-            cout << "Failed to start user registration: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
-            _getch();
-            return 0;
+            s = sdk.RestartRegistration(user);
+            if (s != Status::OK)
+            {
+                cout << "Failed to restart user registration: status code = " << s.GetStatusCode() << ", error: " << s.GetErrorMessage() << endl;
+                _getch();
+                return 0;
+            }
         }
 
         if (user->GetState() == User::ACTIVATED)
@@ -145,6 +160,8 @@ int main(int argc, char *argv[])
         cout << "User successfuly registered. Press any key to authenticate user..." << endl;
         _getch();
     }
+
+    cout << "Authenticating user '" << user->GetId() << "'" << endl;
 
     //string accessCode = GetStringFromStdin("Enter access code: ");
     String accessCode;
