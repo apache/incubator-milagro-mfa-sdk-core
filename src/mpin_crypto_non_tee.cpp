@@ -309,7 +309,7 @@ Status MPinCryptoNonTee::AuthenticatePass2(UserPtr user, const String& challenge
     return Status(Status::OK);
 }
 
-Status MPinCryptoNonTee::SaveRegOTT(const String& mpinId, const String& regOTT)
+Status MPinCryptoNonTee::SaveRegOTT(const String& mpinId, const String& regOTT, const String& accessCode)
 {
 	if(!m_initialized)
     {
@@ -324,12 +324,14 @@ Status MPinCryptoNonTee::SaveRegOTT(const String& mpinId, const String& regOTT)
         {
 			json::Object item;
 			item["regOTT"] = json::String(regOTT);
+            item["accessCode"] = json::String(accessCode);
             m_tokens[mpinIdHex] = item;
         }
         else
         {
 			i->element["regOTT"] = json::String(regOTT);
-		}
+            i->element["accessCode"] = json::String(accessCode);
+        }
 		
 		m_storage->SetData(m_tokens.ToString());
 		
@@ -342,7 +344,7 @@ Status MPinCryptoNonTee::SaveRegOTT(const String& mpinId, const String& regOTT)
     }
 }
 
-Status MPinCryptoNonTee::LoadRegOTT(const String& mpinId, OUT String& regOTT)
+Status MPinCryptoNonTee::LoadRegOTT(const String& mpinId, OUT String& regOTT, OUT String& accessCode)
 {
 	if(!m_initialized)
     {
@@ -356,10 +358,12 @@ Status MPinCryptoNonTee::LoadRegOTT(const String& mpinId, OUT String& regOTT)
         if (i == m_tokens.End())
         {
 			regOTT.clear();
+            accessCode.clear();
 			return Status(Status::OK);
         }
         
-        regOTT = json::String( i->element["regOTT"] ).Value();
+        regOTT = json::String(i->element["regOTT"]).Value();
+        accessCode = json::String(i->element["accessCode"]).Value();
 
 		return Status(Status::OK);
 		
@@ -399,7 +403,18 @@ Status MPinCryptoNonTee::DeleteRegOTT(const String& mpinId)
                 util::OverwriteString(regOTT);
 				item.Erase(i);
 			}
-		}
+            i = item.Find("accessCode");
+            if (i == item.End())
+            {
+                return Status(Status::OK);
+            }
+            else
+            {
+                std::string& accessCode = ((json::String&) i->element).Value();
+                util::OverwriteString(accessCode);
+                item.Erase(i);
+            }
+        }
 
 		if(!m_storage->SetData(m_tokens.ToString()))
         {

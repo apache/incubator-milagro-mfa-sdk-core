@@ -47,8 +47,8 @@ public:
     virtual void DeleteToken(const String& mpinId) = 0;
     virtual void ClearTokens() = 0;
 
-    virtual Status SaveRegOTT(const String& mpinId, const String& regOTT) = 0;
-    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT) = 0;
+    virtual Status SaveRegOTT(const String& mpinId, const String& regOTT, const String& accessCode) = 0;
+    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT, OUT String& accessCode) = 0;
     virtual Status DeleteRegOTT(const String& mpinId) = 0;
 };
 

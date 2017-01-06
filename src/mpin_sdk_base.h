@@ -191,15 +191,16 @@ public:
         const String& GetDeviceName() const;
         const String& GetMPinIdHex() const;
         const String& GetRegOTT() const;
+        const String& GetAccessCode() const;
         const TimePermitCache& GetTimePermitCache() const;
         void CacheTimePermit(const String& timePermit, int date);
         void SetBackend(const String& backend);
-        void SetStartedRegistration(const String& mpinIdHex, const String& regOTT, const String& customerId, const String& appId);
+        void SetStartedRegistration(const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& customerId, const String& appId);
         void SetActivated();
         void SetRegistered();
         void Invalidate();
         void Block();
-        Status RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& backend,
+        Status RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& backend,
             const String& customerId, const String& appId);
         String GetStateString() const;
         static String StateToString(State state);
@@ -215,6 +216,7 @@ public:
         String m_mpinId;
         String m_mpinIdHex;
         String m_regOTT;
+        String m_accessCode;
         TimePermitCache m_timePermitCache;
         String m_timePermitShare1;
         String m_timePermitShare2;

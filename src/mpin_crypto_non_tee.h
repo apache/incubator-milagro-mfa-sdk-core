@@ -51,8 +51,8 @@ public:
     virtual void DeleteToken(const String& mpinId);
     virtual void ClearTokens();
 
-	virtual Status SaveRegOTT(const String& mpinId, const String& regOTT);
-    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT);
+	virtual Status SaveRegOTT(const String& mpinId, const String& regOTT, const String& accessCode);
+    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT, OUT String& accessCode);
     virtual Status DeleteRegOTT(const String& mpinId);
 
 private:

@@ -175,6 +175,11 @@ const String& User::GetRegOTT() const
     return m_regOTT;
 }
 
+const String & MPinSDKBase::User::GetAccessCode() const
+{
+    return m_accessCode;
+}
+
 const MPinSDKBase::TimePermitCache& User::GetTimePermitCache() const
 {
     return m_timePermitCache;
@@ -190,12 +195,13 @@ void User::SetBackend(const String& backend)
     m_backend = backend;
 }
 
-void User::SetStartedRegistration(const String& mpinIdHex, const String& regOTT, const String& customerId, const String& appId)
+void User::SetStartedRegistration(const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& customerId, const String& appId)
 {
     m_state = STARTED_REGISTRATION;
     m_mpinIdHex = mpinIdHex;
     m_mpinId = util::HexDecode(mpinIdHex);
     m_regOTT = regOTT;
+    m_accessCode = accessCode;
     m_customerId = customerId;
     m_appId = appId;
 }
@@ -209,12 +215,14 @@ void User::SetActivated()
 void User::SetRegistered()
 {
     m_regOTT.Overwrite();
+    m_accessCode.Overwrite();
     m_state = REGISTERED;
 }
 
 void User::Invalidate()
 {
     m_regOTT.Overwrite();
+    m_accessCode.Overwrite();
     m_timePermitCache.Invalidate();
     m_state = INVALID;
 }
@@ -225,11 +233,11 @@ void User::Block()
     m_state = BLOCKED;
 }
 
-Status User::RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& backend,
+Status User::RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& backend,
     const String& customerId, const String& appId)
 {
     SetBackend(backend);
-    SetStartedRegistration(mpinIdHex, regOTT, customerId, appId);
+    SetStartedRegistration(mpinIdHex, regOTT, accessCode, customerId, appId);
 
     State state = StringToState(stateString);
     switch (state)
@@ -1000,8 +1008,10 @@ Status MPinSDKBase::RestartRegistration(INOUT UserPtr user, const String& userDa
     return RequestRegistration(user, "", "", "", userData);
 }
 
-Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode, const String& accessCode, const String& pushToken, const String& userData)
+Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode, const String& accessCode_, const String& pushToken, const String& userData)
 {
+    String accessCode = !accessCode_.empty() ? accessCode_ : user->GetAccessCode();
+
     // Make request to RPA to add M-Pin ID
     util::JsonObject data;
     data["userId"] = json::String(user->GetId());
@@ -1051,7 +1061,7 @@ Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode
     }
 
     user->SetBackend(MakeBackendKey(m_RPAServer));
-    user->SetStartedRegistration(mpinIdHex, regOTT, customerId, appId);
+    user->SetStartedRegistration(mpinIdHex, regOTT, accessCode, customerId, appId);
 
     m_users[user->GetKey()] = user;
 
@@ -1591,7 +1601,7 @@ Status MPinSDKBase::WriteUsersToStorage() const
             {
             case User::STARTED_REGISTRATION:
             case User::ACTIVATED:
-                s = m_crypto->SaveRegOTT(user->GetMPinId(), user->GetRegOTT());
+                s = m_crypto->SaveRegOTT(user->GetMPinId(), user->GetRegOTT(), user->GetAccessCode());
                 break;
             case User::REGISTERED:
                 s = m_crypto->DeleteRegOTT(user->GetMPinId());
@@ -1664,14 +1674,15 @@ Status MPinSDKBase::LoadUsersFromStorage()
             std::string state = ((const json::String&) userObject["state"]).Value();
 
             String regOTT;
-            Status s = m_crypto->LoadRegOTT(mpinId, regOTT);
+            String accessCode;
+            Status s = m_crypto->LoadRegOTT(mpinId, regOTT, accessCode);
             if (s != Status::OK)
             {
                 return s;
             }
 
             UserPtr user = MakeNewUser(id, deviceName);
-            s = user->RestoreState(state, mpinIdHex, regOTT, backend, customerId, appId);
+            s = user->RestoreState(state, mpinIdHex, regOTT, accessCode, backend, customerId, appId);
             if (s != Status::OK)
             {
                 return s;
