@@ -22,7 +22,7 @@ under the License.
 #include <iostream>
 #include <fstream>
 
-typedef MPinSDK::String String;
+typedef MPinSDKBase::String String;
 using std::fstream;
 using std::stringbuf;
 using std::cout;

@@ -59,7 +59,7 @@ long AccessNumberThread::Body(void*)
 
         m_req->SetHeaders(headers);
         m_req->SetContent(payload);
-        m_req->Execute(MPinSDK::IHttpRequest::POST, url);
+        m_req->Execute(MPinSDKBase::IHttpRequest::POST, url);
     }
 
     json.Clear();
@@ -70,7 +70,7 @@ long AccessNumberThread::Body(void*)
 
     m_req->SetHeaders(headers);
     m_req->SetContent(payload);
-    m_req->Execute(MPinSDK::IHttpRequest::POST, m_authenticateURL);
+    m_req->Execute(MPinSDKBase::IHttpRequest::POST, m_authenticateURL);
 
     m_context.ReleaseHttpRequest(m_req);
     m_req = NULL;

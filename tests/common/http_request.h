@@ -24,13 +24,13 @@ under the License.
 #ifndef _TEST_HTTP_REQUEST_H_
 #define _TEST_HTTP_REQUEST_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 
-class HttpRequest : public MPinSDK::IHttpRequest
+class HttpRequest : public MPinSDKBase::IHttpRequest
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::StringMap StringMap;
 
     HttpRequest() : m_timeout(0), m_httpStatusCode(0) {}
     virtual void SetHeaders(const StringMap& headers);

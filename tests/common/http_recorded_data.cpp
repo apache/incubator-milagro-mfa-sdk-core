@@ -28,8 +28,8 @@ using std::fstream;
 using std::cerr;
 using std::endl;
 
-typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
 typedef HttpRecordedData::Request Request;
 typedef HttpRecordedData::Response Response;
 

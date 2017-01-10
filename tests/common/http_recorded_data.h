@@ -24,15 +24,15 @@ under the License.
 #ifndef _TEST_HTTP_RECORDED_DATA_H_
 #define _TEST_HTTP_RECORDED_DATA_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 #include "CvMutex.h"
 
 class HttpRecordedData
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::StringMap StringMap;
+    typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
     class Request
     {

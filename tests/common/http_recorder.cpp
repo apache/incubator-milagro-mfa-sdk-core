@@ -18,15 +18,15 @@ under the License.
 */
 
 /*
- * MPinSDK::IHttpRequest implementation used for to record test http requests
+ * MPinSDKBase::IHttpRequest implementation used for to record test http requests
  */
 
 #include "http_recorder.h"
 #include "http_recorded_data.h"
 #include <cassert>
 
-typedef MPinSDK::String String;
-typedef MPinSDK::StringMap StringMap;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::StringMap StringMap;
 typedef HttpRecordedData::Request Request;
 typedef HttpRecordedData::Response Response;
 

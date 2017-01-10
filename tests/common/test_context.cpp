@@ -26,8 +26,8 @@ under the License.
 #include "../common/http_recorder.h"
 #include "../common/http_player.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
 TestContext::TestContext() : m_mode(MODE_MAKE_REAL_REQUESTS), m_autoContextData(NULL)
 {

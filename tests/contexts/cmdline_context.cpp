@@ -18,15 +18,15 @@ under the License.
 */
 
 /*
- * MPinSDK::IContext and all related interfaces implementation for command line test client
+ * MPinSDKBase::IContext and all related interfaces implementation for command line test client
  */
 
 #include "cmdline_context.h"
 #include "../common/file_storage.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
-typedef MPinSDK::CryptoType CryptoType;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::CryptoType CryptoType;
 
 /*
  * Context class impl
@@ -43,7 +43,7 @@ CmdLineContext::~CmdLineContext()
     delete m_secureStorage;
 }
 
-MPinSDK::IStorage * CmdLineContext::GetStorage(IStorage::Type type) const
+MPinSDKBase::IStorage * CmdLineContext::GetStorage(IStorage::Type type) const
 {
     if(type == IStorage::SECURE)
     {
@@ -55,5 +55,5 @@ MPinSDK::IStorage * CmdLineContext::GetStorage(IStorage::Type type) const
 
 CryptoType CmdLineContext::GetMPinCryptoType() const
 {
-    return MPinSDK::CRYPTO_NON_TEE;
+    return MPinSDKBase::CRYPTO_NON_TEE;
 }

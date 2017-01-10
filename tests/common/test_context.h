@@ -24,14 +24,14 @@ under the License.
 #ifndef _TEST_CONTEXT_H_
 #define _TEST_CONTEXT_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 #include "http_recorded_data.h"
 
-class TestContext : public MPinSDK::IContext
+class TestContext : public MPinSDKBase::IContext
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
     class AutoContextData
     {

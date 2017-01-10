@@ -18,21 +18,21 @@ under the License.
 */
 
 /*
- * MPinSDK::IContext and all related interfaces implementation for automatic tests
+ * MPinSDKBase::IContext and all related interfaces implementation for automatic tests
  */
 
 #ifndef _AUTO_CONTEXT_H_
 #define _AUTO_CONTEXT_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 #include "../common/test_context.h"
 
 class AutoContext : public TestContext
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::IStorage IStorage;
-    typedef MPinSDK::CryptoType CryptoType;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::IStorage IStorage;
+    typedef MPinSDKBase::CryptoType CryptoType;
 
     AutoContext(const AutoContextData& autoContextData);
     ~AutoContext();

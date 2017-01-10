@@ -18,7 +18,7 @@ under the License.
 */
 
 /*
- * MPinSDK::IContext and all related interfaces implementation for command line test client
+ * MPinSDKBase::IContext and all related interfaces implementation for command line test client
  */
 
 #ifndef _CMDLINE_CONTEXT_H_
@@ -29,9 +29,9 @@ under the License.
 class CmdLineContext : public TestContext
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::IStorage IStorage;
-    typedef MPinSDK::CryptoType CryptoType;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::IStorage IStorage;
+    typedef MPinSDKBase::CryptoType CryptoType;
 
     CmdLineContext(const String& usersFile, const String& tokensFile);
     ~CmdLineContext();

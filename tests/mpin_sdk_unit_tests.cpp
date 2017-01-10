@@ -33,7 +33,7 @@ using namespace boost::unit_test;
 
 
 static char RECORDED_DATA_JSON[] = {
-#include "unit_tests_recorded_data.inc"
+#include "mpin_sdk_unit_tests_data.inc"
 };
 
 class MemBuf : public std::streambuf
@@ -53,7 +53,7 @@ static const char * GetRecordedDataFileName()
         char **argv = framework::master_test_suite().argv;
         return argv[1];
     }
-    return "unit_tests_recorded_data.json";
+    return "mpin_sdk_unit_tests_data.json";
 }
 
 class TestNameData : public TestContext::AutoContextData

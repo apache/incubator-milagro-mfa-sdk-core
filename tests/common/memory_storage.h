@@ -20,12 +20,12 @@ under the License.
 #ifndef _MPIN_SDK_TEST_MEMORY_STORAGE_H_
 #define _MPIN_SDK_TEST_MEMORY_STORAGE_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 
-class MemoryStorage : public MPinSDK::IStorage
+class MemoryStorage : public MPinSDKBase::IStorage
 {
 public:
-    typedef MPinSDK::String String;
+    typedef MPinSDKBase::String String;
 
     virtual bool SetData(const String& data);
     virtual bool GetData(String &data);

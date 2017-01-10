@@ -20,7 +20,7 @@ under the License.
 #include "memory_storage.h"
 #include <iostream>
 
-typedef MPinSDK::String String;
+typedef MPinSDKBase::String String;
 using std::cout;
 using std::endl;
 

@@ -18,13 +18,13 @@ under the License.
 */
 
 /*
- * MPinSDK::IHttpRequest implementation used for to reproduce recorded http requests
+ * MPinSDKBase::IHttpRequest implementation used for to reproduce recorded http requests
  */
 
 #include "http_player.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::StringMap StringMap;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::StringMap StringMap;
 
 void HttpPlayer::SetHeaders(const StringMap & headers)
 {

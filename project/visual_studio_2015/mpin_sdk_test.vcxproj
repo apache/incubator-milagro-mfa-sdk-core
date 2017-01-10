@@ -73,7 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\tests\cmdline_test.cpp" />
+    <ClCompile Include="..\..\tests\mpin_sdk_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="mpin_sdk.vcxproj">
