@@ -37,6 +37,12 @@ MfaSDK::MfaSDK() {}
 
 Status MfaSDK::GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails)
 {
+    Status s = CheckIfIsInitialized();
+    if (s != Status::OK)
+    {
+        return s;
+    }
+
     HttpResponse response = MakeGetRequest(String().Format("%s/service", String(url).TrimRight("/").c_str()));
     if (response.GetStatus() != HttpResponse::HTTP_OK)
     {

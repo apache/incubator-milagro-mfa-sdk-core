@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
 
     sdk.AddTrustedDomain("miracl.net");
 
-    // TODO: Shouldn't CID setting be moved to Init?
     sdk.SetCID("dd");
 
     Status s = sdk.Init(StringMap(), &context);

@@ -55,6 +55,54 @@ Status::Code Status::GetStatusCode() const
     return m_statusCode;
 }
 
+String MPinSDKBase::Status::GetStatusCodeString() const
+{
+    switch (m_statusCode)
+    {
+    case OK:
+        return "OK";
+    case PIN_INPUT_CANCELED:
+        return "PIN_INPUT_CANCELED";
+    case CRYPTO_ERROR:
+        return "CRYPTO_ERROR";
+    case STORAGE_ERROR:
+        return "STORAGE_ERROR";
+    case NETWORK_ERROR:
+        return "NETWORK_ERROR";
+    case RESPONSE_PARSE_ERROR:
+        return "RESPONSE_PARSE_ERROR";
+    case FLOW_ERROR:
+        return "FLOW_ERROR";
+    case IDENTITY_NOT_AUTHORIZED:
+        return "IDENTITY_NOT_AUTHORIZED";
+    case IDENTITY_NOT_VERIFIED:
+        return "IDENTITY_NOT_VERIFIED";
+    case REQUEST_EXPIRED:
+        return "REQUEST_EXPIRED";
+    case REVOKED:
+        return "REVOKED";
+    case INCORRECT_PIN:
+        return "INCORRECT_PIN";
+    case INCORRECT_ACCESS_NUMBER:
+        return "INCORRECT_ACCESS_NUMBER";
+    case HTTP_SERVER_ERROR:
+        return "HTTP_SERVER_ERROR";
+    case HTTP_REQUEST_ERROR:
+        return "HTTP_REQUEST_ERROR";
+    case BAD_USER_AGENT:
+        return "BAD_USER_AGENT";
+    case CLIENT_SECRET_EXPIRED:
+        return "CLIENT_SECRET_EXPIRED";
+    case BAD_CLIENT_VERSION:
+        return "BAD_CLIENT_VERSION";
+    case UNTRUSTED_DOMAIN_ERROR:
+        return "UNTRUSTED_DOMAIN_ERROR";
+    default:
+        assert(false);
+        return "Invalid status code";
+    }
+}
+
 const String& Status::GetErrorMessage() const
 {
     return m_errorMessage;
@@ -777,7 +825,13 @@ Status MPinSDKBase::Init(const StringMap& config, IContext* ctx)
     StringMap::const_iterator i = config.find(CONFIG_RPS_PREFIX);
     String rpsPrefix = (i != config.end()) ? i->second : DEFAULT_RPS_PREFIX;
 
-    return SetBackend(backend, rpsPrefix);
+    s = SetBackend(backend, rpsPrefix);
+    if (s != Status::OK)
+    {
+        Destroy();
+    }
+
+    return s;
 }
 
 void MPinSDKBase::Destroy()
@@ -794,6 +848,11 @@ void MPinSDKBase::Destroy()
     m_context = NULL;
 
     ClearCustomHeaders();
+
+    m_RPAServer.clear();
+    m_clientSettings.Clear();
+
+    ClearTrustedDomains();
 
     m_state = NOT_INITIALIZED;
 }

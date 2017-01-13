@@ -17,39 +17,39 @@ specific language governing permissions and limitations
 under the License.
 */
 
-/*
- * M-Pin SDK test interface
- */
+#ifndef _TEST_MFA_SDK_H_
+#define _TEST_MFA_SDK_H_
 
-#ifndef _TEST_MPIN_SDK_H_
-#define _TEST_MPIN_SDK_H_
-
-#include "mpin_sdk.h"
+#include "mfa_sdk.h"
 
 class TestContext;
 
-class TestMPinSDK : public MPinSDK
+class TestMfaSDK : public MfaSDK
 {
 public:
-    TestMPinSDK(TestContext& testContext);
+    TestMfaSDK(TestContext& testContext);
 
     Status Init(const StringMap& config);
 
-    Status StartRegistration(INOUT UserPtr user, const String& activateCode = "", const String& userData = "");
-    Status RestartRegistration(INOUT UserPtr user, const String& userData = "");
-    Status ConfirmRegistration(INOUT UserPtr user, const String& pushToken = "");
+    Status GetAccessCode(const String& authzUrl, OUT String& accessCode);
+
+    Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
+    Status AbortSession(const String& accessCode);
+
+    Status StartRegistration(INOUT UserPtr user, const String& accessCode, const String& pushToken);
+    Status RestartRegistration(INOUT UserPtr user);
+    Status ConfirmRegistration(INOUT UserPtr user);
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
-    Status StartAuthentication(INOUT UserPtr user);
-    Status FinishAuthentication(INOUT UserPtr user, const String& pin);
-    Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData);
-    Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
-    Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
+    Status StartAuthentication(INOUT UserPtr user, const String& accessCode);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode);
+    Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String& authzCode);
 
     bool Logout(IN UserPtr user);
 
 private:
     TestContext& m_testContext;
+    int m_accessCodeCounter;
 };
 
 #endif // _TEST_MPIN_SDK_H_

@@ -67,14 +67,6 @@ Status TestMPinSDK::FinishRegistration(INOUT UserPtr user, const String & pin)
     return s;
 }
 
-//Status TestMPinSDK::StartAuthentication(INOUT UserPtr user, const String & accessCode)
-//{
-//    m_testContext.SetRequestContextData(user->GetId() + "-" + accessCode);
-//    Status s = MPinSDK::StartAuthentication(user, accessCode);
-//    m_testContext.SetRequestContextData("");
-//    return s;
-//}
-
 Status TestMPinSDK::StartAuthentication(INOUT UserPtr user)
 {
     m_testContext.SetRequestContextData(user->GetId() + "-");
@@ -114,14 +106,6 @@ Status TestMPinSDK::FinishAuthenticationAN(INOUT UserPtr user, const String & pi
     m_testContext.SetRequestContextData("");
     return s;
 }
-
-//Status TestMPinSDK::GetSessionDetails(const String & accessCode, OUT SessionDetails & sessionDetails)
-//{
-//    m_testContext.SetRequestContextData(accessCode);
-//    Status s = MPinSDK::GetSessionDetails(accessCode, sessionDetails);
-//    m_testContext.SetRequestContextData("");
-//    return s;
-//}
 
 bool TestMPinSDK::Logout(IN UserPtr user)
 {

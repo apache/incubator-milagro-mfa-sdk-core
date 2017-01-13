@@ -138,6 +138,7 @@ public:
         Status(Code statusCode);
         Status(Code statusCode, const String& error);
         Code GetStatusCode() const;
+        String GetStatusCodeString() const;
         const String& GetErrorMessage() const;
         void SetStatusCode(Code statusCode);
         void SetErrorMessage(const String& error);
@@ -183,6 +184,8 @@ public:
         const String& GetAppId() const;
         const String& GetMPinId() const;
         State GetState() const;
+        String GetStateString() const;
+        static String StateToString(State state);
 
     private:
         friend class MPinSDKBase;
@@ -202,8 +205,6 @@ public:
         void Block();
         Status RestoreState(const String& stateString, const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& backend,
             const String& customerId, const String& appId);
-        String GetStateString() const;
-        static String StateToString(State state);
         static State StringToState(const String& stateString);
         static String MakeKey(const String& id, const String& backend, const String& customerId, const String& appId);
 
@@ -245,6 +246,8 @@ public:
 
     Status Init(const StringMap& config, IN IContext* ctx);
     void Destroy();
+    bool IsInitilized() const;
+    bool IsBackendSet() const;
 
     void AddCustomHeaders(const StringMap& customHeaders);
     void ClearCustomHeaders();
@@ -351,8 +354,6 @@ protected:
         String logoutURL;
     };
 
-    bool IsInitilized() const;
-    bool IsBackendSet() const;
     Status CheckIfIsInitialized() const;
     Status CheckIfBackendIsSet() const;
     Status CheckUrl(const String& url) const;
