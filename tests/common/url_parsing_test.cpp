@@ -26,8 +26,9 @@ under the License.
 namespace
 {
     using util::Url;
-    typedef std::pair<std::string, Url> UrlTest;
-    typedef std::vector<UrlTest> UrlTestVector;
+    using std::cout;
+    using std::endl;
+    using std::ostream;
 
     UrlTestVector tests =
     {
@@ -64,24 +65,8 @@ namespace
     };
 }
 
-UrlPairVector GetUrlParsingTestResults()
+namespace std
 {
-    UrlPairVector res;
-
-    for (UrlTestVector::iterator test = tests.begin(); test != tests.end(); ++test)
-    {
-        res.push_back(std::make_pair(Url(test->first), test->second));
-    }
-
-    return res;
-}
-
-namespace
-{
-    using std::cout;
-    using std::endl;
-    using std::ostream;
-
     ostream& operator<<(ostream& out, const Url& url)
     {
         out << "scheme='" << url.GetScheme() << "', host='" << url.GetHost() << "', port='" << url.GetPort() << "', path='" << url.GetPath() << "'";
@@ -89,23 +74,35 @@ namespace
     }
 }
 
+bool UrlTest::Parse()
+{
+    return GetParsedUrl() == correctUrl;
+}
+
+util::Url UrlTest::GetParsedUrl() const
+{
+    return Url(urlString);
+}
+
+UrlTestVector& GetUrlTests()
+{
+    return tests;
+}
+
 void DoStandaloneUrlParsingTest()
 {
-    UrlPairVector testPairs = GetUrlParsingTestResults();
-    UrlTestVector::iterator test = tests.begin();
     size_t failedCount = 0;
-    for (UrlPairVector::iterator pair = testPairs.begin(); pair != testPairs.end(); ++pair, ++test)
+    for (UrlTestVector::iterator test = tests.begin(); test != tests.end(); ++test)
     {
-        if (pair->first == pair->second)
+        if (test->Parse())
         {
-            cout << "success: '" << test->first << "' parsed as {" << pair->first << "}" << endl;
+            cout << "success: '" << test->urlString << "' parsed as {" << test->GetParsedUrl() << "}" << endl;
         }
         else
         {
-            cout << " * FAILED: '" << test->first << "' parsed as {" << pair->first << "}" << endl << "   expected was {" << pair->second << "}" << endl;
+            cout << " * FAILED: '" << test->urlString << "' parsed as {" << test->GetParsedUrl() << "}" << endl << "   expected was {" << test->correctUrl << "}" << endl;
             ++failedCount;
         }
     }
-
     cout << endl << "Failed " << failedCount << " out of " << tests.size() << endl;
 }

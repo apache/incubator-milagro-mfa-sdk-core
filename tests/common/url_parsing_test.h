@@ -27,10 +27,24 @@ under the License.
 #include "utils.h"
 #include <vector>
 
-typedef std::pair<util::Url, util::Url> UrlPair;
-typedef std::vector<UrlPair> UrlPairVector;
+class UrlTest
+{
+public:
+    bool Parse();
+    util::Url GetParsedUrl() const;
 
-UrlPairVector GetUrlParsingTestResults();
+    std::string urlString;
+    util::Url correctUrl;
+};
+
+typedef std::vector<UrlTest> UrlTestVector;
+
+namespace std
+{
+    std::ostream& operator<<(std::ostream& out, const util::Url& url);
+}
+
+UrlTestVector& GetUrlTests();
 void DoStandaloneUrlParsingTest();
 
 #endif // _TEST_URL_PARSING_H_

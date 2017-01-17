@@ -19,6 +19,7 @@ under the License.
 
 #include "common/test_mfa_sdk.h"
 #include "contexts/auto_context.h"
+#include "common/url_parsing_test.h"
 #include "CvLogger.h"
 
 #define BOOST_TEST_MODULE Simple testcases
@@ -72,12 +73,12 @@ namespace
 
     void PrintTestStart()
     {
-        BOOST_MESSAGE(String().Format("Starting %s...", GetCurrentTestName().c_str()));
+        BOOST_MESSAGE(String().Format("Starting test %s...", GetCurrentTestName().c_str()));
     }
 
     void PrintTestEnd()
     {
-        BOOST_MESSAGE(String().Format("    %s finished", GetCurrentTestName().c_str()));
+        BOOST_MESSAGE(String().Format("    test %s finished", GetCurrentTestName().c_str()));
     }
 
     TestNameData testNameData;
@@ -88,21 +89,25 @@ namespace
     const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&"
         "redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&"
         "state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en";
+    const char *serviceDetailsUrl = "https://dd.dev.mpin.io";
 }
 
-static std::ostream& operator<<(std::ostream& ostr, const Status& s)
+namespace std
 {
-    ostr << s.GetStatusCodeString();
-    return ostr;
+    std::ostream& operator<<(std::ostream& ostr, const Status& s)
+    {
+        ostr << s.GetStatusCodeString();
+        return ostr;
+    }
+
+    std::ostream& operator<<(std::ostream& ostr, User::State s)
+    {
+        ostr << User::StateToString(s);
+        return ostr;
+    }
 }
 
-static std::ostream& operator<<(std::ostream& ostr, User::State s)
-{
-    ostr << User::StateToString(s);
-    return ostr;
-}
-
-BOOST_AUTO_TEST_CASE(testNoInit)
+BOOST_AUTO_TEST_CASE(NoInit)
 {
     unit_test_log.set_threshold_level(log_messages);
 
@@ -168,7 +173,7 @@ BOOST_AUTO_TEST_CASE(testNoInit)
     PrintTestEnd();
 }
 
-BOOST_AUTO_TEST_CASE(testInitNoCID)
+BOOST_AUTO_TEST_CASE(InitNoCID)
 {
     PrintTestStart();
 
@@ -180,7 +185,7 @@ BOOST_AUTO_TEST_CASE(testInitNoCID)
     PrintTestEnd();
 }
 
-BOOST_AUTO_TEST_CASE(testInit)
+BOOST_AUTO_TEST_CASE(Init)
 {
     PrintTestStart();
 
@@ -191,7 +196,31 @@ BOOST_AUTO_TEST_CASE(testInit)
     PrintTestEnd();
 }
 
-BOOST_AUTO_TEST_CASE(testBackend)
+BOOST_AUTO_TEST_CASE(ServiceAndSessionDetails)
+{
+    PrintTestStart();
+
+    BOOST_REQUIRE(sdk.IsInitilized());
+
+    MfaSDK::ServiceDetails serviceDetails;
+    Status s = sdk.GetServiceDetails(serviceDetailsUrl, serviceDetails);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    String accessCode;
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    MfaSDK::SessionDetails sessionDetails;
+    s = sdk.GetSessionDetails(accessCode, sessionDetails);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.AbortSession(accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    PrintTestEnd();
+}
+
+BOOST_AUTO_TEST_CASE(TestBackend)
 {
     PrintTestStart();
 
@@ -206,7 +235,7 @@ BOOST_AUTO_TEST_CASE(testBackend)
     PrintTestEnd();
 }
 
-BOOST_AUTO_TEST_CASE(setBackend)
+BOOST_AUTO_TEST_CASE(SetBackend)
 {
     PrintTestStart();
 
@@ -221,9 +250,7 @@ BOOST_AUTO_TEST_CASE(setBackend)
     PrintTestEnd();
 }
 
-// TODO: Add tests with trusted domains and URL parsing
-
-BOOST_AUTO_TEST_CASE(testUsers)
+BOOST_AUTO_TEST_CASE(Users)
 {
     PrintTestStart();
 
@@ -293,7 +320,7 @@ BOOST_AUTO_TEST_CASE(testUsers)
     PrintTestEnd();
 }
 
-BOOST_AUTO_TEST_CASE(testRegistration)
+BOOST_AUTO_TEST_CASE(Registration)
 {
     PrintTestStart();
 
@@ -406,7 +433,7 @@ namespace
     }
 }
 
-BOOST_AUTO_TEST_CASE(testAuthentication)
+BOOST_AUTO_TEST_CASE(Authentication)
 {
     PrintTestStart();
 
@@ -480,6 +507,79 @@ BOOST_AUTO_TEST_CASE(testAuthentication)
     s = sdk.FinishAuthentication(user, "3333", accessCode);
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::BLOCKED);
+
+    PrintTestEnd();
+}
+
+// TODO: Add tests with trusted domains and URL parsing
+
+BOOST_AUTO_TEST_CASE(TrustedDomains)
+{
+    PrintTestStart();
+
+    // URL Parsing test
+    UrlTestVector urlTests = GetUrlTests();
+    for (UrlTestVector::iterator test = urlTests.begin(); test != urlTests.end(); ++test)
+    {
+        BOOST_CHECK_MESSAGE(test->Parse(),
+            "Url parsing test failed: '" << test->urlString << "' parsed as {" << test->GetParsedUrl() << "} expected was {" << test->correctUrl << "}");
+    }
+    
+    // Trusted domain tests
+    BOOST_REQUIRE(sdk.IsInitilized());
+
+    sdk.AddTrustedDomain("mpin.io");
+
+    MfaSDK::ServiceDetails serviceDetails;
+    Status s = sdk.GetServiceDetails(serviceDetailsUrl, serviceDetails);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    // No miracl.net trusted domain
+    String accessCode;
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::UNTRUSTED_DOMAIN_ERROR);
+
+    MfaSDK::SessionDetails sessionDetails;
+    s = sdk.GetSessionDetails(accessCode, sessionDetails);
+    BOOST_CHECK_EQUAL(s, Status::UNTRUSTED_DOMAIN_ERROR);
+    s = sdk.AbortSession(accessCode);
+    BOOST_CHECK_EQUAL(s, Status::UNTRUSTED_DOMAIN_ERROR);
+
+    UserPtr user = sdk.MakeNewUser("testUser5@example.com");
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::UNTRUSTED_DOMAIN_ERROR);
+    BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
+
+    // Add miracl.net trusted domain
+    sdk.AddTrustedDomain("miracl.net");
+
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.GetSessionDetails(accessCode, sessionDetails);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    s = sdk.AbortSession(accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    BOOST_CHECK_EQUAL(user->GetState(), User::STARTED_REGISTRATION);
+
+    s = sdk.ConfirmRegistration(user);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.FinishRegistration(user, "1234");
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
+
+    s = sdk.StartAuthentication(user, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.FinishAuthentication(user, "1234", accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
 
     PrintTestEnd();
 }

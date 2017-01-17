@@ -4,7 +4,7 @@
 			"method" : "GET",
 			"url" : "https://api.dev.miracl.net/rps/clientSettings",
 			"data" : "",
-			"context" : "@testInitNoCID"
+			"context" : "@InitNoCID"
 		},
 		"response" : {
 			"success" : true,
@@ -18,7 +18,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "40",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:54 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:24 GMT"
 			},
 			"data" : "Cannot parse application for User-Agent "
 		}
@@ -28,7 +28,7 @@
 			"method" : "GET",
 			"url" : "https://api.dev.miracl.net/rps/clientSettings",
 			"data" : "",
-			"context" : "@testInit"
+			"context" : "@Init"
 		},
 		"response" : {
 			"success" : true,
@@ -42,9 +42,101 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "1180",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:54 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:24 GMT"
 			},
-			"data" : "{\"certivoxURL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"dta2URL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"signatureURL\":\"https://api.dev.miracl.net/rps/signature\",\"registerURL\":\"https://api.dev.miracl.net/rps/user\",\"timePermitsURL\":\"\",\"usePermits\":false,\"setupDoneURL\":\"https://api.dev.miracl.net/rps/setupDone\",\"mobileAuthenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"timePermitsStorageURL\":\"\",\"mpinAuthServerURL\":\"https://api.dev.miracl.net/rps\",\"authenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"setDeviceName\":false,\"accessNumberUseCheckSum\":false,\"accessNumberFormat\":\"qr\",\"appID\":\"OIDC\",\"requestOTP\":false,\"accessnumber\":\"https://api.dev.miracl.net/rps/accessNumber\",\"getAccessNumber\":\"https://api.dev.miracl.net/rps/getAccessNumber\",\"seedValue\":\"dff31454a164906fcc002db48fb33bf0d9a282049feb03d0dd7b95dc75346c885ce99293654bf3f0f3657b089d4236ea5009923010c41cc3ea7f0f4772b417d9757e269f38390bd5aa3555265c93ff31647878abd653dc1573aeb19cee5053ba266a461e\",\"accessNumberDigits\":0,\"cSum\":0,\"useWebSocket\":false,\"codeStatusURL\":\"https://api.dev.miracl.net/rps/codeStatus\"}"
+			"data" : "{\"certivoxURL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"dta2URL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"signatureURL\":\"https://api.dev.miracl.net/rps/signature\",\"registerURL\":\"https://api.dev.miracl.net/rps/user\",\"timePermitsURL\":\"\",\"usePermits\":false,\"setupDoneURL\":\"https://api.dev.miracl.net/rps/setupDone\",\"mobileAuthenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"timePermitsStorageURL\":\"\",\"mpinAuthServerURL\":\"https://api.dev.miracl.net/rps\",\"authenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"setDeviceName\":false,\"accessNumberUseCheckSum\":false,\"accessNumberFormat\":\"qr\",\"appID\":\"OIDC\",\"requestOTP\":false,\"accessnumber\":\"https://api.dev.miracl.net/rps/accessNumber\",\"getAccessNumber\":\"https://api.dev.miracl.net/rps/getAccessNumber\",\"seedValue\":\"64c1a94fb1789f1ad6ad155e507d5a5d752a286412e80fadf327c85e848ec64a13dc0981cf27611e17bb0f6411e2ddf3927dc7c4b60ab3250c960db13b942680f18824fbaa49f8bb513082e4142b2410ded2d7f3d6c609d7f47f1dbefd8733fa98c3b25a\",\"accessNumberDigits\":0,\"cSum\":0,\"useWebSocket\":false,\"codeStatusURL\":\"https://api.dev.miracl.net/rps/codeStatus\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "GET",
+			"url" : "https://dd.dev.mpin.io/service",
+			"data" : "",
+			"context" : "@ServiceAndSessionDetails"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Connection" : "keep-alive",
+				"Content-Length" : "157",
+				"Content-Type" : "application/json",
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
+			},
+			"data" : "{\"name\":\"Secuclick [dev]\",\"url\":\"https://api.dev.miracl.net\",\"rps_prefix\":\"rps\",\"logo_url\":\"https://dd.cdn.dev.miracl.net/service-logo.png\",\"type\":\"online\"}\n"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
+			"data" : "{}",
+			"context" : "GetAccessCode001@ServiceAndSessionDetails"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "195",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
+			},
+			"data" : "{\"webOTT\":\"6f32db3bfeb7b5c39ff874160b0ac5de7299b9d39b5fe52a3cd115bc0f8f98d2\",\"qrURL\":\"https://dd.dev.mpin.io#ad12b02575df473c68e9340d5dcc45ce\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/codeStatus",
+			"data" : "{\n\t\"status\" : \"wid\",\n\t\"wid\" : \"ad12b02575df473c68e9340d5dcc45ce\"\n}",
+			"context" : "ad12b02575df473c68e9340d5dcc45ce-GetSessionDetails@ServiceAndSessionDetails"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "150",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
+			},
+			"data" : "{\"prerollId\":\"\",\"appName\":\"TCB Demo\",\"appLogoURL\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"customerName\":\"System\",\"customerLogoURL\":\"\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/codeStatus",
+			"data" : "{\n\t\"status\" : \"abort\",\n\t\"wid\" : \"ad12b02575df473c68e9340d5dcc45ce\"\n}",
+			"context" : "ad12b02575df473c68e9340d5dcc45ce-AbortSession@ServiceAndSessionDetails"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "28",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
+			},
+			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
 	},
 	{
@@ -52,7 +144,7 @@
 			"method" : "GET",
 			"url" : "https://m-pindemo.certivox.org/rps/clientSettings",
 			"data" : "",
-			"context" : "@testBackend"
+			"context" : "@TestBackend"
 		},
 		"response" : {
 			"success" : true,
@@ -66,13 +158,13 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "849",
 				"Content-Type" : "application/json; charset=UTF-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT",
-				"ETag" : "\"bbbe8a6fc6b1fa55ef19f6251a26cbc8549383d1\"",
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT",
+				"ETag" : "\"112ab0988aad2eedfb02ad32ef06e07783ba93cf\"",
 				"Expires" : "Sat, 26 Jul 1997 05:00:00 GMT",
 				"Pragma" : "no-cache",
 				"Server" : "nginx/1.4.6 (Ubuntu)"
 			},
-			"data" : "{\"requestOTP\": false, \"mpinAuthServerURL\": \"https://m-pindemo.certivox.org/mpin\", \"timePermitsURL\": \"/rps/timePermit\", \"useWebSocket\": false, \"setDeviceName\": false, \"seedValue\": \"2a14802473c50d6ea7ff6c910982302168aea530c5c2337f18eb3830db39dcf14003bbd96444273307acf9b62d9de36e3be99823ad6ca9b4d43519f26ce1c6c6a603642ebef20dd4fcbed6fc269d374137981d2489df086cd3c84cd692510554a2fbd93f\", \"accessNumberDigits\": 7, \"accessNumberURL\": \"/rps/accessnumber\", \"setupDoneURL\": \"/rps/setupDone\", \"timePermitsStorageURL\": \"https://timepermits.certivox.net\", \"authenticateURL\": \"/mpinAuthenticate\", \"certivoxURL\": \"https://community-api.certivox.net/v3/\", \"registerURL\": \"/rps/user\", \"appID\": \"45393a1e809511e481df066d36255cd6\", \"cSum\": 1, \"signatureURL\": \"/rps/signature\", \"getAccessNumberURL\": \"/rps/getAccessNumber\", \"mobileAuthenticateURL\": \"/rps/authenticate\"}"
+			"data" : "{\"requestOTP\": false, \"mpinAuthServerURL\": \"https://m-pindemo.certivox.org/mpin\", \"timePermitsURL\": \"/rps/timePermit\", \"useWebSocket\": false, \"setDeviceName\": false, \"seedValue\": \"6c8e2ccf631647a13195d90169c59d6a392b5d3f8d58d661fbd60e310d9c5abcb831368302b33379d17a7c6ac031e41aa90ad6edd73f53474e086df13a6e7138b876bef1c77903b56ef42a0ad0a6a5043e1eaa55d5b0dce915b0c78463f4a5060bc5ed23\", \"accessNumberDigits\": 7, \"accessNumberURL\": \"/rps/accessnumber\", \"setupDoneURL\": \"/rps/setupDone\", \"timePermitsStorageURL\": \"https://timepermits.certivox.net\", \"authenticateURL\": \"/mpinAuthenticate\", \"certivoxURL\": \"https://community-api.certivox.net/v3/\", \"registerURL\": \"/rps/user\", \"appID\": \"45393a1e809511e481df066d36255cd6\", \"cSum\": 1, \"signatureURL\": \"/rps/signature\", \"getAccessNumberURL\": \"/rps/getAccessNumber\", \"mobileAuthenticateURL\": \"/rps/authenticate\"}"
 		}
 	},
 	{
@@ -80,7 +172,7 @@
 			"method" : "GET",
 			"url" : "https://blabla.certivox.org/rps/clientSettings",
 			"data" : "",
-			"context" : "@testBackend"
+			"context" : "@TestBackend"
 		},
 		"response" : {
 			"success" : false,
@@ -95,7 +187,7 @@
 			"method" : "GET",
 			"url" : "https://blabla.certivox.org/rps/clientSettings",
 			"data" : "",
-			"context" : "@setBackend"
+			"context" : "@SetBackend"
 		},
 		"response" : {
 			"success" : false,
@@ -110,7 +202,7 @@
 			"method" : "GET",
 			"url" : "https://api.dev.miracl.net/rps/clientSettings",
 			"data" : "",
-			"context" : "@setBackend"
+			"context" : "@SetBackend"
 		},
 		"response" : {
 			"success" : true,
@@ -124,9 +216,9 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "1180",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
 			},
-			"data" : "{\"certivoxURL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"dta2URL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"signatureURL\":\"https://api.dev.miracl.net/rps/signature\",\"registerURL\":\"https://api.dev.miracl.net/rps/user\",\"timePermitsURL\":\"\",\"usePermits\":false,\"setupDoneURL\":\"https://api.dev.miracl.net/rps/setupDone\",\"mobileAuthenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"timePermitsStorageURL\":\"\",\"mpinAuthServerURL\":\"https://api.dev.miracl.net/rps\",\"authenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"setDeviceName\":false,\"accessNumberUseCheckSum\":false,\"accessNumberFormat\":\"qr\",\"appID\":\"OIDC\",\"requestOTP\":false,\"accessnumber\":\"https://api.dev.miracl.net/rps/accessNumber\",\"getAccessNumber\":\"https://api.dev.miracl.net/rps/getAccessNumber\",\"seedValue\":\"e1b5918644b222d471d07d81ad4ac436aa1e31504dbc4e9dc59f738777e0a67d410e7da22992d0aec7e41d14449e4df5bdfc4df06768c9df683aab9ca32529ce9ea4bdc3e572046731ec6479cd90494e65dd46ec8439fab3e9e1f40a31a2ba6d104589f9\",\"accessNumberDigits\":0,\"cSum\":0,\"useWebSocket\":false,\"codeStatusURL\":\"https://api.dev.miracl.net/rps/codeStatus\"}"
+			"data" : "{\"certivoxURL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"dta2URL\":\"https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/\",\"signatureURL\":\"https://api.dev.miracl.net/rps/signature\",\"registerURL\":\"https://api.dev.miracl.net/rps/user\",\"timePermitsURL\":\"\",\"usePermits\":false,\"setupDoneURL\":\"https://api.dev.miracl.net/rps/setupDone\",\"mobileAuthenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"timePermitsStorageURL\":\"\",\"mpinAuthServerURL\":\"https://api.dev.miracl.net/rps\",\"authenticateURL\":\"https://api.dev.miracl.net/rps/authenticate\",\"setDeviceName\":false,\"accessNumberUseCheckSum\":false,\"accessNumberFormat\":\"qr\",\"appID\":\"OIDC\",\"requestOTP\":false,\"accessnumber\":\"https://api.dev.miracl.net/rps/accessNumber\",\"getAccessNumber\":\"https://api.dev.miracl.net/rps/getAccessNumber\",\"seedValue\":\"65dbb173f4c3fbe824c8a0d59725e18aa1edebd91232a80243406c8c95ec1d69558cc321abd96c6eee0021fa37a73123c9e1c8e22d809a78be5887c3dfe22d85ec518b7364e7345cffa76e100f6dfaa57acd049242a5823f644b5ff5dcade52e1994e7e7\",\"accessNumberDigits\":0,\"cSum\":0,\"useWebSocket\":false,\"codeStatusURL\":\"https://api.dev.miracl.net/rps/codeStatus\"}"
 		}
 	},
 	{
@@ -134,7 +226,7 @@
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
 			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1\n}",
-			"context" : "testUser1@example.com--@testUsers"
+			"context" : "testUser1@example.com--@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -148,7 +240,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "17",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:25 GMT"
 			},
 			"data" : "Invalid access id"
 		}
@@ -158,7 +250,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode001@testUsers"
+			"context" : "GetAccessCode002@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -172,17 +264,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"webOTT\":\"a82001ce6fe1b3378402790285ddcee5da2dd5c592ed19f15fa757d13cc1cdf7\",\"qrURL\":\"https://dd.dev.mpin.io#aff99b44d3e8545420f27c9062defb90\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"bb505dda54756c2b74403699efe731fa81d6d62b22aea5586530d0315900d8d6\",\"qrURL\":\"https://dd.dev.mpin.io#9e412ba3a5c3db31e84c52b8a1f716f5\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser1@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser1@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -196,17 +288,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35355a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226433356634386434326232333662363333366434386232313137306633323938227d\",\"regOTT\":\"c9948a3d2652383804e1973e55ec0936\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226261663861623331363738656135386337346436316331373239356261633366227d\",\"regOTT\":\"977ec8d91172ae308a9a3ddd9c46feee\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser000@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser000@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser000@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser000@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -220,17 +312,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35355a222c22757365724944223a227465737455736572303030406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223139383537363630613738386431393161646630663263316435366465626666227d\",\"regOTT\":\"93ea33db9dd217f7e4f3e9da5c393fe0\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303030406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223466623839646562313932656238316133663537316465326364316532393363227d\",\"regOTT\":\"57a8104ebf7db979730502bb730a1157\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser001@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser001@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser001@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser001@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -244,17 +336,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35355a222c22757365724944223a227465737455736572303031406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223732626366323862343262333462316438336661363961323265303735343734227d\",\"regOTT\":\"f35f1bd75495f17243c333c17ed7484c\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303031406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226533663837383633666435343334353130383730366537663662356639383134227d\",\"regOTT\":\"8b5800d15f640369b2864e4f13bf2f46\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser002@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser002@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser002@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser002@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -268,17 +360,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35355a222c22757365724944223a227465737455736572303032406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223932613238613563326266646235346161333337346537353137366131333334227d\",\"regOTT\":\"df00e32b77b0be37cc75508b9c7603f1\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303032406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223737316333306135666331373066643330613666343963336136616665326363227d\",\"regOTT\":\"d33251f85247222ea5ff6882e0e7dfe9\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser003@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser003@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser003@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser003@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -292,17 +384,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:55 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35355a222c22757365724944223a227465737455736572303033406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226461616631353665343665343137636131383064343164643836333662633233227d\",\"regOTT\":\"10d4542ee5f1dd5353a844e654f24047\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303033406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223564653762333266613331613439393330366437353035336133373563326662227d\",\"regOTT\":\"45a896838098523e4398ba6e5e16355a\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser004@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser004@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser004@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser004@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -316,17 +408,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303034406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226464333562316262373836306564666461373235353631303831623461613232227d\",\"regOTT\":\"c39d71d12ac69944c3cfa4497b66c3bf\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303034406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226235326536316136396130346138316163386265656438333464653131363934227d\",\"regOTT\":\"3120895ec8d529356d4ef405840829dc\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser005@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser005@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser005@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser005@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -340,17 +432,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303035406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226262363430656535656136303938333963613534626463313036363132376237227d\",\"regOTT\":\"1089abf838737349481c50648fc358a2\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303035406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226565653836393036363539323864373165363266383634393539613165616232227d\",\"regOTT\":\"febfe0b3b5257b0620d8654cbf6ccf25\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser006@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser006@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser006@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser006@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -364,17 +456,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:26 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303036406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223235306638626264353535313935633936383730323230373933376630323964227d\",\"regOTT\":\"8481dcffbc57bc4a8342ed731b91c223\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32365a222c22757365724944223a227465737455736572303036406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223461363838333836393436386637346362646335643163643233363538393734227d\",\"regOTT\":\"473b1c87f1e81a2df6c2e3e5a0b7f9dd\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser007@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser007@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser007@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser007@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -388,17 +480,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:27 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303037406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226332653132653839613533383433356238343561303335666634336539663532227d\",\"regOTT\":\"b7161fdbf06eee986d532ba72f60c60d\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32375a222c22757365724944223a227465737455736572303037406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226339623764306137306136663331626135613066386463663665353636646632227d\",\"regOTT\":\"688ac3eebd39bc4dedeb1bbd6237baab\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser008@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser008@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser008@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser008@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -412,17 +504,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:27 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303038406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226634333336373265306563643138656438323835633130626335623565353264227d\",\"regOTT\":\"3cd7ace96278b149e2838111fb897d19\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32375a222c22757365724944223a227465737455736572303038406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226539376264313161373233313565303064653166636638653439613437306263227d\",\"regOTT\":\"61b67a82f665cae967f679d35e64cdc5\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser009@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"aff99b44d3e8545420f27c9062defb90\"\n}",
-			"context" : "testUser009@example.com-aff99b44d3e8545420f27c9062defb90-@testUsers"
+			"data" : "{\n\t\"userId\" : \"testUser009@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9e412ba3a5c3db31e84c52b8a1f716f5\"\n}",
+			"context" : "testUser009@example.com-9e412ba3a5c3db31e84c52b8a1f716f5-@Users"
 		},
 		"response" : {
 			"success" : true,
@@ -436,9 +528,9 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "496",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:56 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:27 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35365a222c22757365724944223a227465737455736572303039406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226534613436383864643936663562383233336234363530323232316434666539227d\",\"regOTT\":\"4ba02f8f7af816f00fff35949b3d69d1\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32375a222c22757365724944223a227465737455736572303039406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226562376631396163313734383963373239643839633233333034616233616463227d\",\"regOTT\":\"a83676d7002f47da501485cf793eccd5\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
@@ -446,7 +538,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode002@testRegistration"
+			"context" : "GetAccessCode003@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -460,17 +552,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:57 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:28 GMT"
 			},
-			"data" : "{\"webOTT\":\"3ed83d1dd3be3e0a5c554b91b535b57011a80f5639a539be8ee40a0a20f04890\",\"qrURL\":\"https://dd.dev.mpin.io#9563c346f21883452f1bbeba0c0b547c\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"4de18f0eca6f55a9d2ed4deef073fe4d53c5c066b0b7cb0dee8c8186a5c2d837\",\"qrURL\":\"https://dd.dev.mpin.io#7688dfac797997ddfd446fb13c6b290d\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\"\n}",
-			"context" : "testUser1@example.com-9563c346f21883452f1bbeba0c0b547c-@testRegistration"
+			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\"\n}",
+			"context" : "testUser1@example.com-7688dfac797997ddfd446fb13c6b290d-@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -484,17 +576,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:57 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:28 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\"regOTT\":\"e714017db4cec124b49fd981b72879a1\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\"regOTT\":\"16473a0b55fd749428ad03532561fd32\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d?regOTT=e714017db4cec124b49fd981b72879a1",
+			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d?regOTT=16473a0b55fd749428ad03532561fd32",
 			"data" : "",
-			"context" : "testUser1@example.com@testRegistration"
+			"context" : "testUser1@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -508,17 +600,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "489",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:57 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:28 GMT"
 			},
-			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-13T15%3A13%3A57Z\u0026hash_mpin_id=f07d8b507e14cdeac192af82b12b1f1d137297284a555c765c7360e75e5e03f4\u0026hash_user_id=3af72ce4002635604b571b566aa6179a8ae658910c40a6f61ad3aadbe96e9732\u0026signature=b1e940eeda2f45d010bad55309f53280204ccd85cf7d65fd1b3c14f43c77700a\",\"clientSecretShare\":\"04104a2a3f67457221a9160b8507f70085db9fbdf3050016cea52ecd12bdcc5aa601ceae7cf937ca4bef09cb91c9b9d01b830746d7486340457251b850a7406691\"}"
+			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-17T11%3A59%3A28Z\u0026hash_mpin_id=0a2e582134edd059d58de0a3aa61758de927c050c674d5224b4e2a3d6addb8f3\u0026hash_user_id=3af72ce4002635604b571b566aa6179a8ae658910c40a6f61ad3aadbe96e9732\u0026signature=b1ec917faf7e0419f440fe04c54628f9f00abea92ecafe46ad37914784b29b1e\",\"clientSecretShare\":\"0402466b280e5d510c523c462c3ef8f4cda76b594b1f980dbaf119cb3455acdd77051e42109867bcc7c528d8293db11c9c9556f4995eec8d2a8659dd5ab4cd8a09\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-13T15%3A13%3A57Z&hash_mpin_id=f07d8b507e14cdeac192af82b12b1f1d137297284a555c765c7360e75e5e03f4&hash_user_id=3af72ce4002635604b571b566aa6179a8ae658910c40a6f61ad3aadbe96e9732&signature=b1e940eeda2f45d010bad55309f53280204ccd85cf7d65fd1b3c14f43c77700a",
+			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-17T11%3A59%3A28Z&hash_mpin_id=0a2e582134edd059d58de0a3aa61758de927c050c674d5224b4e2a3d6addb8f3&hash_user_id=3af72ce4002635604b571b566aa6179a8ae658910c40a6f61ad3aadbe96e9732&signature=b1ec917faf7e0419f440fe04c54628f9f00abea92ecafe46ad37914784b29b1e",
 			"data" : "",
-			"context" : "testUser1@example.com@testRegistration"
+			"context" : "testUser1@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -531,18 +623,18 @@
 				"Access-Control-Allow-Origin" : "*",
 				"Content-Length" : "186",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT",
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT",
 				"X-Powered-By" : "ASP.NET"
 			},
-			"data" : "{\"clientSecret\":\"040c8cafbf29dc1257992a0bc082104dd9190b00d30e25949d44df558e457a2789227002efed38b1c29e3066126dccb9ea4e5a4dbe934d77bd547c0ba3f6164a63\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
+			"data" : "{\"clientSecret\":\"040ad26b55b7c3ac8c99d01db399d21e0c5b0f6ca4d44c5950bfeb17f3da37ab5413b2e8a1557e61a68170629713f1a5253f99faaf8885163b127eb51811b2e4d3\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser2@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\"\n}",
-			"context" : "testUser2@example.com-9563c346f21883452f1bbeba0c0b547c-@testRegistration"
+			"data" : "{\n\t\"userId\" : \"testUser2@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\"\n}",
+			"context" : "testUser2@example.com-7688dfac797997ddfd446fb13c6b290d-@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -556,17 +648,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:28 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223561636338366161383231373265613830336563633732613033346161323461227d\",\"regOTT\":\"7e29255c0f60d837da79591557c3e188\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226631316134353134336230626635366336666461643865616462356365363037227d\",\"regOTT\":\"0563927e70f0774089eced0167d42e39\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
-			"url" : "https://api.dev.miracl.net/rps/user/7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223561636338366161383231373265613830336563633732613033346161323461227d",
-			"data" : "{\n\t\"userId\" : \"testUser2@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\",\n\t\"regOTT\" : \"7e29255c0f60d837da79591557c3e188\"\n}",
-			"context" : "testUser2@example.com@testRegistration"
+			"url" : "https://api.dev.miracl.net/rps/user/7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226631316134353134336230626635366336666461643865616462356365363037227d",
+			"data" : "{\n\t\"userId\" : \"testUser2@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\",\n\t\"regOTT\" : \"0563927e70f0774089eced0167d42e39\"\n}",
+			"context" : "testUser2@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -580,17 +672,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223561636338366161383231373265613830336563633732613033346161323461227d\",\"regOTT\":\"aa5ec16d48ca36275d9adb35b69f96bf\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226631316134353134336230626635366336666461643865616462356365363037227d\",\"regOTT\":\"2cce34b2361800257ac7821cb2749609\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223561636338366161383231373265613830336563633732613033346161323461227d?regOTT=aa5ec16d48ca36275d9adb35b69f96bf",
+			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657232406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226631316134353134336230626635366336666461643865616462356365363037227d?regOTT=2cce34b2361800257ac7821cb2749609",
 			"data" : "",
-			"context" : "testUser2@example.com@testRegistration"
+			"context" : "testUser2@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -604,17 +696,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "489",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-13T15%3A13%3A58Z\u0026hash_mpin_id=5701bd3ee7ee0662c308c9164474383cf796b1572206ae88dff55c9d4586bb0d\u0026hash_user_id=904b6086ff7271a349a26c8215e7b367975b6e662a6484af46086d848dc85aa7\u0026signature=da1ed2be7dee7ae3b667831189e11e78b2cd3b900009fd5ac4942f333a1d19ae\",\"clientSecretShare\":\"040a504b66282de82a7dd631e8bb296b1c4f72989197f24412638b859052f57ee6118baf5eca3d13a64de18bc2c78a8b1a1d2373e932c1f4c28b22f399a5d97708\"}"
+			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-17T11%3A59%3A29Z\u0026hash_mpin_id=5e143305dde9659a3395ed582cf906a8ee0c1902f3486b7343326686898cc0d4\u0026hash_user_id=904b6086ff7271a349a26c8215e7b367975b6e662a6484af46086d848dc85aa7\u0026signature=b2b349172d48fb780c355c3f6189bc2ca745388f2ae2f0e20c6fcb848c61c070\",\"clientSecretShare\":\"0423f66018659e232822e2564b17080cc13347ab1522608e78a03b615ca15ee77f22f6263ac6b52c07ab157fcc10c36df9575cd9a7576ff07fb0d515e35fd51e77\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-13T15%3A13%3A58Z&hash_mpin_id=5701bd3ee7ee0662c308c9164474383cf796b1572206ae88dff55c9d4586bb0d&hash_user_id=904b6086ff7271a349a26c8215e7b367975b6e662a6484af46086d848dc85aa7&signature=da1ed2be7dee7ae3b667831189e11e78b2cd3b900009fd5ac4942f333a1d19ae",
+			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-17T11%3A59%3A29Z&hash_mpin_id=5e143305dde9659a3395ed582cf906a8ee0c1902f3486b7343326686898cc0d4&hash_user_id=904b6086ff7271a349a26c8215e7b367975b6e662a6484af46086d848dc85aa7&signature=b2b349172d48fb780c355c3f6189bc2ca745388f2ae2f0e20c6fcb848c61c070",
 			"data" : "",
-			"context" : "testUser2@example.com@testRegistration"
+			"context" : "testUser2@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -627,18 +719,18 @@
 				"Access-Control-Allow-Origin" : "*",
 				"Content-Length" : "186",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT",
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT",
 				"X-Powered-By" : "ASP.NET"
 			},
-			"data" : "{\"clientSecret\":\"0423c0076d2bdf1b57024d9e946ebd324fcf543e90a47a4e0ef62e3a09fd4f4de31938a22034cdaf922241f54813c3bd44576f30a10657864c8049b59dd676f28a\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
+			"data" : "{\"clientSecret\":\"0414cf10347e6efe8301916673c234ca539f6d7fe5fe23a10d227a6ff2ca4b0c6f22239754571f13d09e95a959c98676882beb4d4fe2c641eb9e04e4c2c26c5d52\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\",\n\t\"pushToken\" : \"test\"\n}",
-			"context" : "testUser1@example.com-9563c346f21883452f1bbeba0c0b547c-test@testRegistration"
+			"data" : "{\n\t\"userId\" : \"testUser1@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\",\n\t\"pushToken\" : \"test\"\n}",
+			"context" : "testUser1@example.com-7688dfac797997ddfd446fb13c6b290d-test@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -652,17 +744,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a226237303235633738386131333631623666333462303030383939383035653036227d\",\"regOTT\":\"d11d7cb2d154e53abb686f2d9ff6d181\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32395a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223163313134323433376636613862663135623032623039376538303439666564227d\",\"regOTT\":\"14f5fe7c95c001cf9753be6c1332fd77\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\"\n}",
-			"context" : "-9563c346f21883452f1bbeba0c0b547c-@testRegistration"
+			"data" : "{\n\t\"userId\" : \"\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\"\n}",
+			"context" : "-7688dfac797997ddfd446fb13c6b290d-@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -676,7 +768,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "15",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
 			"data" : "UserId required"
 		}
@@ -685,8 +777,8 @@
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser3@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\"\n}",
-			"context" : "testUser3@example.com-9563c346f21883452f1bbeba0c0b547c-@testRegistration"
+			"data" : "{\n\t\"userId\" : \"testUser3@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\"\n}",
+			"context" : "testUser3@example.com-7688dfac797997ddfd446fb13c6b290d-@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -700,17 +792,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657233406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223639626462303865323439343730643761623839373463346663346461383262227d\",\"regOTT\":\"ec2b7d1ffcc0b930edd30c88b2368068\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32395a222c22757365724944223a22746573745573657233406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223965333665373336326532613836326530623333303865393436383536396136227d\",\"regOTT\":\"870afec86f8684e77aed3398c2621d74\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "PUT",
 			"url" : "https://api.dev.miracl.net/rps/user",
-			"data" : "{\n\t\"userId\" : \"testUser4@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"9563c346f21883452f1bbeba0c0b547c\"\n}",
-			"context" : "testUser4@example.com-9563c346f21883452f1bbeba0c0b547c-@testRegistration"
+			"data" : "{\n\t\"userId\" : \"testUser4@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"7688dfac797997ddfd446fb13c6b290d\"\n}",
+			"context" : "testUser4@example.com-7688dfac797997ddfd446fb13c6b290d-@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -724,17 +816,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "492",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657234406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223338613764626464373963376466386663313164313639336262636663356132227d\",\"regOTT\":\"8fc305a0c6635d277fbe250635ec6514\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a32395a222c22757365724944223a22746573745573657234406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223437343361666265393635636164373563323335386561326335323637323132227d\",\"regOTT\":\"9a9bd12741f5410499fe7dabea5d02d6\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31335431353a31323a35385a222c22757365724944223a22746573745573657234406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223338613764626464373963376466386663313164313639336262636663356132227d?regOTT=8fc305a0c6635d277fbe250635ec6514",
+			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31375431313a35383a32395a222c22757365724944223a22746573745573657234406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223437343361666265393635636164373563323335386561326335323637323132227d?regOTT=9a9bd12741f5410499fe7dabea5d02d6",
 			"data" : "",
-			"context" : "testUser4@example.com@testRegistration"
+			"context" : "testUser4@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -748,17 +840,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "489",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-13T15%3A13%3A59Z\u0026hash_mpin_id=edc825932113ac226bd6cbaaa0167ae77d04e2f596c5c72633b2d2fbee360302\u0026hash_user_id=ff6272eb7cfdee44b08687ca82ef0272e20dc6ef2660a8af2c7c03145102b54b\u0026signature=520625fce53bea4047568725050818996beee5189b8ca0937da646030cfa937f\",\"clientSecretShare\":\"041c7d38f29b9cd962b8952f587ee393c5552856e9bf9779e15079ad798e3df9200b8f8aead5f84b150734363643aef714b5d6934ded5b4efded146a039b7cb5a0\"}"
+			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-17T11%3A59%3A29Z\u0026hash_mpin_id=a328c9c8321b80a1bf09025b0323a5344502b6212cdede4da1f633111e54e20b\u0026hash_user_id=ff6272eb7cfdee44b08687ca82ef0272e20dc6ef2660a8af2c7c03145102b54b\u0026signature=2ae5fba682439feb69e154ed3ff04c25411004dd729a476d5c5f7d684912f41e\",\"clientSecretShare\":\"041f4ebe784293a81fd78ceb09247933ab95eb0587da603f37f463e870d9fc1e420b4e329b758f753c4c0fda3fc39a6bbd3f68e8f133ecd4751378fb4e015454db\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "GET",
-			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-13T15%3A13%3A59Z&hash_mpin_id=edc825932113ac226bd6cbaaa0167ae77d04e2f596c5c72633b2d2fbee360302&hash_user_id=ff6272eb7cfdee44b08687ca82ef0272e20dc6ef2660a8af2c7c03145102b54b&signature=520625fce53bea4047568725050818996beee5189b8ca0937da646030cfa937f",
+			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-17T11%3A59%3A29Z&hash_mpin_id=a328c9c8321b80a1bf09025b0323a5344502b6212cdede4da1f633111e54e20b&hash_user_id=ff6272eb7cfdee44b08687ca82ef0272e20dc6ef2660a8af2c7c03145102b54b&signature=2ae5fba682439feb69e154ed3ff04c25411004dd729a476d5c5f7d684912f41e",
 			"data" : "",
-			"context" : "testUser4@example.com@testRegistration"
+			"context" : "testUser4@example.com@Registration"
 		},
 		"response" : {
 			"success" : true,
@@ -771,10 +863,10 @@
 				"Access-Control-Allow-Origin" : "*",
 				"Content-Length" : "186",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:58 GMT",
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT",
 				"X-Powered-By" : "ASP.NET"
 			},
-			"data" : "{\"clientSecret\":\"04122306bb7f5c8b72a8a60d2f3863b39a992a2e6920019bfec57b3a547695a4cd106ba0751b8195102490e392ff26e3d6914b50d963d87f7c2ac2d49bfafaaf2a\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
+			"data" : "{\"clientSecret\":\"040ab3889d18090bfea8b24be4d6d2f4082a445872004cfcb94e69bfb097475edc22c27a224b465b8160e3ec8197b49f5ec29727b4c524194873c4c653c9b1cafe\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
 		}
 	},
 	{
@@ -782,7 +874,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode003@testAuthentication"
+			"context" : "GetAccessCode004@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -796,17 +888,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
-			"data" : "{\"webOTT\":\"28ff5d4abe8953a6b43ae6d6d5dc0a875058da7e6c307a8110cfeffaf2dce39a\",\"qrURL\":\"https://dd.dev.mpin.io#5e314823b5ab1e85718d2c755374bdb4\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"97723a4ac5a4731ca7637589645324694fb08d0bfb1f4b885d8b2fbac51001b5\",\"qrURL\":\"https://dd.dev.mpin.io#7196223d6c05ae855c58364ba0080c7d\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/codeStatus",
-			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"5e314823b5ab1e85718d2c755374bdb4\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
-			"context" : "testUser1@example.com-5e314823b5ab1e85718d2c755374bdb4@testAuthentication"
+			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"7196223d6c05ae855c58364ba0080c7d\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
+			"context" : "testUser1@example.com-7196223d6c05ae855c58364ba0080c7d@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -820,7 +912,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "28",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:29 GMT"
 			},
 			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
@@ -829,8 +921,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"04044e72a06d3c0ea0d6df11c6c8a86a219455844a36f942ad44706845a5f2176a1ebf5159f680676b372b4d99f5240f153be84bd41d7d6f7d67bc1b33132aca2f\"\n}",
-			"context" : "testUser1@example.com-1234-5e314823b5ab1e85718d2c755374bdb4@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"04140dff1c33653acbf147a36a44141db32cafb6cca41f9e4271df211e489e4d4e0f9ff6ac4ffcf23604b9325c92ed70a1bdb65358590f77c0b287e9f0011025d8\"\n}",
+			"context" : "testUser1@example.com-1234-7196223d6c05ae855c58364ba0080c7d@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -844,17 +936,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"y\":\"301014aacdb3bb938ef6d4600cc2a0574882cfa27ed387066f5e427af18313ac\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"f8b32741a1bc8ba9a897649b6c6bff0c2b214ccca917aa6d55fc18fbbad6f9c9\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"5e314823b5ab1e85718d2c755374bdb4\",\n\t\"V\" : \"04102e6e8e93c72cc42a31b7e3a9ecd3158986c3d7e5df722f050ef85e0ee877b1128e4784272e4943a94ef30348b7f2e0ea082ac99a3453d088d9cdb601dbcca1\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1234-5e314823b5ab1e85718d2c755374bdb4@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"7196223d6c05ae855c58364ba0080c7d\",\n\t\"V\" : \"041aeee8dd5411c68addae13d29c26d07c7f7d1adc40df92bd759fac04c9c2d7b90566f41366b5fe1c7266a624209d0103b8b0e1eee17de2a5c43ca8a3cb01409f\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1234-7196223d6c05ae855c58364ba0080c7d@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -868,17 +960,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"authOTT\":\"4b019d3f826a2c5d8ab4089e703e6a53\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"fe2964f9aa38b85ad48e5d8d2e685174\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"4b019d3f826a2c5d8ab4089e703e6a53\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1234-5e314823b5ab1e85718d2c755374bdb4@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"fe2964f9aa38b85ad48e5d8d2e685174\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1234-7196223d6c05ae855c58364ba0080c7d@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -892,7 +984,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "39",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
 			"data" : "{\"status\":200,\"message\":\"OK\",\"code\":\"\"}"
 		}
@@ -902,7 +994,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode004@testAuthentication"
+			"context" : "GetAccessCode005@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -916,17 +1008,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"webOTT\":\"eae45971759a8a3435ffbe2b93b63df92ff0d612d48e16c18c4da1266f747d9b\",\"qrURL\":\"https://dd.dev.mpin.io#7c5d58fe4762314a2664ae7f958bd595\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"f3b296ef27f7bc4a059b8dab9e32d255108f2190078f5f57a035634838f22d80\",\"qrURL\":\"https://dd.dev.mpin.io#705891ae657049bc68e12a46f2b588e1\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/codeStatus",
-			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"7c5d58fe4762314a2664ae7f958bd595\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
-			"context" : "testUser1@example.com-7c5d58fe4762314a2664ae7f958bd595@testAuthentication"
+			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"705891ae657049bc68e12a46f2b588e1\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
+			"context" : "testUser1@example.com-705891ae657049bc68e12a46f2b588e1@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -940,7 +1032,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "28",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
 			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
@@ -949,8 +1041,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"04044e72a06d3c0ea0d6df11c6c8a86a219455844a36f942ad44706845a5f2176a1ebf5159f680676b372b4d99f5240f153be84bd41d7d6f7d67bc1b33132aca2f\"\n}",
-			"context" : "testUser1@example.com-1234-7c5d58fe4762314a2664ae7f958bd595-AUTHZ@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"04162caa5d2eef2626a0da1109bdac48fe1d65e037c93a3aca4c23a8c6a9514c012076d0516fb98222ce56c29ca95b9f8632a58cb53c242e4892730af57f2a92c2\"\n}",
+			"context" : "testUser1@example.com-1234-705891ae657049bc68e12a46f2b588e1-AUTHZ@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -964,17 +1056,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:12:59 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"y\":\"d2ace67588b7a636f895c3eccfc81c76660e36c8c06e39a60d2799365cc26cee\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"a811a136efa8a2d64cf32f99557ecd252513ef15ca1ddd6bcaf9b74a585b1aa3\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"7c5d58fe4762314a2664ae7f958bd595\",\n\t\"V\" : \"041e7478316b80e11ea6034fdb43191a700e859915dc8a5fdf9abcad2132fcdb480ba6d3c8a6f2488fcdb6b0bff28d6af4ba163eec277aa57ff86ab7d38a40887d\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1234-7c5d58fe4762314a2664ae7f958bd595-AUTHZ@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"705891ae657049bc68e12a46f2b588e1\",\n\t\"V\" : \"040ce483f266bca156c7c33b51befb0befbb5f11cd0f11ba1a24ec049164f7d87a1a7555df9d3a45f4355ec5fa69d8f99e94124a38f9d884d8b9fb62574efa766e\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1234-705891ae657049bc68e12a46f2b588e1-AUTHZ@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -988,17 +1080,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"authOTT\":\"269bd9878bef40e84eda7d41dace882e\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"62860a2339601c6caec027782cd1a63c\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"269bd9878bef40e84eda7d41dace882e\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1234-7c5d58fe4762314a2664ae7f958bd595-AUTHZ@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"62860a2339601c6caec027782cd1a63c\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1234-705891ae657049bc68e12a46f2b588e1-AUTHZ@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1012,7 +1104,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "39",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
 			"data" : "{\"status\":200,\"message\":\"OK\",\"code\":\"\"}"
 		}
@@ -1022,7 +1114,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode005@testAuthentication"
+			"context" : "GetAccessCode006@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1036,17 +1128,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"webOTT\":\"14809b99d28f437083c7a5cc54fde8f7d736d70cc520d03c27112a88a97848a6\",\"qrURL\":\"https://dd.dev.mpin.io#c29c77f61bab3d6694c71684001e9afe\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"021264dde2e59f2afa66b4d9dcaae547d1f829647ba921c2fb248d432db60c33\",\"qrURL\":\"https://dd.dev.mpin.io#263b0fcea15d1f2c8cea4b2d1f9e893a\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/codeStatus",
-			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"c29c77f61bab3d6694c71684001e9afe\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
-			"context" : "testUser1@example.com-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"263b0fcea15d1f2c8cea4b2d1f9e893a\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
+			"context" : "testUser1@example.com-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1060,7 +1152,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "28",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
 			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
@@ -1069,8 +1161,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"040b72910b2a017362234feb10020ddd37da6511c4de8cbac1ebc7e1449b7e7b960106f02ee7fff3ef08d9c15fe8fac5e21564af9b2e19d1d67593cd0d470c5082\"\n}",
-			"context" : "testUser1@example.com-1111-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"04162caa5d2eef2626a0da1109bdac48fe1d65e037c93a3aca4c23a8c6a9514c012076d0516fb98222ce56c29ca95b9f8632a58cb53c242e4892730af57f2a92c2\"\n}",
+			"context" : "testUser1@example.com-1111-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1084,17 +1176,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:30 GMT"
 			},
-			"data" : "{\"y\":\"cab1bb47f217cf513e8a9833eeefb2938a870f44457038da706fbdcfd6cde9bd\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"baed829597a032cf7befde75b597c6bbcb525345cc69d9c7486b0ca9a0317f13\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"c29c77f61bab3d6694c71684001e9afe\",\n\t\"V\" : \"0413fc45d1a93a1f4d736ae437669ebfd855d186751aac9fec65fc32ba69b7938c02a2943b2990b0a85bd1b8483f969d3bf92f1a153c1384f544ce9e039c567264\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1111-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"263b0fcea15d1f2c8cea4b2d1f9e893a\",\n\t\"V\" : \"0409d46d193cf3d979b9f98f5315b6990d71e4403f8dfb8b52f908ae31f690630b11ad26be165ee1d01fcb7064fac33b8c73d57bb7609e8505b19f127cd6996ed2\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1111-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1108,17 +1200,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"authOTT\":\"d3e6732a02e2c35615c335d1363f0be1\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"00970275b76730dc9ea6bb42ef246b3a\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"d3e6732a02e2c35615c335d1363f0be1\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1111-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"00970275b76730dc9ea6bb42ef246b3a\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1111-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1132,7 +1224,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "74",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
 			"data" : "{\"status\":401,\"message\":\"Authentication Failed. Invalid Token.\",\"code\":\"\"}"
 		}
@@ -1141,8 +1233,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"040b72910b2a017362234feb10020ddd37da6511c4de8cbac1ebc7e1449b7e7b960106f02ee7fff3ef08d9c15fe8fac5e21564af9b2e19d1d67593cd0d470c5082\"\n}",
-			"context" : "testUser1@example.com-1234-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0413c750c859043c8edf87fcef81dff3ab98d6a43ab7c8b305a7736ce6c43cbcf30c415c2702c3ffc02e4c2a7e2a4a8ef79f3c694fac133aeaa1751b511200f0ac\"\n}",
+			"context" : "testUser1@example.com-1234-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1156,17 +1248,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"y\":\"5ec35bdf4399b8cb1f377025b6ec37a7f9f8768a0f48e1d70a1eba282aefa583\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"16e01bf3db9b3a4a629964ae94dd9bdd2f869afa28fc06ac4c199c868b7cb321\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"c29c77f61bab3d6694c71684001e9afe\",\n\t\"V\" : \"04134853470f61ae1bec72a90457f845fcf4861b659e4628244cbe9e8d4f655bfc0cbc14f0a3744a139d115ee98bdaba7faebaac6135fad8d33ffa4b110e2daaf0\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1234-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"263b0fcea15d1f2c8cea4b2d1f9e893a\",\n\t\"V\" : \"041955fed540caa9970a442eeee1bf51d37085bdb2d403a7589cf0a94647e8a1fd0e41f8df235a3d9ae8334258b74ec76c14d33367bb88e1d01b71c32a02fac74f\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1234-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1180,17 +1272,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"authOTT\":\"b40b2f635f5496e57030df8ec7fa0739\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"42b65ddbefdb8c0f0f19cf0615db3ebd\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"b40b2f635f5496e57030df8ec7fa0739\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1234-c29c77f61bab3d6694c71684001e9afe@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"42b65ddbefdb8c0f0f19cf0615db3ebd\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1234-263b0fcea15d1f2c8cea4b2d1f9e893a@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1204,7 +1296,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "39",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
 			"data" : "{\"status\":200,\"message\":\"OK\",\"code\":\"\"}"
 		}
@@ -1214,7 +1306,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/codeStatus",
 			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"1234\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
-			"context" : "testUser1@example.com-1234@testAuthentication"
+			"context" : "testUser1@example.com-1234@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1228,7 +1320,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "28",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:00 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
 			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
@@ -1237,8 +1329,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0418d8db7c6bdc2455206dbfa2d8701f5dd48ff68fbbed5949a32ccd481738f6b80ce8f4ce96ea1afdec3c6d6d3f69413a3b95c8c1d44128e675d856dcdfde0f57\"\n}",
-			"context" : "testUser1@example.com-1234-1234@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0413c750c859043c8edf87fcef81dff3ab98d6a43ab7c8b305a7736ce6c43cbcf30c415c2702c3ffc02e4c2a7e2a4a8ef79f3c694fac133aeaa1751b511200f0ac\"\n}",
+			"context" : "testUser1@example.com-1234-1234@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1252,17 +1344,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"y\":\"fb6057913584bda6bb4c498c2dd54f20de3c20bb8e1c6946ba1f596bc4e41aaa\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"d352a1cc7c96be4e9433f6270845d88658084d5f70933e24025f196a214ba208\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"1234\",\n\t\"V\" : \"0409b08e2072911f4a9ef2a98dd27be730f91d603e9ad1871ebc881435e8e0c4a308a0b4d5a0240cb1e3f0696273d2bf48dc56ee251b7f02e1c7d2458e5cb7681d\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1234-1234@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"1234\",\n\t\"V\" : \"0407c2343f002bbefd1f38dc609b97696fb9884491090ad5f7ea0bebe1f83e497122d62748c2ccff5538f3af0e55feb51b967aae390bffee553525bc21bc6ef84f\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1234-1234@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1276,17 +1368,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"authOTT\":\"4f000f964310c9ea6ec180e7558bbd09\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"5130fe0c8532661b4689ef4d9d14bcf0\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"4f000f964310c9ea6ec180e7558bbd09\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1234-1234@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"5130fe0c8532661b4689ef4d9d14bcf0\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1234-1234@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1300,7 +1392,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "26",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
 			"data" : "Invalid or expired authOTT"
 		}
@@ -1310,7 +1402,7 @@
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
 			"data" : "{}",
-			"context" : "GetAccessCode006@testAuthentication"
+			"context" : "GetAccessCode007@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1324,17 +1416,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "195",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
-			"data" : "{\"webOTT\":\"fe92e56780a4938ab63af6b50641580df93890706ff83212a79f953f78ede683\",\"qrURL\":\"https://dd.dev.mpin.io#42ec2ab328cb46f91a8df6ca6511c458\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+			"data" : "{\"webOTT\":\"d78568d76769d8807e53894a25cd85b17fd4ca979f2533062b34c7668cd8d614\",\"qrURL\":\"https://dd.dev.mpin.io#4961854263f55931db432119edca9de4\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/codeStatus",
-			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"42ec2ab328cb46f91a8df6ca6511c458\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
-			"context" : "testUser1@example.com-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"4961854263f55931db432119edca9de4\",\n\t\"userId\" : \"testUser1@example.com\"\n}",
+			"context" : "testUser1@example.com-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1348,7 +1440,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "28",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:31 GMT"
 			},
 			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
 		}
@@ -1357,8 +1449,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0418d8db7c6bdc2455206dbfa2d8701f5dd48ff68fbbed5949a32ccd481738f6b80ce8f4ce96ea1afdec3c6d6d3f69413a3b95c8c1d44128e675d856dcdfde0f57\"\n}",
-			"context" : "testUser1@example.com-1111-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"041142cc01b94c63f5f5645a80a6332e85b50a2d04a2a5c62996e6c8f38ee2e0ce113a6b1a2a772ad1d16ce0b8bdee3fe053f3ef6eb22a4042c2b5e79a86027afb\"\n}",
+			"context" : "testUser1@example.com-1111-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1372,17 +1464,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"y\":\"7f7f7ec64626b77c7172884c039a7546b837fa7c3f0c1bd5b6b90a5e84ba1b75\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"a9be6f4d836da9863264bdd3dd05adb3b2d1b0dd00fc41779c386d7cf9b7babc\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"42ec2ab328cb46f91a8df6ca6511c458\",\n\t\"V\" : \"0403568017f1d0e960a34a1d47f110cb405753894d2012a397f7c9ae76b98be100204d5ec205c3e1cef2017a13e2fee65e01359a383356c4996736f34988b33cfc\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-1111-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"4961854263f55931db432119edca9de4\",\n\t\"V\" : \"040f69c579a36740fcc7ce5d98dcde632ca8a39cd08de8660b1ac2a9b716603e6e0100ef269fc989bd3dbad50561545cb984454964e32fa16bac242d3e0562d615\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-1111-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1396,17 +1488,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"authOTT\":\"332cdae062a9afdc4787e5405de474aa\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"695c2694eba2b5040c43dfcd62d5725d\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"332cdae062a9afdc4787e5405de474aa\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-1111-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"695c2694eba2b5040c43dfcd62d5725d\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-1111-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1420,7 +1512,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "74",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
 			"data" : "{\"status\":401,\"message\":\"Authentication Failed. Invalid Token.\",\"code\":\"\"}"
 		}
@@ -1429,8 +1521,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0418d8db7c6bdc2455206dbfa2d8701f5dd48ff68fbbed5949a32ccd481738f6b80ce8f4ce96ea1afdec3c6d6d3f69413a3b95c8c1d44128e675d856dcdfde0f57\"\n}",
-			"context" : "testUser1@example.com-2222-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"041142cc01b94c63f5f5645a80a6332e85b50a2d04a2a5c62996e6c8f38ee2e0ce113a6b1a2a772ad1d16ce0b8bdee3fe053f3ef6eb22a4042c2b5e79a86027afb\"\n}",
+			"context" : "testUser1@example.com-2222-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1444,17 +1536,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"y\":\"2dbea063b78943bfa470a499c433600ffa82e8c4c5b254ca4839b374bacbfacd\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"ee13734f0174584c3fd7fb88b75684f2d0e6aad146974fba548f7401f69234b0\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"42ec2ab328cb46f91a8df6ca6511c458\",\n\t\"V\" : \"04198cfb1ecde773397dcb2eca4b76215578893c3342665521b64111a1c717f0cb2260cd67873accc60d1fc2037d4df766ea5a2343abe1b0f25c4c90d7d65a94c2\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-2222-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"4961854263f55931db432119edca9de4\",\n\t\"V\" : \"041aac1e0a4559f40319ebbd3ea4a3d378709b5876a9356321f2c570354dfb70890ec52b885119d6aee204a248727c77e57467f06e33f1ca8063ab5f8302d6c3c0\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-2222-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1468,17 +1560,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"authOTT\":\"4e51ebf71dc59279b1ff1ccd4c733ebb\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"2814ba462559fb9567921ee84423bbbc\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"4e51ebf71dc59279b1ff1ccd4c733ebb\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-2222-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"2814ba462559fb9567921ee84423bbbc\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-2222-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1492,7 +1584,7 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "74",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:01 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
 			"data" : "{\"status\":401,\"message\":\"Authentication Failed. Invalid Token.\",\"code\":\"\"}"
 		}
@@ -1501,8 +1593,8 @@
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass1",
-			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0414ed7059380329ac165ba33fc554eaa726bae17ffd0dd30a92cf9e90decadd910c5ecf56539f7356841b3002775769873470a7c84c95c8a764f50dbba898a8e2\"\n}",
-			"context" : "testUser1@example.com-3333-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"041142cc01b94c63f5f5645a80a6332e85b50a2d04a2a5c62996e6c8f38ee2e0ce113a6b1a2a772ad1d16ce0b8bdee3fe053f3ef6eb22a4042c2b5e79a86027afb\"\n}",
+			"context" : "testUser1@example.com-3333-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1516,17 +1608,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "96",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:02 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"y\":\"69116feb4f2156c6e37746971e3407edb41c2404f77c44236034ee5b56b08a1e\",\"message\":\"OK\",\"pass\":1}"
+			"data" : "{\"y\":\"7b32c2e1fbd359f15eec98462bc4bf2a4d82c9398f136c5891fc81f7ec2e33cd\",\"message\":\"OK\",\"pass\":1}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/pass2",
-			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"42ec2ab328cb46f91a8df6ca6511c458\",\n\t\"V\" : \"0407182e5d475b0a44a1ed44d917394544aa16fc8e00e71f75adbd30690e6a718422c480af67dd55e75ccc69ef69138ec35ed5e87731b7860da80386c86ff7849c\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31335431353a31323a35375a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223532373433306466346563333466326665616534383239643330393636616261227d\"\n}",
-			"context" : "testUser1@example.com-3333-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"4961854263f55931db432119edca9de4\",\n\t\"V\" : \"04113e1fe2a69075ac8cb61b826e43b7bff638b007f9a3351ae9b2f3a1faf73787067098ce0368ae26d3f67678cbc8ef5a35c6bb18a0ea1be5208b0cd320d57def\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a32385a222c22757365724944223a22746573745573657231406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223463333533386664663837303736333938393637353736336637626439346432227d\"\n}",
+			"context" : "testUser1@example.com-3333-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1540,17 +1632,17 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "55",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:02 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
-			"data" : "{\"authOTT\":\"d9244df6f88d05cd420fddb35b00873f\",\"pass\":2}"
+			"data" : "{\"authOTT\":\"ed929c26501bf3234193f80ae309bfab\",\"pass\":2}"
 		}
 	},
 	{
 		"request" : {
 			"method" : "POST",
 			"url" : "https://api.dev.miracl.net/rps/authenticate",
-			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"d9244df6f88d05cd420fddb35b00873f\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
-			"context" : "testUser1@example.com-3333-42ec2ab328cb46f91a8df6ca6511c458@testAuthentication"
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"ed929c26501bf3234193f80ae309bfab\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser1@example.com-3333-4961854263f55931db432119edca9de4@Authentication"
 		},
 		"response" : {
 			"success" : true,
@@ -1564,9 +1656,293 @@
 				"Connection" : "keep-alive",
 				"Content-Length" : "74",
 				"Content-Type" : "text/plain; charset=utf-8",
-				"Date" : "Fri, 13 Jan 2017 15:13:02 GMT"
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
 			},
 			"data" : "{\"status\":410,\"message\":\"Authentication Failed. Invalid Token.\",\"code\":\"\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "GET",
+			"url" : "https://dd.dev.mpin.io/service",
+			"data" : "",
+			"context" : "@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Connection" : "keep-alive",
+				"Content-Length" : "157",
+				"Content-Type" : "application/json",
+				"Date" : "Tue, 17 Jan 2017 11:58:32 GMT"
+			},
+			"data" : "{\"name\":\"Secuclick [dev]\",\"url\":\"https://api.dev.miracl.net\",\"rps_prefix\":\"rps\",\"logo_url\":\"https://dd.cdn.dev.miracl.net/service-logo.png\",\"type\":\"online\"}\n"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
+			"data" : "{}",
+			"context" : "GetAccessCode009@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "195",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"webOTT\":\"96e73a94a1a5ccdbdeb748885ca78c9fb1a78be1902eb7026a8c029e61230711\",\"qrURL\":\"https://dd.dev.mpin.io#6a55dfd15b97d1eb428d27650014f7d2\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/codeStatus",
+			"data" : "{\n\t\"status\" : \"wid\",\n\t\"wid\" : \"6a55dfd15b97d1eb428d27650014f7d2\"\n}",
+			"context" : "6a55dfd15b97d1eb428d27650014f7d2-GetSessionDetails@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "150",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"prerollId\":\"\",\"appName\":\"TCB Demo\",\"appLogoURL\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"customerName\":\"System\",\"customerLogoURL\":\"\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/codeStatus",
+			"data" : "{\n\t\"status\" : \"abort\",\n\t\"wid\" : \"6a55dfd15b97d1eb428d27650014f7d2\"\n}",
+			"context" : "6a55dfd15b97d1eb428d27650014f7d2-AbortSession@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "28",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en",
+			"data" : "{}",
+			"context" : "GetAccessCode010@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "195",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"webOTT\":\"def32247f1a06f12961d65c51b29e59b02a588c91fa56dfd5b5178075a07a214\",\"qrURL\":\"https://dd.dev.mpin.io#91ee22576306978c535cbe2119733e71\",\"accessURL\":\"https://api.dev.miracl.net/rps/access\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "PUT",
+			"url" : "https://api.dev.miracl.net/rps/user",
+			"data" : "{\n\t\"userId\" : \"testUser5@example.com\",\n\t\"mobile\" : 1,\n\t\"wid\" : \"91ee22576306978c535cbe2119733e71\"\n}",
+			"context" : "testUser5@example.com-91ee22576306978c535cbe2119733e71-@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "492",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"mpinId\":\"7b22697373756564223a22323031372d30312d31375431313a35383a33335a222c22757365724944223a22746573745573657235406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223036353562373931636437393164306230363439313766626263383565626635227d\",\"regOTT\":\"937ee514813f1ccd4f77e3e4ce55fdf1\",\"expireTime\":\"\",\"nowTime\":\"\",\"customerId\":\"5c48fc3a-8e0a-452f-9b0b-6bd8efd50577\",\"appId\":\"\",\"active\":false}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "GET",
+			"url" : "https://api.dev.miracl.net/rps/signature/7b22697373756564223a22323031372d30312d31375431313a35383a33335a222c22757365724944223a22746573745573657235406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223036353562373931636437393164306230363439313766626263383565626635227d?regOTT=937ee514813f1ccd4f77e3e4ce55fdf1",
+			"data" : "",
+			"context" : "testUser5@example.com@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "489",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"params\":\"app_id=f27f783c5b4ca2ae7d076acbb36c3d02\u0026expires=2017-01-17T11%3A59%3A33Z\u0026hash_mpin_id=ea425061ab3d6aa16ac931e6d1c522c63eacf6e3b791c9bc65cd05b2b1d1a159\u0026hash_user_id=1cc916e954cfa77a8cefafe1cdbbb1ed31d2bcae00df5209b1e034c45df69d38\u0026signature=00652670c3ad24a2f6bcd65a98d75e1744217e4e4be38f301606b1f41b61a792\",\"clientSecretShare\":\"040543a5ababee47ca496806f815490aea04544253d25303e6be209882f737248410ded6727c2deadc5c1fab3846fa961937b257ee4295971b4a2b14a706ad5d45\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "GET",
+			"url" : "https://miracl-proxy.azure-dev.miracl.net/dta/f27f783c5b4ca2ae7d076acbb36c3d02/clientSecret?app_id=f27f783c5b4ca2ae7d076acbb36c3d02&expires=2017-01-17T11%3A59%3A33Z&hash_mpin_id=ea425061ab3d6aa16ac931e6d1c522c63eacf6e3b791c9bc65cd05b2b1d1a159&hash_user_id=1cc916e954cfa77a8cefafe1cdbbb1ed31d2bcae00df5209b1e034c45df69d38&signature=00652670c3ad24a2f6bcd65a98d75e1744217e4e4be38f301606b1f41b61a792",
+			"data" : "",
+			"context" : "testUser5@example.com@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Content-Length" : "186",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:34 GMT",
+				"X-Powered-By" : "ASP.NET"
+			},
+			"data" : "{\"clientSecret\":\"0417ba969a05b87f783d898205fb07b79e6bf998fa3a87c0dff32bd01ba7cd1f1020939ad13da6a6684e77aa7ddfad5469a37dc471213160d500b24457d311a049\",\"message\":\"OK\",\"version\":\"4.4.0-152\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/codeStatus",
+			"data" : "{\n\t\"status\" : \"user\",\n\t\"wid\" : \"91ee22576306978c535cbe2119733e71\",\n\t\"userId\" : \"testUser5@example.com\"\n}",
+			"context" : "testUser5@example.com-91ee22576306978c535cbe2119733e71@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "28",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"status\":\"OK\",\"message\":\"\"}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/pass1",
+			"data" : "{\n\t\"pass\" : 1,\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a33335a222c22757365724944223a22746573745573657235406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223036353562373931636437393164306230363439313766626263383565626635227d\",\n\t\"UT\" : \"\",\n\t\"U\" : \"0422156b3b49448e6684c4948f42d262b061cb3c64b004b8ca7c3434ac473119b7020d1f9311d3d52d33b2eb5068c0ffbbdfc7875d392d54ef7140dac825d268b8\"\n}",
+			"context" : "testUser5@example.com-1234-91ee22576306978c535cbe2119733e71@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "96",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"y\":\"3b50e1e3e6f2b6003337973c78180acd5570808bd433daf7b9a92e85f07862f2\",\"message\":\"OK\",\"pass\":1}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/pass2",
+			"data" : "{\n\t\"pass\" : 2,\n\t\"OTP\" : false,\n\t\"WID\" : \"91ee22576306978c535cbe2119733e71\",\n\t\"V\" : \"041190d162992410cc026db1a20eb6f58fb185f3953d0a027a9f07cd0a9179f871100f4c3bc3f9ea324514b51994b30cf4a1c640b4a8425de9df3ac0b4a8361395\",\n\t\"mpin_id\" : \"7b22697373756564223a22323031372d30312d31375431313a35383a33335a222c22757365724944223a22746573745573657235406578616d706c652e636f6d222c22634944223a2235633438666333612d386530612d343532662d396230622d366264386566643530353737222c226d6f62696c65223a312c2273616c74223a223036353562373931636437393164306230363439313766626263383565626635227d\"\n}",
+			"context" : "testUser5@example.com-1234-91ee22576306978c535cbe2119733e71@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "55",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:33 GMT"
+			},
+			"data" : "{\"authOTT\":\"9eefc8f18fd18fe91cfa2cad50def0b8\",\"pass\":2}"
+		}
+	},
+	{
+		"request" : {
+			"method" : "POST",
+			"url" : "https://api.dev.miracl.net/rps/authenticate",
+			"data" : "{\n\t\"mpinResponse\" : {\n\t\t\"authOTT\" : \"9eefc8f18fd18fe91cfa2cad50def0b8\",\n\t\t\"pass\" : 2\n\t},\n\t\"authzRequest\" : false\n}",
+			"context" : "testUser5@example.com-1234-91ee22576306978c535cbe2119733e71@TrustedDomains"
+		},
+		"response" : {
+			"success" : true,
+			"error" : "",
+			"httpStatus" : 200,
+			"headers" : {
+				"Access-Control-Allow-Credentials" : "true",
+				"Access-Control-Allow-Headers" : "Content-Type, Content-Length, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control, WWW-Authenticate",
+				"Access-Control-Allow-Methods" : "GET,PUT,POST,DELETE,OPTIONS",
+				"Access-Control-Allow-Origin" : "*",
+				"Connection" : "keep-alive",
+				"Content-Length" : "39",
+				"Content-Type" : "text/plain; charset=utf-8",
+				"Date" : "Tue, 17 Jan 2017 11:58:34 GMT"
+			},
+			"data" : "{\"status\":200,\"message\":\"OK\",\"code\":\"\"}"
 		}
 	}
 ]

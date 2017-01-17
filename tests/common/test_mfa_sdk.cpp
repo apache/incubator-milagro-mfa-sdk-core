@@ -41,7 +41,7 @@ Status TestMfaSDK::GetAccessCode(const String & authzUrl, OUT String & accessCod
 
 Status TestMfaSDK::GetSessionDetails(const String & accessCode, OUT SessionDetails & sessionDetails)
 {
-    m_testContext.SetRequestContextData(accessCode);
+    m_testContext.SetRequestContextData(accessCode + "-GetSessionDetails");
     Status s = MfaSDK::GetSessionDetails(accessCode, sessionDetails);
     m_testContext.SetRequestContextData("");
     return s;
@@ -49,7 +49,7 @@ Status TestMfaSDK::GetSessionDetails(const String & accessCode, OUT SessionDetai
 
 Status TestMfaSDK::AbortSession(const String & accessCode)
 {
-    m_testContext.SetRequestContextData(accessCode);
+    m_testContext.SetRequestContextData(accessCode + "-AbortSession");
     Status s = MfaSDK::AbortSession(accessCode);
     m_testContext.SetRequestContextData("");
     return s;
