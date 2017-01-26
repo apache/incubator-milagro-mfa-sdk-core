@@ -1,6 +1,6 @@
 # Core API for Apache Milagro - `MPinSDK`
 
-The `MPinSDK` is the main SDK Core class.
+The `MPinSDK` is the main SDK Core class for Apache Milagro.
 In order to use the Core, one should create an instance of the `MPinSDK` class and initialize it.
 Most of the methods return a `MPinSDK::Status` object, which is defined as follows:
 
@@ -26,10 +26,13 @@ public:
         HTTP_SERVER_ERROR,       // Remote error, when the error does not apply to any of the above - the remote server returned internal server error status (5xx)
         HTTP_REQUEST_ERROR,      // Remote error, where the error does not apply to any of the above - invalid data sent to server, the remote server returned 4xx error status
         BAD_USER_AGENT,          // Remote error - user agent not supported
-        CLIENT_SECRET_EXPIRED    // Remote error - re-registration required because server master secret expired
+        CLIENT_SECRET_EXPIRED,   // Remote error - re-registration required because server master secret expired
+        BAD_CLIENT_VERSION,      // Remote error - wrong client app version
+        UNTRUSTED_DOMAIN_ERROR,  // Local error - a request to a domain, that is not in the trusted list was attempted		
     };
 
     Code GetStatusCode() const;
+    String GetStatusCodeString() const;
     const String& GetErrorMessage() const;
     bool operator==(Code statusCode) const;
     bool operator!=(Code statusCode) const;
@@ -40,7 +43,6 @@ The methods that return `Status`, will always return `Status::OK` if successful.
 Many methods expect the provided `User` object to be in a certain state, and if it is not, the method will return `Status::FLOW_ERROR`
 
 ##### `Status Init(const StringMap& config, IN IContext* ctx);`
-##### `Status Init(const StringMap& config, IN IContext* ctx, const StringMap& customHeaders);`
 This method initializes the `MPinSDK` instance.
 It receives a map of configuration parameters and a pointer to a [Context Interface](#Context-Interface).
 The configuration map is a key-value map into which different configuration options can be inserted.
@@ -50,8 +52,6 @@ Currently, the Core recognizes the following parameters:
 
 * `backend` - the URL of the Milagro MFA back-end service (Mandatory)
 * `rpsPrefix` - the prefix that should be added for requests to the RPS (Optional). The default value is `"rps"`.
-
-The `customHeaders` parameter is optional and allows the caller to pass additional map of custom headers, which will be added to any HTTP request that the SDK executes.
 
 Example:
 ```c++
@@ -66,10 +66,22 @@ MPinSDK::Status s = sdk->Init( config, Context::Instance() );
 This method clears the `MPinSDK` instance and releases any allocated data by it.
 After calling this method, one should use `Init()` again in order to re-use the `MPinSDK` instance.
 
-##### `void SetClientId(const String& clientId);`
-This method will set a specific _Client ID_ which the SDK should use when sending requests to the backend.
-As an example, the MIRACL MFA Platform issues _Client IDs_ for registered applications, which use the platform for authenticating users.
-When the SDK is used to authenticate users specifically for this registered application, the _Client ID_ should be set by the app using this method. 
+##### `void AddCustomHeaders(const StringMap& customHeaders);`
+This method allows the SDK user to set a map of custom headers, which will be added to any HTTP request that the SDK executes.
+The `customHeaders` parameter is a map of header names mapped to their respective value.
+Subsequent calls of this method will add headers on top of the already added ones.
+
+##### `void ClearCustomHeaders();`
+This method will clear all the currently set custom headers.
+
+##### `void AddTrustedDomain(const String& domain);`
+For better security, the SDK user might want to limit the SDK to make outgoing requests only to URLs that belong to one or more trusted domains.
+This method can be used to add such trusted domains, one by one.
+When trusted doamins are added, the SDK will verify that any outgoing request is done over the `https` protocol and the host belongs to one of the trusted domains.
+If for some reason a request is about to be done to a non-trusted domain, the SDK will return `Status::UNTRUSTED_DOMAIN_ERROR`.
+
+##### `void ClearTrustedDomains();`
+This method will clear all the currently set trusted domains.
 
 ##### `Status TestBackend(const String& server, const String& rpsPrefix = "rps") const;`
 This method will test whether `server` is a valid back-end URL by trying to retrieve Client Settings from it.
@@ -115,6 +127,10 @@ private:
 The newly created user is in the `INVALID` state.
 The `User` class is defined in the namespace of the `MPinSDK` class.
 
+##### `bool IsUserExisting(const String& id);`
+This method will retutn `true` if there is a user with the given identity, associated with the currently set backend.
+If no such user is found, the method will return `false`.
+
 ##### `void DeleteUser(INOUT UserPtr user);`
 This method deletes a user from the users list that the SDK maintains.
 All the user data including its _M-Pin ID_, its state and _M-Pin Token_ will be deleted.
@@ -139,49 +155,6 @@ The method will return `Status::OK` on success and `Status::FLOW_ERROR` if the S
 ##### `Status ListBackends(OUT std::vector<String>& backends) const;`
 This method will populate the provided vector with all the backends known to the SDK.
 The method will return `Status::OK` on success and `Status::FLOW_ERROR` if the SDK was not initialized.
-
-##### `Status GetServiceDetails(const String& url, OUT ServiceDetails& serviceDetails);`
-This method is provided for applications working with the _MIRACL MFA Platform_.
-After scanning a QR Code from the platform login page, the app should extract the URL from it and call this method to retreive the service details.
-The service details include the _backend URL_ which needs to be set back to the SDK in order connect it to the platform.
-This method could be called even before the SDK has been initialized, or alternatively the SDK could be initialized without setting a backend, and `SetBackend()` could be used after the backend URL has been retreived through this method.
-The returned `ServiceDetails` look as follows:
-```c++
-class ServiceDetails
-{
-public:
-    String name;
-    String backendUrl;
-    String rpsPrefix;
-    String logoUrl;
-};
-```
-* `name` is the service readable name
-* `backendUrl` is the URL of the service backend. This URL has to be set either via the SDK `Init()` method or using  `SetBackend()`
-* `rpsPrefix` is RPS prefix setting which is also provided together with `backendUrl` while setting a backend
-* `logoUrl` is the URL of the service logo. The logo is a UI element that could be used by the app.
-
-##### `Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);`
-This method could be optionally used to retrieve details regarding a browser session when the SDK is used to authenticate users to an online service, such as the _MIRACL MFA Platform_.
-In this case an `accessCode` is transferred to the mobile device out-of-band e.g. via scanning a graphical code.
-The code is then provided to this method to get the session details.
-This method will also notify the backend that the `accessCode` was retrieved from the browser session.
-The returned `SessionDetails` look as follows:
-```c++
-class SessionDetails
-{
-public:
-    void Clear();
-
-    String prerollId;
-    String appName;
-    String appIconUrl;
-};
-```
-During the online browser session an optional user identity might be provided meaning that this is the user that wants to register/authenticate to the online service.
-* The `prerollId` will carry that user ID, or it will be empty if no such ID was provided.
-* `appName` is the name of the web application to which the service will authenticate the user.
-* `appIconUrl` is the URL from which the icon for web application could be downloaded.
 
 ##### `Status StartRegistration(INOUT UserPtr user, const String& activateCode = "", const String& userData = "");`
 This method initializes the registration for a User that has already been created.
@@ -208,7 +181,7 @@ The application could also pass additional `userData` to help the RPA to verify 
 The RPA might decide to verify the identity without starting a verification process.
 In this case, the `Status` of the call will still be `Status::OK`, but the User State will be set to `ACTIVATED`.
 
-##### `Status ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier = "");`
+##### `Status ConfirmRegistration(INOUT UserPtr user, const String& pushToken = "");`
 This method allows the application to check whether the user identity verification process has been finalized or not.
 The provided `user` object is expected to be either in the `STARTED_REGISTRATION` state or in the `ACTIVATED` state.
 The latter is possible if the RPA activated the user immediately with the call to `StartRegistration()` and no verification process was started.
@@ -217,23 +190,19 @@ This attempt will succeed if the user has already been verified/activated but wi
 The method will return `Status::OK` if the Client Key has been successfully retrieved and `Status::IDENTITY_NOT_VERIFIED` if the identity has not been verified yet.
 If the method has succeeded, the application is expected to get the desired PIN/secret from the end-user and then call `FinishRegistration()`, and provide the PIN.
 
-**Note** Using the optional parameter `pushMessageIdentifier`, the application can provide a platform specific identifier for sending _Push Messages_ to the device.
-Such push messages might be utilized as an alternative to the _Access Number/Code_, as part of the authentication flow.
+**Note** Using the optional parameter `pushToken`, the application can provide a platform specific token for sending _Push Messages_ to the device.
+Such push messages might be utilized as an alternative to the _Access Number_, as part of the authentication flow.
 
 ##### `Status FinishRegistration(INOUT UserPtr user, const String& pin)`
 This method finalizes the user registration process.
 It extracts the _M-Pin Token_ from the _Client Key_ for the provided `pin` (secret), and then stores the token in the secure storage.
 On successful completion, the User state will be set to `REGISTERED` and the method will return `Status::OK`
 
-##### `Status StartAuthentication(INOUT UserPtr user, const String& accessCode = "");`
+##### `Status StartAuthentication(INOUT UserPtr user);`
 This method starts the authentication process for a given `user`.
 It attempts to retrieve the _Time Permits_ for the user, and if successful, will return `Status::OK`.
 If they cannot be retrieved, the method will return `Status::REVOKED`.
 If this method is successfully completed, the app should read the PIN/secret from the end-user and call one of the `FinishAuthentication()` variants to authenticate the user.
-
-Optionally, an `accessCode` could be provided.
-This code is retrieved out-of-band from a browser session when the user has to be authenticated to an online service, such as the _MIRACL MFA Platform_.
-When this code is provided, the SDK will notify the service that authentication associated with the given `accessCode` has started for the provided user.
 
 ##### `Status CheckAccessNumber(const String& accessNumber);`
 This method is used only when a user needs to be authenticated to a remote (browser) session, using _Access Number_.
@@ -274,7 +243,7 @@ public:
 Other RPA's might not support OTP generation where the `status` inside the returned `otp` structure will be `Status::FLOW_ERROR`.
 
 ##### `Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);`
-This method authenticates the end-user using an _Access Number_ (also refered as _Access Code_), provided by a PC/Browser session.
+This method authenticates the end-user using an _Access Number_, provided by a PC/Browser session.
 After this authentication, the end-user can log into the PC/Browser which provided the Access Number, while the authentication itself is done on the Mobile Device.
 `accessNumber` is the Access Number from the browser session.
 The returned status might be:
@@ -282,15 +251,8 @@ The returned status might be:
 * `Status::INCORRECT_PIN` - The authentication failed because of incorrect PIN. After the 3rd (configurable in the RPS) unsuccessful authentication attempt, the method will still return `Status::INCORRECT_PIN` but the User State will be set to `BLOCKED`.
 * `Status::INCORRECT_ACCESS_NUMBER` - The authentication failed because of incorrect Access Number.
 
-##### `Status FinishAuthenticationMFA(INOUT UserPtr user, const String& pin, OUT String& authzCode);`
-This method is almost identical to the standard `FinishAuthentication()`, but it returns back an _Authorization Code_, which should be used further by the app back-end to validate the authenticated user.
-This method is useful when authenticating users against the MIRACL MFA Platform.
-For this flow to work, the app should also set a _Client ID_ through the `SetClientId()` method.
-The Platform will provide the _Authorization Code_ as a result from the authentication.
-This code should be then passed by the app to the back-end, where it should be verified using one of the MFA Paltform SDK flavors.
-
 ##### `bool CanLogout(IN UserPtr user);`
-This method is used after authentication with an Access Number/Code through `FinishAuthenticationAN()`.
+This method is used after authentication with an Access Number through `FinishAuthenticationAN()`.
 After such an authentication, the Mobile Device can log out the end-user from the Browser session, if the RPA supports that functionality.
 This method checks whether logout information was provided by the RPA and the remote (Browser) session can be terminated from the Mobile Device.
 The method will return `true` if the user can be logged-out from the remote session, and `false` otherwise.
@@ -311,4 +273,4 @@ Client settings that might interest the applications are:
 * `setDeviceName` - Indicator (`true/false`) whether the application should ask the user to insert a _Device Name_ and pass it to the `MakeNewUser()` method.
 * `appID` - The _App ID_ used by the backend. The App ID is a unique ID assigned to each customer or application. It is a hex-encoded long numeric value. The App ID can be used only for information purposes and it does not affect the application's behavior in any way.
 
-See also [Apache Milagro - Main Flows](docs/mpinsdk-flows.md)
+See also [Apache Milagro - Main Flows](mpinsdk-flows.md)

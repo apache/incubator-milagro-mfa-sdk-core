@@ -9,7 +9,7 @@ The interfaces are:
 Although the SDK Core API (part of it) is the de-facto SDK API, it is not exposed to the application developer.
 It is an internal API to the Platform Adaptation Layer, which presents the SDK API to the application in a way that is native to the platform.
 
-#### HTTP Request Interface (`IHttpRequest`)
+### HTTP Request Interface (`IHttpRequest`)
 The Core uses this interface to make HTTP requests.
 It should be implemented in the Platform Adaptation Layer.
 The Core creates an HTTP Request object via `IContext::CreateHttpRequest()` method and when done, releases the request via `IContext::ReleaseHttpRequest()`.
@@ -70,7 +70,7 @@ The headers are returned in a key/value map, which is a standard `std::map<std::
 Returns the data received as a response to the preceding successfully executed HTTP request.
 The data is returned as a string.
 
-#### Storage Interface (`IStorage`)
+### Storage Interface (`IStorage`)
 The Core uses this interface to store data on the specific platform.
 As different platforms provide different storage options, the implementation of the interface should be part of the Platform Adaptation Layer.
 There are two kinds of storages that the Core uses, Secure and Non-secure.
@@ -93,7 +93,7 @@ If the method fails, further information regarding the error can be obtained thr
 ##### `virtual const String& GetErrorMessage() const;`
 Returns the error from the preceding failed `GetData()` or `SetData()` methods.
 
-#### Context Interface (`IContext`)
+### Context Interface (`IContext`)
 The Context Interface "bundles" the rest of the interfaces.
 This is the only interface that is provided to the Core where the other interfaces are used/accessed through it.
 

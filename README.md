@@ -57,5 +57,5 @@ For further details refer to:
 * [Core API Interfaces](docs/core-api-interfaces.md)
 * [Core API for Apache Milagro - `MPinSDK`](docs/core-api-mpinsdk.md)
 * [Apache Milagro - Main Flows](docs/mpinsdk-flows.md)
-* [Core API for MIRACL MFA Platform - `MfaSDK`](docs/core-api-mfasdk.md)
+* [Core API for the MIRACL MFA Platform - `MfaSDK`](docs/core-api-mfasdk.md)
 * [MIRACL MFA Platform - Main Flows](docs/mfasdk-flows.md)
