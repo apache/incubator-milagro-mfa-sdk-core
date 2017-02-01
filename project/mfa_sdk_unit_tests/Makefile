@@ -19,7 +19,7 @@ LIB_DIRS =
 LDLIBS = -lcurl -lcrypto -lpthread
 
 # C and C++ flags
-CXXFLAGS = -g -MMD -MP $(INCLUDE_DIRS)
+CXXFLAGS = -g -MMD -MP -std=c++11 $(INCLUDE_DIRS)
 CFLAGS = $(CXXFLAGS)
 
 # Linker flags
