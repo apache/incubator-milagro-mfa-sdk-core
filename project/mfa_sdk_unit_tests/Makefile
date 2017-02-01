@@ -80,7 +80,7 @@ SRC = $(call add_src_dir, src)
 SRC += $(call add_src_dir_including, ext/cvshared/cpp, \
 		%linux/CvHttpRequest.cpp %linux/CvThread.cpp %linux/CvLogger.cpp %linux/CvMutex.cpp %CvString.cpp %CvTime.cpp %CvXcode.cpp)
 SRC += $(call add_src_dir_including, tests, \
-        %auto_context.cpp %http_player.cpp %http_recorded_data.cpp %http_recorder.cpp %http_request.cpp %memory_storage.cpp %test_context.cpp %test_mfa_sdk.cpp %mfa_sdk_unit_tests.cpp)
+        %auto_context.cpp %http_player.cpp %http_recorded_data.cpp %http_recorder.cpp %http_request.cpp %memory_storage.cpp %test_context.cpp %test_mfa_sdk.cpp %url_parsing_test.cpp %mfa_sdk_unit_tests.cpp)
 
 # Generate a list of object files
 OBJ = $(call cpp_to_obj, $(call c_to_obj, $(SRC)))
