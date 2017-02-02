@@ -27,11 +27,12 @@ under the License.
 #include <string>
 #include <map>
 #include <vector>
+#include <memory>
 
 #include "utils.h"
-#include "cv_shared_ptr.h"
 
 #ifdef _WIN32
+#include <windows.h>
 #undef DELETE
 #undef REGISTERED
 #endif
@@ -44,7 +45,7 @@ public:
     typedef util::String String;
     typedef util::StringMap StringMap;
     class User;
-    typedef shared_ptr<User> UserPtr;
+    typedef std::shared_ptr<User> UserPtr;
 
     enum CryptoType
     {

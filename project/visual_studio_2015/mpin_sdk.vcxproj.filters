@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\src\json\writer.h">
       <Filter>src\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cv_shared_ptr.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\utf8.h">
       <Filter>src</Filter>
     </ClInclude>

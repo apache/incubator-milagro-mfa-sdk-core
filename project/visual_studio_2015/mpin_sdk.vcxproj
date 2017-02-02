@@ -120,7 +120,6 @@
     <ClInclude Include="..\..\src\crypto\mpin.h" />
     <ClInclude Include="..\..\src\crypto\platform.h" />
     <ClInclude Include="..\..\src\crypto\version.h" />
-    <ClInclude Include="..\..\src\cv_shared_ptr.h" />
     <ClInclude Include="..\..\src\json\elements.h" />
     <ClInclude Include="..\..\src\json\reader.h" />
     <ClInclude Include="..\..\src\json\visitor.h" />
