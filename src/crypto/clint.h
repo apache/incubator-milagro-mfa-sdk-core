@@ -100,8 +100,8 @@ under the License.
 /* Actual curve parameters associated with these choices can be found in rom.c */
 
 /* These next options only apply for pairings */
-#define USE_GLV		/* Note this method is patented (GLV), so maybe you want to comment this out */
-#define USE_GS_G2	/* Well we didn't patent it :) But may be covered by GLV patent :( */
+/*#define USE_GLV	*//* Note this method is patented (GLV), so maybe you want to comment this out */
+/*#define USE_GS_G2	*//* Well we didn't patent it :) But may be covered by GLV patent :( */
 #define USE_GS_GT   /* Not patented, so probably always use this */
 
 /* Finite field support - for RSA, DH etc. */
