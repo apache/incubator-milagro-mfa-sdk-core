@@ -19,11 +19,12 @@ LIB_DIRS =
 LDLIBS = -lcurl -lcrypto -lpthread
 
 # C and C++ flags
-CXXFLAGS = -g -MMD -MP -std=c++11 $(INCLUDE_DIRS)
-CFLAGS = $(CXXFLAGS)
+COMMON_FLAGS = -g -MMD -MP $(INCLUDE_DIRS)
+CXXFLAGS += $(COMMON_FLAGS) -std=c++11
+CFLAGS += $(COMMON_FLAGS)
 
 # Linker flags
-LDFLAGS = $(LIB_DIRS)
+LDFLAGS += $(LIB_DIRS)
 
 # Utility functions, used later in build
 # rfind

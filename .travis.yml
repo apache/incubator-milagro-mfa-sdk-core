@@ -1,0 +1,50 @@
+language: cpp
+sudo: required
+dist: trusty
+
+os:
+  - linux
+
+branches:
+  except:
+    - release
+
+branches:
+  only:
+    - master
+    - travis
+
+addons:
+  apt:
+    packages:
+      - make
+      - g++
+      - libcurl4-openssl-dev
+      - lcov
+
+compiler:
+  - gcc
+
+env:
+  global:
+    - CFLAGS="-ftest-coverage -fprofile-arcs"
+    - CXXFLAGS="-ftest-coverage -fprofile-arcs"
+    - LDFLAGS="-coverage"
+
+before_install:
+  - if [ -n "$GH_USER" ]; then git config --global github.user ${GH_USER}; fi;
+  - if [ -n "$GH_TOKEN" ]; then git config --global github.token ${GH_TOKEN}; fi;
+
+install:
+  - gem install coveralls-lcov
+  
+script:
+  - make -C project/mpin_sdk_unit_tests && make -C project/mfa_sdk_unit_tests  
+  - lcov --zerocounters --directory . && lcov --capture --initial --directory . -output-file coverage.info
+  - project/mpin_sdk_unit_tests/dist/mpin_sdk_unit_tests && project/mfa_sdk_unit_tests/dist/mfa_sdk_unit_tests
+
+after_success:
+  - lcov --no-checksum --capture --directory . --output-file coverage.info
+  - lcov --remove coverage.info "/usr/include/*" "tests/*" "ext/*" "src/crypto/*" "src/json/*" -output-file coverage.info
+#  - genhtml -o coverage -t "SDK Core Test Coverage" coverage.info
+  - coveralls-lcov coverage.info

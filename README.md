@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/miracl/incubator-milagro-mfa-sdk-core.svg?branch=master)](https://travis-ci.org/miracl/incubator-milagro-mfa-sdk-core)
+[![Coverage Status](https://coveralls.io/repos/github/miracl/incubator-milagro-mfa-sdk-core/badge.svg?branch=master)](https://coveralls.io/github/miracl/incubator-milagro-mfa-sdk-core?branch=master)
+
 # Apache Milagro Mobile SDK Core
 
 ## Architecture and API
