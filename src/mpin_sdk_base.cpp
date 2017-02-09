@@ -1406,7 +1406,9 @@ Status MPinSDKBase::FinishAuthenticationImpl(INOUT UserPtr user, const String& p
     // Send response data from M-Pin authentication server to RPA
     url = m_clientSettings.GetStringParam(accessCode.empty() ? "authenticateURL" : "mobileAuthenticateURL");
     requestData.Clear();
-    requestData["mpinResponse"] = response.GetJsonData();
+    json::Object mpinResponseData;
+    mpinResponseData["authOTT"] = json::String(response.GetJsonData().GetStringParam("authOTT"));
+    requestData["mpinResponse"] = mpinResponseData;
     requestData["authzRequest"] = json::Boolean(authzRequest);
     response = MakeRequest(url, IHttpRequest::POST, requestData);
     if (response.GetStatus() != HttpResponse::HTTP_OK)

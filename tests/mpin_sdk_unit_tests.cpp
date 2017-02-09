@@ -506,7 +506,7 @@ BOOST_AUTO_TEST_CASE(testAuthenticateOTP)
     s = sdk.FinishAuthenticationOTP(user, "1234", otp);
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
-    BOOST_CHECK_EQUAL(otp.status, Status::RESPONSE_PARSE_ERROR);
+    BOOST_CHECK_EQUAL(otp.status, Status::OK);
 
     sdk.DeleteUser(user);
 

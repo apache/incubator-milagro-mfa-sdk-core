@@ -1877,7 +1877,7 @@
 				"Server" : "TornadoServer/4.1",
 				"Set-Cookie" : "mpindemo_session=\"2|1:0|10:1476194057|16:mpindemo_session|88:MTMwNjI4YWY3YWQ2NDZkMGI1M2ZlODE1NWFhOTc1ZjczM2Y2YWQxZThmYmExMWU2ODQ0MWZhMTYzZTYyNjM4Ng==|230c4a25d7b165feb4ac5ce1aee6222422043df9cc9d2763bfd531c5edac8d77\"; expires=Thu, 10 Nov 2016 13:54:17 GMT; Path=/"
 			},
-			"data" : "{\"someUserData\": \"This will be handled by onSuccessLogin handler.\"}"
+			"data" : "{\"ttlSeconds\": 60, \"expireTime\": 70000, \"nowTime\": 10000}"
 		}
 	},
 	{

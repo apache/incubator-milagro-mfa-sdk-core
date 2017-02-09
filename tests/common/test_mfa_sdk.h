@@ -44,6 +44,8 @@ public:
     Status StartAuthentication(INOUT UserPtr user, const String& accessCode);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String& authzCode);
+    Status StartAuthenticationOTP(INOUT UserPtr user);
+    Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
 
     bool Logout(IN UserPtr user);
 

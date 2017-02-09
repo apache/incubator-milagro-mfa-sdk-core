@@ -111,6 +111,22 @@ Status TestMfaSDK::FinishAuthentication(INOUT UserPtr user, const String & pin, 
     return s;
 }
 
+Status TestMfaSDK::StartAuthenticationOTP(INOUT UserPtr user)
+{
+    m_testContext.SetRequestContextData(user->GetId() + "-OTP");
+    Status s = MfaSDK::StartAuthenticationOTP(user);
+    m_testContext.SetRequestContextData("");
+    return s;
+}
+
+Status TestMfaSDK::FinishAuthenticationOTP(INOUT UserPtr user, const String & pin, OUT OTP & otp)
+{
+    m_testContext.SetRequestContextData(user->GetId() + "-" + pin + "-OTP");
+    Status s = MfaSDK::FinishAuthenticationOTP(user, pin, otp);
+    m_testContext.SetRequestContextData("");
+    return s;
+}
+
 bool TestMfaSDK::Logout(IN UserPtr user)
 {
     m_testContext.SetRequestContextData(user->GetId());

@@ -86,10 +86,10 @@ namespace
     TestMfaSDK sdk(context);
     MfaSDK::StringMap config;
     const char *backend = "https://api.dev.miracl.net";
-    const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&"
-        "redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&"
-        "state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en";
-    const char *serviceDetailsUrl = "https://dd.dev.mpin.io";
+    const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=nfoztuxb5dpn4&"
+        "redirect_uri=https%3A%2F%2Fmcl.demo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&"
+        "state=ac5caf93cc4118d27bbe23ec4568b0dd&back_url=https%3A%2F%2Fmcl.demo.dev.miracl.net%2F&lang=en";
+    const char *serviceDetailsUrl = "https://mcl.dev.mpin.io";
 }
 
 namespace std
@@ -170,6 +170,15 @@ BOOST_AUTO_TEST_CASE(NoInit)
     BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
     BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
 
+    s = sdk.StartAuthenticationOTP(user);
+    BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
+    BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
+
+    MfaSDK::OTP otp;
+    s = sdk.FinishAuthenticationOTP(user, "", otp);
+    BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
+    BOOST_CHECK_EQUAL(user->GetState(), User::INVALID);
+
     PrintTestEnd();
 }
 
@@ -189,7 +198,7 @@ BOOST_AUTO_TEST_CASE(Init)
 {
     PrintTestStart();
 
-    sdk.SetCID("dd");
+    sdk.SetCID("mcl");
     Status s = sdk.Init(config);
     BOOST_CHECK_EQUAL(s, Status::OK);
 
@@ -466,6 +475,16 @@ BOOST_AUTO_TEST_CASE(Authentication)
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
+    // OTP authentication
+    s = sdk.StartAuthenticationOTP(user);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    MfaSDK::OTP otp;
+    s = sdk.FinishAuthenticationOTP(user, "1234", otp);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
+    BOOST_CHECK_EQUAL(otp.status, Status::OK);
+
     // One incorrect pin, followed by correct pin authentication
     s = sdk.GetAccessCode(authzUrl, accessCode);
     BOOST_CHECK_EQUAL(s, Status::OK);
@@ -510,8 +529,6 @@ BOOST_AUTO_TEST_CASE(Authentication)
 
     PrintTestEnd();
 }
-
-// TODO: Add tests with trusted domains and URL parsing
 
 BOOST_AUTO_TEST_CASE(TrustedDomains)
 {
