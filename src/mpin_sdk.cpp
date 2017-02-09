@@ -90,13 +90,7 @@ Status MPinSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, OUT 
 
 Status MPinSDK::FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp)
 {
-    util::JsonObject authResult;
-    String otpNumber;
-
-    Status s = FinishAuthenticationImpl(user, pin, "", &otpNumber, authResult);
-
-    otp.ExtractFrom(otpNumber, authResult);
-    return s;
+    return MPinSDKBase::FinishAuthenticationOTP(user, pin, otp);
 }
 
 Status MPinSDK::FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber)

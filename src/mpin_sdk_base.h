@@ -377,6 +377,7 @@ protected:
         const String& accessCode, OUT String *otp, OUT util::JsonObject& authResultData, bool authzRequest = false);
     Status GetCertivoxTimePermitShare(INOUT UserPtr user, const util::JsonObject& cutomerTimePermitData, OUT String& resultTimePermit);
     Status FinishAuthenticationAC(INOUT UserPtr user, const String& pin, const String& accessCode);
+    Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
 
     template <typename Filter>
     Status FilterUsers(OUT std::vector<UserPtr>& users, const Filter& filter) const;

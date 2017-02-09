@@ -70,6 +70,7 @@ public:
     Status StartAuthentication(INOUT UserPtr user, const String& accessCode);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, const String& accessCode, OUT String& authzCode);
+    Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
 
     Status ListUsers(OUT std::vector<UserPtr>& users) const;
 };

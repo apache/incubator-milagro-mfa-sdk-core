@@ -1496,6 +1496,17 @@ Status MPinSDKBase::FinishAuthenticationAC(INOUT UserPtr user, const String& pin
     return s;
 }
 
+Status MPinSDKBase::FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp)
+{
+    util::JsonObject authResult;
+    String otpNumber;
+
+    Status s = FinishAuthenticationImpl(user, pin, "", &otpNumber, authResult);
+
+    otp.ExtractFrom(otpNumber, authResult);
+    return s;
+}
+
 void MPinSDKBase::OTP::ExtractFrom(const String& otpData, const util::JsonObject& json)
 {
     if (otpData.empty())

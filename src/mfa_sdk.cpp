@@ -235,6 +235,11 @@ Status MfaSDK::FinishAuthentication(INOUT UserPtr user, const String& pin, const
     return s;
 }
 
+Status MfaSDK::FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp)
+{
+    return MPinSDKBase::FinishAuthenticationOTP(user, pin, otp);
+}
+
 Status MfaSDK::ListUsers(OUT std::vector<UserPtr>& users) const
 {
     return MPinSDKBase::ListAllUsers(users);
