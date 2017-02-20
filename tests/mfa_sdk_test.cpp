@@ -55,7 +55,9 @@ int main(int argc, char *argv[])
         cout << endl;
     }
 
-    const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=ojmlslsgnaax2&redirect_uri=https%3A%2F%2Fdemo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&state=096aa4d129464939886a7a0d8fe1e212&back_url=https%3A%2F%2Fdemo.dev.miracl.net%2F&lang=en";
+    const char *authzUrl = "https://api.dev.miracl.net/authorize?client_id=nfoztuxb5dpn4&"
+        "redirect_uri=https%3A%2F%2Fmcl.demo.dev.miracl.net%2Foidc&response_type=code&scope=openid+email+profile&"
+        "state=ac5caf93cc4118d27bbe23ec4568b0dd&back_url=https%3A%2F%2Fmcl.demo.dev.miracl.net%2F&lang=en";
 
     const char *backend = "https://api.dev.miracl.net";
 
@@ -64,7 +66,7 @@ int main(int argc, char *argv[])
 
     sdk.AddTrustedDomain("miracl.net");
 
-    sdk.SetCID("dd");
+    sdk.SetCID("mcl");
 
     Status s = sdk.Init(StringMap(), &context);
     if (s != Status::OK)

@@ -133,6 +133,7 @@ public:
             CLIENT_SECRET_EXPIRED, // Remote error - re-registration required because server master secret expired
             BAD_CLIENT_VERSION, // Remote error - wrong client app version
             UNTRUSTED_DOMAIN_ERROR, // Local error - a request to a domain, that is not in the trusted list was attempted
+            REGISTRATION_EXPIRED, // Remote error - regOTT expired
         };
 
         Status();
@@ -281,6 +282,7 @@ protected:
         static const int HTTP_BAD_REQUEST = 400;
         static const int HTTP_UNAUTHORIZED = 401;
         static const int HTTP_FORBIDDEN = 403;
+        static const int HTTP_NOT_FOUND = 404;
         static const int HTTP_NOT_ACCEPTABLE = 406;
         static const int HTTP_REQUEST_TIMEOUT = 408;
         static const int HTTP_CONFLICT = 409;

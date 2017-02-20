@@ -531,12 +531,22 @@ Status MPinSDKBase::HttpResponse::TranslateToMPinStatus(Context context)
             m_mpinStatus.SetStatusCode(Status::IDENTITY_NOT_AUTHORIZED);
             m_mpinStatus.SetErrorMessage("Identity not authorized");
         }
+        else if (m_httpStatus == HTTP_NOT_FOUND)
+        {
+            m_mpinStatus.SetStatusCode(Status::REGISTRATION_EXPIRED);
+            m_mpinStatus.SetErrorMessage("Registration expired");
+        }
         break;
     case GET_CLIENT_SECRET1:
         if (m_httpStatus == HTTP_BAD_REQUEST || m_httpStatus == HTTP_UNAUTHORIZED)
         {
             m_mpinStatus.SetStatusCode(Status::IDENTITY_NOT_VERIFIED);
             m_mpinStatus.SetErrorMessage("Identity not verified");
+        }
+        else if (m_httpStatus == HTTP_NOT_FOUND)
+        {
+            m_mpinStatus.SetStatusCode(Status::REGISTRATION_EXPIRED);
+            m_mpinStatus.SetErrorMessage("Registration expired");
         }
         break;
     case GET_CLIENT_SECRET2:
