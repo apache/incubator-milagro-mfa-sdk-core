@@ -313,6 +313,8 @@ BOOST_AUTO_TEST_CASE(testRegister1)
     Status s = sdk.StartRegistration(user);
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::ACTIVATED);
+    MPinSDK::Expiration rex = user->GetRegistrationExpiration();
+    BOOST_CHECK(rex.expireTimeSeconds == 0 && rex.nowTimeSeconds == 0);
 
     s = sdk.ConfirmRegistration(user);
     BOOST_CHECK_EQUAL(s, Status::OK);

@@ -168,6 +168,14 @@ protected:
     };
 
 public:
+    class Expiration
+    {
+    public:
+        Expiration();
+        int expireTimeSeconds;
+        int nowTimeSeconds;
+    };
+
     class User
     {
     public:
@@ -185,6 +193,7 @@ public:
         const String& GetCustomerId() const;
         const String& GetAppId() const;
         const String& GetMPinId() const;
+        const Expiration& GetRegistrationExpiration() const;
         State GetState() const;
         String GetStateString() const;
         static String StateToString(State state);
@@ -201,6 +210,7 @@ public:
         void CacheTimePermit(const String& timePermit, int date);
         void SetBackend(const String& backend);
         void SetStartedRegistration(const String& mpinIdHex, const String& regOTT, const String& accessCode, const String& customerId, const String& appId);
+        void SetRegistrationExpiration(long expireTime, long nowTime);
         void SetActivated();
         void SetRegistered();
         void Invalidate();
@@ -219,6 +229,7 @@ public:
         String m_mpinId;
         String m_mpinIdHex;
         String m_regOTT;
+        Expiration m_regOTTExpiration;
         String m_accessCode;
         TimePermitCache m_timePermitCache;
         String m_timePermitShare1;

@@ -279,6 +279,8 @@ BOOST_AUTO_TEST_CASE(Users)
     s = sdk.StartRegistration(user, accessCode, "");
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::STARTED_REGISTRATION);
+    MfaSDK::Expiration rex = user->GetRegistrationExpiration();
+    BOOST_CHECK(rex.expireTimeSeconds > 0 && rex.nowTimeSeconds > 0 && rex.expireTimeSeconds > rex.nowTimeSeconds);
 
     BOOST_CHECK(!sdk.CanLogout(user));
     BOOST_CHECK(!sdk.Logout(user));

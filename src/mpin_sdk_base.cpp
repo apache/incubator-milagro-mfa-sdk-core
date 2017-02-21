@@ -254,6 +254,18 @@ void User::SetStartedRegistration(const String& mpinIdHex, const String& regOTT,
     m_appId = appId;
 }
 
+MPinSDKBase::Expiration::Expiration() : expireTimeSeconds(0), nowTimeSeconds(0) {}
+
+void MPinSDKBase::User::SetRegistrationExpiration(long expireTime, long nowTime)
+{
+    m_regOTTExpiration.expireTimeSeconds = expireTime;
+    m_regOTTExpiration.nowTimeSeconds = nowTime;
+}
+
+const MPinSDKBase::Expiration & MPinSDKBase::User::GetRegistrationExpiration() const
+{
+    return m_regOTTExpiration;
+}
 
 void User::SetActivated()
 {
@@ -1113,6 +1125,13 @@ Status MPinSDKBase::RequestRegistration(UserPtr user, const String& activateCode
     String regOTT = response.GetJsonData().GetStringParam("regOTT");
     String customerId = response.GetJsonData().GetStringParam("customerId");
     String appId = response.GetJsonData().GetStringParam("appId");
+
+    long expireTime = response.GetJsonData().GetIntParam("expireTime");
+    long nowTime = response.GetJsonData().GetIntParam("nowTime");
+    if (expireTime && nowTime)
+    {
+        user->SetRegistrationExpiration(expireTime, nowTime);
+    }
 
     String newUserKey = User::MakeKey(user->GetId(), MakeBackendKey(m_RPAServer), customerId, appId);
     if (user->GetKey() != newUserKey && IsUserKeyExisting(newUserKey))
