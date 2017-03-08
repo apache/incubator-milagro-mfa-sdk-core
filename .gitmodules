@@ -1,0 +1,4 @@
+[submodule "ext/milagro-crypto-c"]
+	path = ext/milagro-crypto-c
+	url = https://github.com/miracl/milagro-crypto-c.git
+	branch = develop
