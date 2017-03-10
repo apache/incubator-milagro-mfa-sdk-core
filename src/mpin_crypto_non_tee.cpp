@@ -22,6 +22,12 @@ under the License.
  */
 
 #include "mpin_crypto_non_tee.h"
+#define C99
+extern "C"
+{
+#include "mpin.h"
+#include "randapi.h"
+}
 
 
 typedef MPinSDKBase::String String;
@@ -186,7 +192,7 @@ Status MPinCryptoNonTee::Register(UserPtr user, const String& pin, std::vector<S
 
     // Extract the pin from the secret
     Octet cid(mpinId);
-    res = MPIN_EXTRACT_PIN(&cid, pin.GetHash(), &token);
+    res = MPIN_EXTRACT_PIN(HASH_TYPE_MPIN, &cid, pin.GetHash(), &token);
     if(res)
     {
         return Status(Status::CRYPTO_ERROR, String().Format("MPIN_EXTRACT_PIN() failed with code %d", res));
@@ -261,7 +267,7 @@ Status MPinCryptoNonTee::AuthenticatePass1(UserPtr user, const String& pin, int 
     Octet ut(Octet::TOKEN_SIZE);
 
     // Authentication pass 1
-    int res = MPIN_CLIENT_1(date, &cid, &rng, &x, pin.GetHash(), &token, &clientSecret, &u, &ut, &timePermit);
+    int res = MPIN_CLIENT_1(HASH_TYPE_MPIN, date, &cid, &rng, &x, pin.GetHash(), &token, &clientSecret, &u, &ut, &timePermit);
     if(res)
     {
         return Status(Status::CRYPTO_ERROR, String().Format("MPIN_CLIENT_1() failed with code %d", res));

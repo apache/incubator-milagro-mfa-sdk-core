@@ -25,10 +25,6 @@ under the License.
 #define _MPIN_CRYPTO_NON_TEE_H_
 
 #include "mpin_crypto.h"
-extern "C"
-{
-#include "crypto/mpin.h"
-}
 
 class MPinCryptoNonTee : public IMPinCrypto
 {

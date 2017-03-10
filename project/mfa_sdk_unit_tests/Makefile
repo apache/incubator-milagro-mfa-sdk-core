@@ -10,7 +10,7 @@ OUTPUT_DIR = dist
 EXECUTABLE = $(OUTPUT_DIR)/mfa_sdk_unit_tests
 
 # Includes
-INCLUDE_DIRS = -I $(SRC_DIR)/src -I$(SRC_DIR)/ext/cvshared/cpp/include -I$(SRC_DIR)/ext/boost
+INCLUDE_DIRS = -I $(SRC_DIR)/src -I$(SRC_DIR)/ext/cvshared/cpp/include -I$(SRC_DIR)/ext/milagro-crypto-c/include -I$(SRC_DIR)/ext/boost
 
 # Additional library search paths
 LIB_DIRS =
@@ -21,7 +21,7 @@ LDLIBS = -lcurl -lcrypto -lpthread
 # C and C++ flags
 COMMON_FLAGS = -g -MMD -MP $(INCLUDE_DIRS)
 CXXFLAGS += $(COMMON_FLAGS) -std=c++11
-CFLAGS += $(COMMON_FLAGS)
+CFLAGS += $(COMMON_FLAGS) -std=c99
 
 # Linker flags
 LDFLAGS += $(LIB_DIRS)
@@ -78,6 +78,8 @@ endef
 # All directories are specified relatively to $(SRC_DIR).
 # The patterns must contain the % character to match a portion of the full file pathname.
 SRC = $(call add_src_dir, src)
+SRC += $(call add_src_dir_including, ext/milagro-crypto-c/src, \
+		%aes.c %big.c %ecp.c %ecp2.c %ff.c %fp.c %fp2.c %fp4.c %fp12.c %gcm.c %hash.c %mpin.c %oct.c %pair.c %rand.c %randapi.c %rom.c)
 SRC += $(call add_src_dir_including, ext/cvshared/cpp, \
 		%linux/CvHttpRequest.cpp %linux/CvThread.cpp %linux/CvLogger.cpp %linux/CvMutex.cpp %CvString.cpp %CvTime.cpp %CvXcode.cpp)
 SRC += $(call add_src_dir_including, tests, \

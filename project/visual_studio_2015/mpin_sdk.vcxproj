@@ -52,7 +52,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../ext/cvshared/cpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../ext/cvshared/cpp/include;../../ext/milagro-crypto-c/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -65,7 +65,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../../ext/cvshared/cpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../ext/cvshared/cpp/include;../../ext/milagro-crypto-c/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,23 +82,23 @@
     <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvLogger.cpp" />
     <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvMutex.cpp" />
     <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvThread.cpp" />
-    <ClCompile Include="..\..\src\crypto\aes.c" />
-    <ClCompile Include="..\..\src\crypto\big.c" />
-    <ClCompile Include="..\..\src\crypto\ecp.c" />
-    <ClCompile Include="..\..\src\crypto\ecp2.c" />
-    <ClCompile Include="..\..\src\crypto\ff.c" />
-    <ClCompile Include="..\..\src\crypto\fp.c" />
-    <ClCompile Include="..\..\src\crypto\fp12.c" />
-    <ClCompile Include="..\..\src\crypto\fp2.c" />
-    <ClCompile Include="..\..\src\crypto\fp4.c" />
-    <ClCompile Include="..\..\src\crypto\gcm.c" />
-    <ClCompile Include="..\..\src\crypto\hash.c" />
-    <ClCompile Include="..\..\src\crypto\mpin.c" />
-    <ClCompile Include="..\..\src\crypto\oct.c" />
-    <ClCompile Include="..\..\src\crypto\pair.c" />
-    <ClCompile Include="..\..\src\crypto\rand.c" />
-    <ClCompile Include="..\..\src\crypto\rom.c" />
-    <ClCompile Include="..\..\src\crypto\version.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\aes.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\big.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ecp.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ecp2.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ff.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp12.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp2.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp4.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\gcm.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\hash.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\mpin.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\oct.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\pair.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\rand.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\randapi.c" />
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\rom.c" />
     <ClCompile Include="..\..\src\mfa_sdk.cpp" />
     <ClCompile Include="..\..\src\mpin_crypto_non_tee.cpp" />
     <ClCompile Include="..\..\src\mpin_sdk.cpp" />
@@ -115,11 +115,10 @@
     <ClInclude Include="..\..\ext\cvshared\cpp\include\CvThread.h" />
     <ClInclude Include="..\..\ext\cvshared\cpp\include\CvTime.h" />
     <ClInclude Include="..\..\ext\cvshared\cpp\include\CvXcode.h" />
-    <ClInclude Include="..\..\src\crypto\clint.h" />
-    <ClInclude Include="..\..\src\crypto\DLLDefines.h" />
-    <ClInclude Include="..\..\src\crypto\mpin.h" />
-    <ClInclude Include="..\..\src\crypto\platform.h" />
-    <ClInclude Include="..\..\src\crypto\version.h" />
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\amcl.h" />
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\arch.h" />
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\mpin.h" />
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\randapi.h" />
     <ClInclude Include="..\..\src\json\elements.h" />
     <ClInclude Include="..\..\src\json\reader.h" />
     <ClInclude Include="..\..\src\json\visitor.h" />
