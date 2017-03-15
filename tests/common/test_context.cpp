@@ -95,6 +95,11 @@ void TestContext::SetAdditionalContextData(const String & additionalContextData)
     m_additionalContextData = additionalContextData;
 }
 
+HttpRecordedData::ResponseQueue& TestContext::GetPredefinedResponses()
+{
+    return m_recordedData.GetPredefinedResponses();
+}
+
 String TestContext::GetRequestContextData() const
 {
     return m_requestContextData + (m_autoContextData ? ("@" + m_autoContextData->Get()) : "") + m_additionalContextData;

@@ -29,6 +29,9 @@ typedef MfaSDK::User User;
 typedef MfaSDK::UserPtr UserPtr;
 typedef MfaSDK::Status Status;
 typedef MfaSDK::String String;
+typedef MfaSDK::StringMap StringMap;
+typedef HttpRecordedData::Response Response;
+typedef HttpRecordedData::PredefinedResponse PredefinedResponse;
 using namespace boost::unit_test;
 
 static char RECORDED_DATA_JSON[] = {
@@ -202,6 +205,8 @@ BOOST_AUTO_TEST_CASE(Init)
     Status s = sdk.Init(config);
     BOOST_CHECK_EQUAL(s, Status::OK);
 
+    sdk.ClearCustomHeaders();
+
     PrintTestEnd();
 }
 
@@ -359,6 +364,9 @@ BOOST_AUTO_TEST_CASE(Registration)
     s = sdk.RestartRegistration(user);
     BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
+
+    bool res = sdk.IsUserExisting(user->GetId(), user->GetCustomerId(), user->GetAppId());
+    BOOST_CHECK(res);
 
     // Normal registration flow with successfull RestartRegistration
     user = sdk.MakeNewUser("testUser2@example.com");
@@ -599,6 +607,117 @@ BOOST_AUTO_TEST_CASE(TrustedDomains)
 
     s = sdk.FinishAuthentication(user, "1234", accessCode);
     BOOST_CHECK_EQUAL(s, Status::OK);
+
+    PrintTestEnd();
+}
+
+BOOST_AUTO_TEST_CASE(LoadUsersFromStorage)
+{
+    PrintTestStart();
+
+    sdk.Destroy();
+    sdk.SetCID("mcl");
+    config.clear();
+    Status s = sdk.Init(config);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    PrintTestEnd();
+}
+
+BOOST_AUTO_TEST_CASE(Misc)
+{
+    PrintTestStart();
+
+    Status s = sdk.SetBackend(backend);
+    BOOST_CHECK_EQUAL(s.GetStatusCodeString(), "OK");
+
+    // RESPONSE_PARSE_ERROR
+    context.GetPredefinedResponses().push(Response(true, "", 200, StringMap(), "Corrupted json"));
+    s = sdk.SetBackend("test.com");
+    BOOST_CHECK_EQUAL(s, Status::RESPONSE_PARSE_ERROR);
+
+    // BAD_CLIENT_VERSION
+    context.GetPredefinedResponses().push(Response(true, "", 412, StringMap(), ""));
+    MfaSDK::ServiceDetails serviceDetails;
+    s = sdk.GetServiceDetails(serviceDetailsUrl, serviceDetails);
+    BOOST_CHECK_EQUAL(s, Status::BAD_CLIENT_VERSION);
+
+    // REGISTER / HTTP_FORBIDDEN
+    String accessCode;
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    UserPtr user = sdk.MakeNewUser("misc1@example.com");
+
+    context.GetPredefinedResponses().push(Response(true, "", 403, StringMap(), ""));
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::IDENTITY_NOT_AUTHORIZED);
+
+    // REGISTER / HTTP_NOT_FOUND
+    context.GetPredefinedResponses().push(Response(true, "", 404, StringMap(), ""));
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::REGISTRATION_EXPIRED);
+
+    // GET_CLIENT_SECRET1 / HTTP_BAD_REQUEST(HTTP_UNAUTHORIZED)
+    user = sdk.MakeNewUser("misc2@example.com");
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    context.GetPredefinedResponses().push(Response(true, "", 400, StringMap(), ""));
+    s = sdk.ConfirmRegistration(user);
+    BOOST_CHECK_EQUAL(s, Status::IDENTITY_NOT_VERIFIED);
+
+    // GET_CLIENT_SECRET1 / HTTP_NOT_FOUND
+    context.GetPredefinedResponses().push(Response(true, "", 404, StringMap(), ""));
+    s = sdk.ConfirmRegistration(user);
+    BOOST_CHECK_EQUAL(s, Status::REGISTRATION_EXPIRED);
+
+    // GET_CLIENT_SECRET2 / HTTP_REQUEST_TIMEOUT
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(Response(true, "", 408, StringMap(), ""));
+    s = sdk.ConfirmRegistration(user);
+    BOOST_CHECK_EQUAL(s, Status::REQUEST_EXPIRED);
+
+    // AUTHENTICATE_RPA / HTTP_REQUEST_TIMEOUT
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    user = sdk.MakeNewUser("misc3@example.com");
+    s = sdk.StartRegistration(user, accessCode, "");
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    s = sdk.ConfirmRegistration(user);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    s = sdk.FinishRegistration(user, "1234");
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    s = sdk.StartAuthentication(user, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(Response(true, "", 408, StringMap(), ""));
+    s = sdk.FinishAuthentication(user, "1234", accessCode);
+    BOOST_CHECK_EQUAL(s, Status::REQUEST_EXPIRED);
+
+    // AUTHENTICATE_RPA / HTTP_FORBIDDEN
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(Response(true, "", 403, StringMap(), ""));
+    s = sdk.FinishAuthentication(user, "1234", accessCode);
+    BOOST_CHECK_EQUAL(s, Status::IDENTITY_NOT_AUTHORIZED);
+
+    // AUTHENTICATE_RPA / HTTP_CONFLICT
+    s = sdk.GetAccessCode(authzUrl, accessCode);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(PredefinedResponse());
+    context.GetPredefinedResponses().push(Response(true, "", 409, StringMap(), ""));
+    s = sdk.FinishAuthentication(user, "1234", accessCode);
+    BOOST_CHECK_EQUAL(s, Status::CLIENT_SECRET_EXPIRED);
 
     PrintTestEnd();
 }

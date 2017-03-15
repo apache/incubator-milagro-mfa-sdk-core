@@ -326,24 +326,18 @@ protected:
         HttpResponse(const String& requestUrl, const String& requestBody);
 
         int GetStatus() const;
-        DataType GetDataType() const;
         bool SetData(const String& rawData, const StringMap& headers, DataType expectedType);
         const util::JsonObject& GetJsonData() const;
         const String& GetRawData() const;
         const StringMap& GetHeaders() const;
         void SetNetworkError(const String& error);
+        void SetResponseJsonParseError(const String& responseJson, const String& jsonParseError);
         void SetHttpError(int httpStatus);
-        void SetResponseJsonParseError(const String& jsonParseError);
         void SetUntrustedDomainError(const String& error);
         Status TranslateToMPinStatus(Context context);
 
     private:
-        DataType DetermineDataType(const String& contentTypeStr) const;
-        void SetResponseJsonParseError(const String& responseJson, const String& jsonParseError);
-        void SetUnexpectedContentTypeError(DataType expectedType, const String& responseContentType, const String& responseRawData);
-
         int m_httpStatus;
-        DataType m_dataType;
         util::JsonObject m_jsonData;
         String m_rawData;
         StringMap m_headers;

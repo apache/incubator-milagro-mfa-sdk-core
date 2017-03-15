@@ -90,7 +90,6 @@ class StringMap : public std::map<String, String>
 public:
     StringMap() {}
     StringMap(const json::Object& object);
-    json::Object ToJsonObject() const;
     bool Put(const String& key, const String& value);
     void PutAll(const StringMap& other);
     const char * Get(const String& key) const;

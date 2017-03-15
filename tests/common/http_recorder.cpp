@@ -22,13 +22,14 @@ under the License.
  */
 
 #include "http_recorder.h"
-#include "http_recorded_data.h"
 #include <cassert>
 
 typedef MPinSDKBase::String String;
 typedef MPinSDKBase::StringMap StringMap;
 typedef HttpRecordedData::Request Request;
 typedef HttpRecordedData::Response Response;
+typedef HttpRecordedData::PredefinedResponse PredefinedResponse;
+typedef HttpRecordedData::ResponseQueue ResponseQueue;
 
 void HttpRecorder::SetHeaders(const StringMap & headers)
 {
@@ -53,30 +54,46 @@ void HttpRecorder::SetTimeout(int seconds)
 
 bool HttpRecorder::Execute(Method method, const String & url)
 {
-    bool res = m_request.Execute(method, url);
+    Request requset(method, url, m_requestData, m_context);
+    PredefinedResponse pr;
 
-    m_recorder.Record(Request(method, url, m_requestData, m_context),
-        Response(res, m_request.GetExecuteErrorMessage(), m_request.GetHttpStatusCode(), m_request.GetResponseHeaders(), m_request.GetResponseData()));
+    ResponseQueue& queue = m_recorder.GetPredefinedResponses();
+    if (!queue.empty())
+    {
+        pr = queue.front();
+        queue.pop();
+    }
 
-    return res;
+    if (pr.IsEmpty())
+    {
+        bool res = m_request.Execute(method, url);
+        m_response = Response(res, m_request.GetExecuteErrorMessage(), m_request.GetHttpStatusCode(), m_request.GetResponseHeaders(), m_request.GetResponseData());
+        m_recorder.Record(requset, m_response);
+    }
+    else
+    {
+        m_response = pr;
+    }
+
+    return m_response.success;
 }
 
 const String & HttpRecorder::GetExecuteErrorMessage() const
 {
-    return m_request.GetExecuteErrorMessage();
+    return m_response.error;
 }
 
 int HttpRecorder::GetHttpStatusCode() const
 {
-    return m_request.GetHttpStatusCode();
+    return m_response.httpStatus;
 }
 
 const StringMap & HttpRecorder::GetResponseHeaders() const
 {
-    return m_request.GetResponseHeaders();
+    return m_response.headers;
 }
 
 const String & HttpRecorder::GetResponseData() const
 {
-    return m_request.GetResponseData();
+    return m_response.data;
 }

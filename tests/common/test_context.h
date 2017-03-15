@@ -50,6 +50,7 @@ public:
     virtual void ReleaseHttpRequest(IN IHttpRequest *request) const;
     void SetRequestContextData(const String& requestContextData);
     void SetAdditionalContextData(const String& additionalContextData);
+    HttpRecordedData::ResponseQueue& GetPredefinedResponses();
 
 protected:
     String GetRequestContextData() const;

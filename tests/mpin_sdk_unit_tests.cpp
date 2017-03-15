@@ -29,6 +29,7 @@ typedef MPinSDK::User User;
 typedef MPinSDK::UserPtr UserPtr;
 typedef MPinSDK::Status Status;
 typedef MPinSDK::String String;
+typedef MPinSDK::StringMap StringMap;
 using namespace boost::unit_test;
 
 
@@ -68,7 +69,7 @@ public:
 static TestNameData testNameData;
 static AutoContext context(testNameData);
 static TestMPinSDK sdk(context);
-static MPinSDK::StringMap config;
+static StringMap config;
 static const char *backend = "http://10.10.40.62:8005";
 
 static std::ostream& operator<<(std::ostream& ostr, const Status& s)
@@ -89,6 +90,11 @@ BOOST_AUTO_TEST_CASE(testNoInit)
     MemBuf buf(RECORDED_DATA_JSON, sizeof(RECORDED_DATA_JSON));
     std::istream recordedDataInputStream(&buf);
     context.EnterRequestPlayerMode(recordedDataInputStream);
+
+    StringMap hdr;
+    hdr.Put("test", "test");
+    sdk.AddCustomHeaders(hdr);
+    sdk.ClearCustomHeaders();
 
     Status s = sdk.TestBackend("12354");
     BOOST_CHECK_EQUAL(s, Status::FLOW_ERROR);
@@ -408,6 +414,10 @@ BOOST_AUTO_TEST_CASE(testAuthenticate1)
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
+    context.GetPredefinedResponses().push(HttpRecordedData::Response(true, "", 410, StringMap(), ""));
+    s = sdk.StartAuthentication(user);
+    BOOST_CHECK_EQUAL(s, Status::REVOKED);
+
     s = sdk.StartAuthentication(user);
     BOOST_CHECK_EQUAL(s, Status::OK);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
@@ -555,6 +565,11 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN1)
     String accessNumber = json.GetStringParam("accessNumber");
     BOOST_CHECK(accessNumber.length() > 0);
 
+    s = sdk.CheckAccessNumber(accessNumber);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+    s = sdk.CheckAccessNumber("12345");
+    BOOST_CHECK_EQUAL(s, Status::INCORRECT_ACCESS_NUMBER);
+
     // Start access number thread
     AccessNumberThread accessNumberThread(context);
     accessNumberThread.Start(backend, json.GetStringParam("webOTT"), sdk.GetClientParam("authenticateURL"));
@@ -654,7 +669,17 @@ BOOST_AUTO_TEST_CASE(testAuthenticateAN2)
     BOOST_CHECK_EQUAL(s, Status::INCORRECT_PIN);
     BOOST_CHECK_EQUAL(user->GetState(), User::REGISTERED);
 
-    sdk.DeleteUser(user);
-
     BOOST_MESSAGE("    testAuthenticateAN2 finished");
+}
+
+BOOST_AUTO_TEST_CASE(testLoadUsersFromStorage)
+{
+    BOOST_MESSAGE("Starting testLoadUsersFromStorage...");
+
+    sdk.Destroy();
+    config.clear();
+    Status s = sdk.Init(config);
+    BOOST_CHECK_EQUAL(s, Status::OK);
+
+    BOOST_MESSAGE("    testLoadUsersFromStorage finished");
 }

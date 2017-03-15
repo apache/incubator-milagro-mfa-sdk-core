@@ -25,8 +25,7 @@ under the License.
 #define _TEST_HTTP_RECORDER_H_
 
 #include "http_request.h"
-
-class HttpRecordedData;
+#include "http_recorded_data.h"
 
 class HttpRecorder : public MPinSDKBase::IHttpRequest
 {
@@ -48,6 +47,7 @@ public:
 private:
     HttpRequest m_request;
     String m_requestData;
+    HttpRecordedData::Response m_response;
     HttpRecordedData& m_recorder;
     String m_context;
 };

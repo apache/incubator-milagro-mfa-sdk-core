@@ -45,6 +45,6 @@ script:
 
 after_success:
   - lcov --no-checksum --capture --directory . --output-file coverage.info
-  - lcov --remove coverage.info "/usr/include/*" "tests/*" "ext/*" "src/crypto/*" "src/json/*" -output-file coverage.info
+  - lcov --remove coverage.info "/usr/include/*" "tests/*" "ext/*" "src/json/*" "src/utf8/*" -output-file coverage.info
 #  - genhtml -o coverage -t "SDK Core Test Coverage" coverage.info
   - coveralls-lcov coverage.info

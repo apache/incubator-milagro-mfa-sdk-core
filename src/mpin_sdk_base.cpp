@@ -55,52 +55,42 @@ Status::Code Status::GetStatusCode() const
     return m_statusCode;
 }
 
+namespace
+{
+    std::vector<const char *> statusCodeStrings =
+    {
+        "OK",
+        "PIN_INPUT_CANCELED",
+        "CRYPTO_ERROR",
+        "STORAGE_ERROR",
+        "NETWORK_ERROR",
+        "RESPONSE_PARSE_ERROR",
+        "FLOW_ERROR",
+        "IDENTITY_NOT_AUTHORIZED",
+        "IDENTITY_NOT_VERIFIED",
+        "REQUEST_EXPIRED",
+        "REVOKED",
+        "INCORRECT_PIN",
+        "INCORRECT_ACCESS_NUMBER",
+        "HTTP_SERVER_ERROR",
+        "HTTP_REQUEST_ERROR",
+        "BAD_USER_AGENT",
+        "CLIENT_SECRET_EXPIRED",
+        "BAD_CLIENT_VERSION",
+        "UNTRUSTED_DOMAIN_ERROR",
+        "REGISTRATION_EXPIRED",
+    };
+}
+
 String MPinSDKBase::Status::GetStatusCodeString() const
 {
-    switch (m_statusCode)
+    size_t index = static_cast<size_t>(GetStatusCode());
+    if (index >= statusCodeStrings.size())
     {
-    case OK:
-        return "OK";
-    case PIN_INPUT_CANCELED:
-        return "PIN_INPUT_CANCELED";
-    case CRYPTO_ERROR:
-        return "CRYPTO_ERROR";
-    case STORAGE_ERROR:
-        return "STORAGE_ERROR";
-    case NETWORK_ERROR:
-        return "NETWORK_ERROR";
-    case RESPONSE_PARSE_ERROR:
-        return "RESPONSE_PARSE_ERROR";
-    case FLOW_ERROR:
-        return "FLOW_ERROR";
-    case IDENTITY_NOT_AUTHORIZED:
-        return "IDENTITY_NOT_AUTHORIZED";
-    case IDENTITY_NOT_VERIFIED:
-        return "IDENTITY_NOT_VERIFIED";
-    case REQUEST_EXPIRED:
-        return "REQUEST_EXPIRED";
-    case REVOKED:
-        return "REVOKED";
-    case INCORRECT_PIN:
-        return "INCORRECT_PIN";
-    case INCORRECT_ACCESS_NUMBER:
-        return "INCORRECT_ACCESS_NUMBER";
-    case HTTP_SERVER_ERROR:
-        return "HTTP_SERVER_ERROR";
-    case HTTP_REQUEST_ERROR:
-        return "HTTP_REQUEST_ERROR";
-    case BAD_USER_AGENT:
-        return "BAD_USER_AGENT";
-    case CLIENT_SECRET_EXPIRED:
-        return "CLIENT_SECRET_EXPIRED";
-    case BAD_CLIENT_VERSION:
-        return "BAD_CLIENT_VERSION";
-    case UNTRUSTED_DOMAIN_ERROR:
-        return "UNTRUSTED_DOMAIN_ERROR";
-    default:
         assert(false);
         return "Invalid status code";
     }
+    return statusCodeStrings[index];
 }
 
 const String& Status::GetErrorMessage() const
@@ -392,7 +382,7 @@ const char *MPinSDKBase::IHttpRequest::TEXT_PLAIN_CONTENT_TYPE = "text/plain";
 */
 
 MPinSDKBase::HttpResponse::HttpResponse(const String& requestUrl, const String& requestBody)
-    : m_httpStatus(HTTP_OK), m_dataType(JSON), m_requestUrl(requestUrl), m_requestBody(requestBody)
+    : m_httpStatus(HTTP_OK), m_requestUrl(requestUrl), m_requestBody(requestBody)
 {
 }
 
@@ -401,28 +391,15 @@ int MPinSDKBase::HttpResponse::GetStatus() const
     return m_httpStatus;
 }
 
-MPinSDKBase::HttpResponse::DataType MPinSDKBase::HttpResponse::GetDataType() const
-{
-    return m_dataType;
-}
-
-MPinSDKBase::HttpResponse::DataType MPinSDKBase::HttpResponse::DetermineDataType(const String& contentTypeStr) const
-{
-    if (contentTypeStr.compare(0, strlen(JSON_CONTENT_TYPE_STRING), JSON_CONTENT_TYPE_STRING) == 0)
-    {
-        return JSON;
-    }
-
-    return RAW;
-}
-
 bool MPinSDKBase::HttpResponse::SetData(const String& rawData, const StringMap& headers, DataType expectedType)
 {
     m_rawData = rawData;
     m_headers = headers;
 
-    String contentTypeStr = headers.Get(IHttpRequest::CONTENT_TYPE_HEADER);
-    m_dataType = DetermineDataType(contentTypeStr);
+    if (expectedType != JSON)
+    {
+        return true;
+    }
 
     String data = rawData;
     data.Trim();
@@ -457,26 +434,12 @@ void MPinSDKBase::HttpResponse::SetNetworkError(const String& error)
     m_mpinStatus.SetErrorMessage(String().Format("HTTP request to '%s' failed. Error: '%s'", m_requestUrl.c_str(), error.c_str()));
 }
 
-void MPinSDKBase::HttpResponse::SetResponseJsonParseError(const String& jsonParseError)
-{
-    SetResponseJsonParseError(String(m_rawData).Trim(), jsonParseError);
-}
-
 void MPinSDKBase::HttpResponse::SetResponseJsonParseError(const String& responseJson, const String& jsonParseError)
 {
     m_httpStatus = NON_HTTP_ERROR;
     m_mpinStatus.SetStatusCode(Status::RESPONSE_PARSE_ERROR);
     m_mpinStatus.SetErrorMessage(String().Format("Failed to parse '%s' response json in request to '%s' (body='%s'). Error: '%s'",
         responseJson.c_str(), m_requestUrl.c_str(), m_requestBody.c_str(), jsonParseError.c_str()));
-}
-
-void MPinSDKBase::HttpResponse::SetUnexpectedContentTypeError(DataType expectedType, const String& responseContentType, const String& responseRawData)
-{
-    m_httpStatus = NON_HTTP_ERROR;
-    m_mpinStatus.SetStatusCode(Status::RESPONSE_PARSE_ERROR);
-    assert(expectedType == JSON || expectedType == RAW);
-    m_mpinStatus.SetErrorMessage(String().Format("HTTP request to '%s' (body='%s') returned unexpected content type '%s'. Expected was '%s'",
-        m_requestUrl.c_str(), m_requestBody.c_str(), responseContentType.c_str(), (expectedType == JSON) ? "JSON" : "RAW"));
 }
 
 void MPinSDKBase::HttpResponse::SetHttpError(int httpStatus)
@@ -756,11 +719,11 @@ namespace
         RewriteUrlVisitor(const String& rpaServer) : m_rpaServer(rpaServer) {}
         virtual ~RewriteUrlVisitor() {}
 
-        virtual void Visit(json::Array& array) {}
-        virtual void Visit(json::Object& object) {}
-        virtual void Visit(json::Number& number) {}
-        virtual void Visit(json::Boolean& boolean) {}
-        virtual void Visit(json::Null& null) {}
+        virtual void Visit(json::Array&) {}
+        virtual void Visit(json::Object&) {}
+        virtual void Visit(json::Number&) {}
+        virtual void Visit(json::Boolean&) {}
+        virtual void Visit(json::Null&) {}
 
         virtual void Visit(json::String& string)
         {
@@ -1589,9 +1552,9 @@ namespace
     public:
         virtual ~StringVisitor() {}
 
-        virtual void Visit(json::Array& array) {}
-        virtual void Visit(json::Object& object) {}
-        virtual void Visit(json::Null& null) {}
+        virtual void Visit(json::Array&) {}
+        virtual void Visit(json::Object&) {}
+        virtual void Visit(json::Null&) {}
 
         virtual void Visit(json::Number& number)
         {

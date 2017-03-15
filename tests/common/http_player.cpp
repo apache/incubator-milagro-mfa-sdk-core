@@ -25,6 +25,8 @@ under the License.
 
 typedef MPinSDKBase::String String;
 typedef MPinSDKBase::StringMap StringMap;
+typedef HttpRecordedData::PredefinedResponse PredefinedResponse;
+typedef HttpRecordedData::ResponseQueue ResponseQueue;
 
 void HttpPlayer::SetHeaders(const StringMap & headers)
 {
@@ -46,7 +48,25 @@ void HttpPlayer::SetTimeout(int seconds)
 
 bool HttpPlayer::Execute(Method method, const String & url)
 {
-    m_response = m_recordedData.FindResponseFor(Request(method, url, m_requestData, m_context));
+    Request requset(method, url, m_requestData, m_context);
+    PredefinedResponse pr;
+
+    ResponseQueue& queue = m_recordedData.GetPredefinedResponses();
+    if (!queue.empty())
+    {
+        pr = queue.front();
+        queue.pop();
+    }
+
+    if (pr.IsEmpty())
+    {
+        m_response = m_recordedData.FindResponseFor(requset);
+    }
+    else
+    {
+        m_response = pr;
+    }
+
     return m_response.success;
 }
 

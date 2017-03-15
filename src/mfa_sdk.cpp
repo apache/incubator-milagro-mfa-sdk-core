@@ -66,7 +66,7 @@ Status MfaSDK::GetServiceDetails(const String& url, OUT ServiceDetails& serviceD
     }
     catch (json::Exception& e)
     {
-        response.SetResponseJsonParseError(e.what());
+        response.SetResponseJsonParseError(response.GetRawData(), e.what());
         return response.TranslateToMPinStatus(HttpResponse::GET_SERVICE_DETAILS);
     }
 }
@@ -210,7 +210,7 @@ Status MfaSDK::GetAccessCode(const String& authzUrl, OUT String& accessCode)
     }
     catch (json::Exception& e)
     {
-        response.SetResponseJsonParseError(e.what());
+        response.SetResponseJsonParseError(response.GetRawData(), e.what());
         return response.TranslateToMPinStatus(HttpResponse::GET_ACCESS_CODE);
     }
 }

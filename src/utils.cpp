@@ -144,11 +144,12 @@ JsonObject::JsonObject()
 
 JsonObject::JsonObject(const json::Object& other)
 {
-    Copy(other);
+    *this = other;
 }
 
 JsonObject& JsonObject::operator =(const json::Object& other)
 {
+    Clear();
     Copy(other);
     m_parseError = "";
     return *this;
@@ -349,16 +350,6 @@ StringMap::StringMap(const json::Object & object)
     {
         (*this)[i->name] = ((const json::String&) i->element).Value();
     }
-}
-
-json::Object StringMap::ToJsonObject() const
-{
-    json::Object object;
-    for (StringMap::const_iterator i = begin(); i != end(); ++i)
-    {
-        object[i->first] = json::String(i->second);
-    }
-    return object;
 }
 
 bool StringMap::Put(const String& key, const String& value)
