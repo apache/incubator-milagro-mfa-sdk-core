@@ -18,14 +18,14 @@ under the License.
 */
 
 /*
- * MPinSDK::IContext and all related interfaces implementation for command line test client
+ * MPinSDKBase::IContext and all related interfaces implementation for command line test client
  */
 
 #include "auto_context.h"
 #include "../common/memory_storage.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::CryptoType CryptoType;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::CryptoType CryptoType;
 
 /*
  * Context class impl
@@ -42,7 +42,7 @@ AutoContext::~AutoContext()
     delete m_secureStorage;
 }
 
-MPinSDK::IStorage * AutoContext::GetStorage(IStorage::Type type) const
+MPinSDKBase::IStorage * AutoContext::GetStorage(IStorage::Type type) const
 {
     if(type == IStorage::SECURE)
     {
@@ -54,5 +54,5 @@ MPinSDK::IStorage * AutoContext::GetStorage(IStorage::Type type) const
 
 CryptoType AutoContext::GetMPinCryptoType() const
 {
-    return MPinSDK::CRYPTO_NON_TEE;
+    return MPinSDKBase::CRYPTO_NON_TEE;
 }

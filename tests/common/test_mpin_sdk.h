@@ -37,16 +37,15 @@ public:
 
     Status StartRegistration(INOUT UserPtr user, const String& activateCode = "", const String& userData = "");
     Status RestartRegistration(INOUT UserPtr user, const String& userData = "");
-    Status ConfirmRegistration(INOUT UserPtr user, const String& pushMessageIdentifier = "");
+    Status ConfirmRegistration(INOUT UserPtr user, const String& pushToken = "");
     Status FinishRegistration(INOUT UserPtr user, const String& pin);
 
-    Status StartAuthentication(INOUT UserPtr user, const String& accessCode = "");
+    Status StartAuthentication(INOUT UserPtr user);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin);
     Status FinishAuthentication(INOUT UserPtr user, const String& pin, OUT String& authResultData);
     Status FinishAuthenticationOTP(INOUT UserPtr user, const String& pin, OUT OTP& otp);
     Status FinishAuthenticationAN(INOUT UserPtr user, const String& pin, const String& accessNumber);
 
-    Status GetSessionDetails(const String& accessCode, OUT SessionDetails& sessionDetails);
     bool Logout(IN UserPtr user);
 
 private:

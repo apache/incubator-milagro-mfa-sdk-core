@@ -26,8 +26,8 @@ under the License.
 #include "../common/http_recorder.h"
 #include "../common/http_player.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
 TestContext::TestContext() : m_mode(MODE_MAKE_REAL_REQUESTS), m_autoContextData(NULL)
 {
@@ -93,6 +93,11 @@ void TestContext::SetRequestContextData(const String & requestContextData)
 void TestContext::SetAdditionalContextData(const String & additionalContextData)
 {
     m_additionalContextData = additionalContextData;
+}
+
+HttpRecordedData::ResponseQueue& TestContext::GetPredefinedResponses()
+{
+    return m_recordedData.GetPredefinedResponses();
 }
 
 String TestContext::GetRequestContextData() const

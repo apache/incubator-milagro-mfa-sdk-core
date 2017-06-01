@@ -20,7 +20,7 @@ under the License.
 #ifndef _MPIN_SDK_TEST_ACCESS_NUMBER_THREAD_H_
 #define _MPIN_SDK_TEST_ACCESS_NUMBER_THREAD_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 #include "test_context.h"
 #include "CvThread.h"
 #include "CvMutex.h"
@@ -28,9 +28,9 @@ under the License.
 class AccessNumberThread : public CvShared::CvThread
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
+    typedef MPinSDKBase ::String String;
+    typedef MPinSDKBase::StringMap StringMap;
+    typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
     AccessNumberThread(TestContext& context);
     virtual ~AccessNumberThread();

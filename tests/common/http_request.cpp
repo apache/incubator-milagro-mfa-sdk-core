@@ -18,15 +18,15 @@ under the License.
 */
 
 /*
- * MPinSDK::IHttpRequest implementation used for tests
+ * MPinSDKBase::IHttpRequest implementation used for tests
  */
 
 #include "http_request.h"
 #include "CvHttpRequest.h"
 
-typedef MPinSDK::String String;
-typedef MPinSDK::StringMap StringMap;
-typedef MPinSDK::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::StringMap StringMap;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
 static enHttpMethod_t MPinToCvMethod(IHttpRequest::Method method)
 {

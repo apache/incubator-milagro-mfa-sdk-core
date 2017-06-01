@@ -51,10 +51,10 @@ Status TestMPinSDK::RestartRegistration(INOUT UserPtr user, const String & userD
     return s;
 }
 
-Status TestMPinSDK::ConfirmRegistration(INOUT UserPtr user, const String & pushMessageIdentifier)
+Status TestMPinSDK::ConfirmRegistration(INOUT UserPtr user, const String & pushToken)
 {
-    m_testContext.SetRequestContextData(user->GetId() + "-" + pushMessageIdentifier);
-    Status s = MPinSDK::ConfirmRegistration(user, pushMessageIdentifier);
+    m_testContext.SetRequestContextData(user->GetId() + "-" + pushToken);
+    Status s = MPinSDK::ConfirmRegistration(user, pushToken);
     m_testContext.SetRequestContextData("");
     return s;
 }
@@ -67,10 +67,10 @@ Status TestMPinSDK::FinishRegistration(INOUT UserPtr user, const String & pin)
     return s;
 }
 
-Status TestMPinSDK::StartAuthentication(INOUT UserPtr user, const String & accessCode)
+Status TestMPinSDK::StartAuthentication(INOUT UserPtr user)
 {
-    m_testContext.SetRequestContextData(user->GetId() + "-" + accessCode);
-    Status s = MPinSDK::StartAuthentication(user, accessCode);
+    m_testContext.SetRequestContextData(user->GetId() + "-");
+    Status s = MPinSDK::StartAuthentication(user);
     m_testContext.SetRequestContextData("");
     return s;
 }
@@ -103,14 +103,6 @@ Status TestMPinSDK::FinishAuthenticationAN(INOUT UserPtr user, const String & pi
 {
     m_testContext.SetRequestContextData(user->GetId() + "-" + pin + "-" + accessNumber);
     Status s = MPinSDK::FinishAuthenticationAN(user, pin, accessNumber);
-    m_testContext.SetRequestContextData("");
-    return s;
-}
-
-Status TestMPinSDK::GetSessionDetails(const String & accessCode, OUT SessionDetails & sessionDetails)
-{
-    m_testContext.SetRequestContextData(accessCode);
-    Status s = MPinSDK::GetSessionDetails(accessCode, sessionDetails);
     m_testContext.SetRequestContextData("");
     return s;
 }

@@ -48,6 +48,8 @@ public:
     String& Trim(const std::string& chars = " \t\f\v\n\r");
     void Overwrite(char c = ' ');
     int GetHash() const;
+    String ToLower() const;
+    bool EndsWith(const std::string& suffix) const;
 };
 
 void OverwriteString(std::string& str, char c = ' ');
@@ -67,6 +69,7 @@ public:
     int64_t GetInt64Param(const char *name, int64_t defaultValue = 0) const;
     bool GetBoolParam(const char *name, bool defaultValue = false) const;
     std::string GetParseError() const;
+    void PutIfNotEmpty(const std::string& name, const std::string& value);
     
 private:
     void Copy(const json::Object& other);
@@ -74,6 +77,9 @@ private:
 private:
     String m_parseError;
 };
+
+std::string GetOptionalStringParam(const json::Object& object, const std::string& name, const std::string& defaultValue = "");
+int GetOptionalIntParam(const json::Object& object, const std::string& name, int defaultValue = 0);
 
 void OverwriteJsonValues(json::Object& object);
 void OverwriteJsonValues(json::Array& array);
@@ -84,7 +90,6 @@ class StringMap : public std::map<String, String>
 public:
     StringMap() {}
     StringMap(const json::Object& object);
-    json::Object ToJsonObject() const;
     bool Put(const String& key, const String& value);
     void PutAll(const StringMap& other);
     const char * Get(const String& key) const;
@@ -94,6 +99,26 @@ public:
 std::string HexEncode(const char *str, size_t len);
 std::string HexEncode(const std::string& str);
 std::string HexDecode(const std::string& str);
+
+
+class Url
+{
+public:
+    Url(const std::string& url);
+    Url(const std::string& scheme, const std::string& host, const std::string& port, const std::string& path);
+    const String& GetScheme() const;
+    const String& GetHost() const;
+    const String& GetPort() const;
+    const String& GetPath() const;
+    bool operator==(const Url& other);
+    bool operator!=(const Url& other);
+
+private:
+    String m_scheme;
+    String m_host;
+    String m_port;
+    String m_path;
+};
 
 }
 

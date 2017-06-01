@@ -18,7 +18,7 @@ under the License.
 */
 
 /*
- * MPinSDK::IHttpRequest implementation used for to reproduce recorded http requests
+ * MPinSDKBase::IHttpRequest implementation used for to reproduce recorded http requests
  */
 
 #ifndef _TEST_HTTP_PLAYER_H_
@@ -26,11 +26,11 @@ under the License.
 
 #include "http_recorded_data.h"
 
-class HttpPlayer : public MPinSDK::IHttpRequest
+class HttpPlayer : public MPinSDKBase::IHttpRequest
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::StringMap StringMap;
     typedef HttpRecordedData::Request Request;
     typedef HttpRecordedData::Response Response;
 

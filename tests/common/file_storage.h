@@ -20,16 +20,17 @@ under the License.
 #ifndef _MPIN_SDK_TEST_FILE_STORAGE_H_
 #define _MPIN_SDK_TEST_FILE_STORAGE_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 
-class FileStorage : public MPinSDK::IStorage
+class FileStorage : public MPinSDKBase::IStorage
 {
 public:
-    typedef MPinSDK::String String;
+    typedef MPinSDKBase::String String;
 
     FileStorage(const String& fileName);
     virtual bool SetData(const String& data);
     virtual bool GetData(String &data);
+    virtual bool ClearData();
     virtual const String& GetErrorMessage() const;
 
 private:

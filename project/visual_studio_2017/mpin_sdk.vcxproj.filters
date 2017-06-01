@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{1f2b4e9c-59f9-4a1f-ad54-75881b53a336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\json">
+      <UniqueIdentifier>{dde06548-f846-45f7-9f2e-2db976eda377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utf8">
+      <UniqueIdentifier>{733f58c9-cbd3-42f6-a6d3-cb6c0bc53272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext">
+      <UniqueIdentifier>{40bf2383-eb37-43aa-89b4-3292a44ee00c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\cvshared">
+      <UniqueIdentifier>{1dc90bf8-1a9d-4f94-bb96-30318d0f9197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\milagro-crypto-c">
+      <UniqueIdentifier>{de70f207-6e8d-4935-b40d-59fe51bd4655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\milagro-crypto-c\include">
+      <UniqueIdentifier>{f6311e34-b94f-4a2d-b68d-2f66b21364f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\mpin_crypto_non_tee.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpin_sdk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvHttpRequest.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvMutex.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\CvTime.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\CvString.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvLogger.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\CvXcode.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\cvshared\cpp\windows\CvThread.cpp">
+      <Filter>ext\cvshared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mpin_sdk_base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mfa_sdk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\aes.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\big.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ecp.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ecp2.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\ff.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp2.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp4.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\fp12.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\gcm.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\hash.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\mpin.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\oct.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\pair.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\rand.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\randapi.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ext\milagro-crypto-c\src\rom.c">
+      <Filter>ext\milagro-crypto-c</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\mpin_crypto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mpin_crypto_non_tee.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mpin_sdk.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\json\elements.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\json\reader.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\json\visitor.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\json\writer.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utf8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utf8\checked.h">
+      <Filter>src\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utf8\core.h">
+      <Filter>src\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utf8\unchecked.h">
+      <Filter>src\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvCommon.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvHttpCommon.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvHttpRequest.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvMutex.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvTime.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvString.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvLogger.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvXcode.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\cvshared\cpp\include\CvThread.h">
+      <Filter>ext\cvshared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mpin_sdk_base.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mfa_sdk.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\amcl.h">
+      <Filter>ext\milagro-crypto-c\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\arch.h">
+      <Filter>ext\milagro-crypto-c\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\mpin.h">
+      <Filter>ext\milagro-crypto-c\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ext\milagro-crypto-c\include\randapi.h">
+      <Filter>ext\milagro-crypto-c\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\json\elements.inl">
+      <Filter>src\json</Filter>
+    </None>
+    <None Include="..\..\src\json\reader.inl">
+      <Filter>src\json</Filter>
+    </None>
+    <None Include="..\..\src\json\writer.inl">
+      <Filter>src\json</Filter>
+    </None>
+    <None Include="unit_tests.vcxproj.filters" />
+  </ItemGroup>
+</Project>

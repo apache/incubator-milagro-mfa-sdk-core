@@ -24,15 +24,16 @@ under the License.
 #ifndef _TEST_HTTP_RECORDED_DATA_H_
 #define _TEST_HTTP_RECORDED_DATA_H_
 
-#include "mpin_sdk.h"
+#include "mpin_sdk_base.h"
 #include "CvMutex.h"
+#include <queue>
 
 class HttpRecordedData
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
-    typedef MPinSDK::IHttpRequest IHttpRequest;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::StringMap StringMap;
+    typedef MPinSDKBase::IHttpRequest IHttpRequest;
 
     class Request
     {
@@ -65,6 +66,19 @@ public:
         String data;
     };
 
+    class PredefinedResponse : public Response
+    {
+    public:
+        PredefinedResponse();
+        PredefinedResponse(const Response& r);
+        bool IsEmpty() const;
+
+    private:
+        bool m_empty;
+    };
+
+    typedef std::queue<PredefinedResponse> ResponseQueue;
+
     HttpRecordedData();
     void Record(const Request& request, const Response& response);
     Response FindResponseFor(const Request& request) const;
@@ -72,6 +86,7 @@ public:
     void SaveTo(const String& fileName) const;
     bool LoadFrom(std::istream& inputStream);
     bool LoadFrom(const String& fileName);
+    ResponseQueue& GetPredefinedResponses();
 
 private:
     bool AddMapping(const Request& request, const Response& response);
@@ -80,6 +95,7 @@ private:
     typedef std::map<String, Response> ResponseMap;
     ResponseMap m_responseMap;
     CvShared::CvMutex m_addRecordMutex;
+    ResponseQueue m_predefinedResponses;
 };
 
 #endif // _TEST_HTTP_RECORDED_DATA_H_

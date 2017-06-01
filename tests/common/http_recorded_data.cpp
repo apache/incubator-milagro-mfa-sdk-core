@@ -28,8 +28,9 @@ using std::fstream;
 using std::cerr;
 using std::endl;
 
-typedef MPinSDK::String String;
-typedef MPinSDK::IHttpRequest IHttpRequest;
+typedef MPinSDKBase::String String;
+typedef MPinSDKBase::StringMap StringMap;
+typedef MPinSDKBase::IHttpRequest IHttpRequest;
 typedef HttpRecordedData::Request Request;
 typedef HttpRecordedData::Response Response;
 
@@ -78,6 +79,16 @@ namespace
         }
 
         return left.data == right.data;
+    }
+
+    json::Object StringMapToJsonObject(const StringMap& map)
+    {
+        json::Object object;
+        for (StringMap::const_iterator i = map.begin(); i != map.end(); ++i)
+        {
+            object[i->first] = json::String(i->second);
+        }
+        return object;
     }
 }
 
@@ -137,7 +148,7 @@ json::Object HttpRecordedData::Response::ToJsonObject() const
     object["success"] = json::Boolean(success);
     object["error"] = json::String(error);
     object["httpStatus"] = json::Number(httpStatus);
-    object["headers"] = headers.ToJsonObject();
+    object["headers"] = StringMapToJsonObject(headers);
     object["data"] = json::String(data);
     return object;
 }
@@ -236,4 +247,17 @@ bool HttpRecordedData::LoadFrom(const String & fileName)
     bool res = LoadFrom(file);
     file.close();
     return res;
+}
+
+HttpRecordedData::ResponseQueue& HttpRecordedData::GetPredefinedResponses()
+{
+    return m_predefinedResponses;
+}
+
+HttpRecordedData::PredefinedResponse::PredefinedResponse() : Response(), m_empty(true) {}
+HttpRecordedData::PredefinedResponse::PredefinedResponse(const Response & r) : Response(r), m_empty(false) {}
+
+bool HttpRecordedData::PredefinedResponse::IsEmpty() const
+{
+    return m_empty;
 }

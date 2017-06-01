@@ -25,17 +25,13 @@ under the License.
 #define _MPIN_CRYPTO_NON_TEE_H_
 
 #include "mpin_crypto.h"
-extern "C"
-{
-#include "crypto/mpin.h"
-}
 
 class MPinCryptoNonTee : public IMPinCrypto
 {
 public:
-    typedef MPinSDK::IStorage IStorage;
+    typedef MPinSDKBase::IStorage IStorage;
     typedef util::JsonObject JsonObject;
-    typedef MPinSDK::UserPtr UserPtr;
+    typedef MPinSDKBase::UserPtr UserPtr;
 
     MPinCryptoNonTee();
     ~MPinCryptoNonTee();
@@ -49,9 +45,10 @@ public:
     virtual Status AuthenticatePass1(IN UserPtr user, const String& pin, int date, IN std::vector<String>& timePermitShares, OUT String& commitmentU, OUT String& commitmentUT);
     virtual Status AuthenticatePass2(IN UserPtr user, const String& challenge, OUT String& validator);
     virtual void DeleteToken(const String& mpinId);
+    virtual void ClearTokens();
 
-	virtual Status SaveRegOTT(const String& mpinId, const String& regOTT);
-    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT);
+    virtual Status SaveRegOTT(const String& mpinId, const String& regOTT, const String& accessCode);
+    virtual Status LoadRegOTT(const String& mpinId, OUT String& regOTT, OUT String& accessCode);
     virtual Status DeleteRegOTT(const String& mpinId);
 
 private:

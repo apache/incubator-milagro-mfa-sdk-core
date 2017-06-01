@@ -24,6 +24,15 @@ under the License.
 #include "utils.h"
 #include "CvXcode.h"
 
+// TODO: Uncomment this to enable translation of non-ANSI characters to lowercase. Tested and
+// working on windows, but requires extensive testing on devices with different C locales).
+// Requires C++11 (codecvt).
+//#define USE_UNICODE_TO_LOWER
+
+#ifdef USE_UNICODE_TO_LOWER
+#include <locale>
+#include <codecvt>
+#endif // USE_UNICODE_TO_LOWER
 
 namespace util
 {
@@ -57,6 +66,60 @@ int String::GetHash() const
     return hash;
 }
 
+#ifdef USE_UNICODE_TO_LOWER
+namespace
+{
+    std::wstring ToWString(const std::string& s)
+    {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.from_bytes(s);
+    }
+
+    std::string FromWString(const std::wstring& s)
+    {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+        return conv.to_bytes(s);
+    }
+
+    const std::locale locale("");
+
+    wchar_t WCharToLower(wchar_t c)
+    {
+        return std::tolower(c, locale);
+    }
+}
+
+String String::ToLower() const
+{
+    std::string res;
+    std::wstring wsrc = ToWString(*this);
+    std::wstring wres;
+    std::transform(wsrc.begin(), wsrc.end(), std::back_inserter(wres), WCharToLower);
+    return FromWString(wres);
+}
+#else
+String String::ToLower() const
+{
+    String res;
+    res.resize(length());
+    std::transform(begin(), end(), res.begin(), tolower);
+    return res;
+}
+#endif // USE_UNICODE_TO_LOWER
+
+bool String::EndsWith(const std::string& suffix) const
+{
+    size_t len = length();
+    size_t suffixLen = suffix.length();
+
+    if (suffixLen > len)
+    {
+        return false;
+    }
+
+    return compare(len - suffixLen, suffixLen, suffix) == 0;
+}
+
 String::~String()
 {
     Overwrite();
@@ -81,11 +144,12 @@ JsonObject::JsonObject()
 
 JsonObject::JsonObject(const json::Object& other)
 {
-    Copy(other);
+    *this = other;
 }
 
 JsonObject& JsonObject::operator =(const json::Object& other)
 {
+    Clear();
     Copy(other);
     m_parseError = "";
     return *this;
@@ -176,6 +240,14 @@ bool JsonObject::GetBoolParam(const char *name, bool defaultValue) const
     }
 }
 
+void JsonObject::PutIfNotEmpty(const std::string& name, const std::string& value)
+{
+    if (!value.empty())
+    {
+        (*this)[name] = json::String(value);
+    }
+}
+
 std::string JsonObject::GetParseError() const
 {
     return m_parseError;
@@ -189,40 +261,61 @@ void JsonObject::Copy(const json::Object& other)
     }
 }
 
-
-class JsonVisitor : public json::Visitor
+std::string GetOptionalStringParam(const json::Object& object, const std::string& name, const std::string& defaultValue)
 {
-public:
-    virtual void Visit(json::Array& array)
+    json::Object::const_iterator i = object.Find(name);
+    if (i == object.End())
     {
-        OverwriteJsonValues(array);
+        return defaultValue;
     }
+    return ((const json::String&) i->element).Value();
+}
 
-    virtual void Visit(json::Object& object)
+int GetOptionalIntParam(const json::Object& object, const std::string& name, int defaultValue)
+{
+    json::Object::const_iterator i = object.Find(name);
+    if (i == object.End())
     {
-        OverwriteJsonValues(object);
+        return defaultValue;
     }
+    return static_cast<int>(((const json::Number&) i->element).Value());
+}
 
-    virtual void Visit(json::Number& number)
+namespace
+{
+    class JsonVisitor : public json::Visitor
     {
-        number.Value() = 0.0;
-    }
+    public:
+        virtual void Visit(json::Array& array)
+        {
+            OverwriteJsonValues(array);
+        }
 
-    virtual void Visit(json::String& string)
-    {
-        OverwriteString(string.Value());
-    }
+        virtual void Visit(json::Object& object)
+        {
+            OverwriteJsonValues(object);
+        }
 
-    virtual void Visit(json::Boolean& boolean)
-    {
-        boolean.Value() = false;
-    }
+        virtual void Visit(json::Number& number)
+        {
+            number.Value() = 0.0;
+        }
 
-    virtual void Visit(json::Null& null)
-    {
-    }
-};
+        virtual void Visit(json::String& string)
+        {
+            OverwriteString(string.Value());
+        }
 
+        virtual void Visit(json::Boolean& boolean)
+        {
+            boolean.Value() = false;
+        }
+
+        virtual void Visit(json::Null& null)
+        {
+        }
+    };
+}
 
 void OverwriteJsonValues(json::Object& object)
 {
@@ -257,16 +350,6 @@ StringMap::StringMap(const json::Object & object)
     {
         (*this)[i->name] = ((const json::String&) i->element).Value();
     }
-}
-
-json::Object StringMap::ToJsonObject() const
-{
-    json::Object object;
-    for (StringMap::const_iterator i = begin(); i != end(); ++i)
-    {
-        object[i->first] = json::String(i->second);
-    }
-    return object;
 }
 
 bool StringMap::Put(const String& key, const String& value)
@@ -324,4 +407,75 @@ std::string HexDecode(const std::string& str)
     CvShared::CvHex::Decode(str, hexDecodedStr);
     return hexDecodedStr;
 }
+
+
+/*
+ * Url parsing
+ */
+
+namespace
+{
+    std::string URL_SCHEME_END = "://";
+}
+
+Url::Url(const std::string& url)
+{
+    String reminder = url;
+
+    size_t pos = reminder.find(URL_SCHEME_END);
+    if (pos != String::npos)
+    {
+        m_scheme = String(reminder.substr(0, pos)).ToLower();
+        reminder = String(reminder.substr(pos + URL_SCHEME_END.length())).TrimLeft("/");
+    }
+
+    pos = reminder.find_first_of('/');
+    if (pos != String::npos)
+    {
+        m_path = reminder.substr(pos + 1);
+        reminder = reminder.substr(0, pos);
+    }
+
+    pos = reminder.find_first_of(':');
+    if (pos != String::npos)
+    {
+        m_port = reminder.substr(pos + 1);
+    }
+
+    m_host = String(reminder.substr(0, pos)).ToLower();
+}
+
+Url::Url(const std::string & scheme, const std::string & host, const std::string & port, const std::string & path) :
+    m_scheme(scheme), m_host(host), m_port(port), m_path(path) {}
+
+const String& Url::GetScheme() const
+{
+    return m_scheme;
+}
+
+const String& Url::GetHost() const
+{
+    return m_host;
+}
+
+const String& Url::GetPort() const
+{
+    return m_port;
+}
+
+const String& Url::GetPath() const
+{
+    return m_path;
+}
+
+bool Url::operator==(const Url & other)
+{
+    return !(*this != other);
+}
+
+bool Url::operator!=(const Url & other)
+{
+    return m_scheme != other.m_scheme || m_host != other.m_host || m_port != other.m_port || m_path != other.m_path;
+}
+
 }

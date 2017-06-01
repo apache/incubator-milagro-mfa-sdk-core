@@ -18,21 +18,20 @@ under the License.
 */
 
 /*
- * MPinSDK::IHttpRequest implementation used for to record test http requests
+ * MPinSDKBase::IHttpRequest implementation used for to record test http requests
  */
 
 #ifndef _TEST_HTTP_RECORDER_H_
 #define _TEST_HTTP_RECORDER_H_
 
 #include "http_request.h"
+#include "http_recorded_data.h"
 
-class HttpRecordedData;
-
-class HttpRecorder : public MPinSDK::IHttpRequest
+class HttpRecorder : public MPinSDKBase::IHttpRequest
 {
 public:
-    typedef MPinSDK::String String;
-    typedef MPinSDK::StringMap StringMap;
+    typedef MPinSDKBase::String String;
+    typedef MPinSDKBase::StringMap StringMap;
 
     HttpRecorder(HttpRecordedData& recorder, const String& context) : m_recorder(recorder), m_context(context) {}
     virtual void SetHeaders(const StringMap& headers);
@@ -48,6 +47,7 @@ public:
 private:
     HttpRequest m_request;
     String m_requestData;
+    HttpRecordedData::Response m_response;
     HttpRecordedData& m_recorder;
     String m_context;
 };
