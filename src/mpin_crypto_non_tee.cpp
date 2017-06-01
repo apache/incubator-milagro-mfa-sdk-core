@@ -51,10 +51,10 @@ Octet::Octet(size_t maxSize)
     this->max = 0;
     this->len = 0;
     this->val = (char *) calloc(maxSize, 1);
-	if(this->val != NULL)
-	{
-		this->max = maxSize;		
-	}		
+    if(this->val != NULL)
+    {
+        this->max = maxSize;
+    }
 }
 
 Octet::Octet(const String& str)
@@ -63,12 +63,12 @@ Octet::Octet(const String& str)
     this->len = 0;
     size_t maxSize = str.size();
     this->val = (char *) malloc(maxSize);
-	if(this->val != NULL)
-	{
-		this->max = maxSize;
-		this->len = maxSize;
-		memcpy(this->val, str.c_str(), maxSize);		
-	}
+    if(this->val != NULL)
+    {
+        this->max = maxSize;
+        this->len = maxSize;
+        memcpy(this->val, str.c_str(), maxSize);
+    }
 }
 
 Octet::~Octet()
@@ -317,63 +317,63 @@ Status MPinCryptoNonTee::AuthenticatePass2(UserPtr user, const String& challenge
 
 Status MPinCryptoNonTee::SaveRegOTT(const String& mpinId, const String& regOTT, const String& accessCode)
 {
-	if(!m_initialized)
+    if(!m_initialized)
     {
         return Status(Status::CRYPTO_ERROR, String("Not initialized"));
     }
 
-	try
-	{
-		String mpinIdHex = util::HexEncode(mpinId);
-		json::Object::iterator i = m_tokens.Find(mpinIdHex);
+    try
+    {
+        String mpinIdHex = util::HexEncode(mpinId);
+        json::Object::iterator i = m_tokens.Find(mpinIdHex);
         if (i == m_tokens.End())
         {
-			json::Object item;
-			item["regOTT"] = json::String(regOTT);
+            json::Object item;
+            item["regOTT"] = json::String(regOTT);
             item["accessCode"] = json::String(accessCode);
             m_tokens[mpinIdHex] = item;
         }
         else
         {
-			i->element["regOTT"] = json::String(regOTT);
+            i->element["regOTT"] = json::String(regOTT);
             i->element["accessCode"] = json::String(accessCode);
         }
-		
-		m_storage->SetData(m_tokens.ToString());
-		
-		return Status(Status::OK);
-		
-	}
+        
+        m_storage->SetData(m_tokens.ToString());
+        
+        return Status(Status::OK);
+        
+    }
     catch(const json::Exception& e)
     {
-		return Status(Status::STORAGE_ERROR, e.what());
+        return Status(Status::STORAGE_ERROR, e.what());
     }
 }
 
 Status MPinCryptoNonTee::LoadRegOTT(const String& mpinId, OUT String& regOTT, OUT String& accessCode)
 {
-	if(!m_initialized)
+    if(!m_initialized)
     {
         return Status(Status::CRYPTO_ERROR, String("Not initialized"));
     }
-	
-	try
-	{
-		String mpinIdHex = util::HexEncode(mpinId);
-		json::Object::iterator i = m_tokens.Find(mpinIdHex);
+    
+    try
+    {
+        String mpinIdHex = util::HexEncode(mpinId);
+        json::Object::iterator i = m_tokens.Find(mpinIdHex);
         if (i == m_tokens.End())
         {
-			regOTT.clear();
+            regOTT.clear();
             accessCode.clear();
-			return Status(Status::OK);
+            return Status(Status::OK);
         }
         
         regOTT = json::String(i->element["regOTT"]).Value();
         accessCode = json::String(i->element["accessCode"]).Value();
 
-		return Status(Status::OK);
-		
-	}
+        return Status(Status::OK);
+        
+    }
     catch(const json::Exception& e)
     {
         return Status(Status::STORAGE_ERROR, e.what());
@@ -382,33 +382,33 @@ Status MPinCryptoNonTee::LoadRegOTT(const String& mpinId, OUT String& regOTT, OU
 
 Status MPinCryptoNonTee::DeleteRegOTT(const String& mpinId)
 {
-	if(!m_initialized)
+    if(!m_initialized)
     {
         return Status(Status::CRYPTO_ERROR, String("Not initialized"));
     }
-	
-	try
-	{
-		String mpinIdHex = util::HexEncode(mpinId);
-		json::Object::iterator i = m_tokens.Find(mpinIdHex);
+    
+    try
+    {
+        String mpinIdHex = util::HexEncode(mpinId);
+        json::Object::iterator i = m_tokens.Find(mpinIdHex);
         if (i == m_tokens.End())
         {
-			return Status(Status::OK);
+            return Status(Status::OK);
         }
         else
         {
-			json::Object& item = (json::Object&) i->element;
-			i = item.Find("regOTT");
-			if (i == item.End())
-			{
-				return Status(Status::OK);
-			}
-			else
-			{
+            json::Object& item = (json::Object&) i->element;
+            i = item.Find("regOTT");
+            if (i == item.End())
+            {
+                return Status(Status::OK);
+            }
+            else
+            {
                 std::string& regOTT = ((json::String&) i->element).Value();
                 util::OverwriteString(regOTT);
-				item.Erase(i);
-			}
+                item.Erase(i);
+            }
             i = item.Find("accessCode");
             if (i == item.End())
             {
@@ -422,13 +422,13 @@ Status MPinCryptoNonTee::DeleteRegOTT(const String& mpinId)
             }
         }
 
-		if(!m_storage->SetData(m_tokens.ToString()))
+        if(!m_storage->SetData(m_tokens.ToString()))
         {
             return Status(Status::STORAGE_ERROR, m_storage->GetErrorMessage());
         }
-		
-		return Status(Status::OK);
-	}
+        
+        return Status(Status::OK);
+    }
     catch(const json::Exception& e)
     {
         return Status(Status::STORAGE_ERROR, e.what());
